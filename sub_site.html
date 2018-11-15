@@ -3,6 +3,7 @@
 	<head>
 		<title>ML-PLan</title>
 		<link rel="stylesheet" href = "style_sub.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	</head>
 	<body>
 		<div class="banner">
@@ -11,21 +12,55 @@
 			</div>
 			<div class="empty_strip"></div>
 			<div class="main">
-						<div id="name_row">
-								<form action="name_creation">
-									<label for ="name">
-										<b>Component Name</b>
-									</label>
-									<input type="text" id="name" name="name_field" placeholder="Name here ...">
+				<div id="name_row">
+					<form action="name_creation">
+						<label for ="name">
+							<b>Component Name</b>
+						</label>
+						<input type="text" id="name" name="name_field" placeholder="Name here ...">
+					</form>
+				</div>	
+				<div id="interface_button">
+					<button class="button">
+						<b>add interface</b> &nbsp; <i class = "fa fa-plus"></i>    
+					</button>		
+				</div>
+				<div id ="wrapper_interface_panel">
+					<div id="interface_panel_top">
+							<div id="close_button">
+									<button class="button_mini">
+											<i class = "fa fa-times"></i>
+									</button>
+							</div>
+					</div>
+					<div id="interface_panel_middel">
+						<div class="col">
+							<div id="interface_panel_left">
+								<form action="id">
+									<div class = "text_field_text">
+											<label for ="id_field">
+													<b>interface ID</b>
+												</label>
+									</div>
+									<div class="text_field">
+											<input type="text" id="id_field" name="interface_id_field" placeholder="ID here ...">
+									</div>
 								</form>
-						</div>	
-						<div id="interface_row">
-							<button class="button">
-
-							</button>
+							</div>
 						</div>
-			</div>
+						<div class="col">
+							</div id="interface_panel_right">
+
+							</div>
+						</div>
+					</div>
+							
+					<div id="interface_panel_bottom">
+						
+					</div>		
+				</div>
 		</div>
+	</div>
 	<script>  
   	</script>		
 	</body>
