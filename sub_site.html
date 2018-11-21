@@ -16,7 +16,7 @@
 						<div class="main">
 							<div id="name_row">
 								<form action="name_creation">
-									<label for ="name">
+									<label for ="name" id="component_name">
 										<b>Component Name</b>
 									</label>
 									<input type="text" id="name" name="name_field" placeholder="Name here ...">
@@ -229,30 +229,32 @@
 										</form>
 									</div>
 								</div>
-								<div class="interface_button">
-										<button class="button">
-											<b>add dependency</b> &nbsp; <i class = "fa fa-plus"></i>    
-										</button>		
-								</div>
-								<div class="panel_main">
-									<div class="panel_main_sub" id="depandency_panel">
-										<div class="box_panel_top" id="value_cat">
-											<div class="close_button">
-												<button class="button_mini">
-													<i class = "fa fa-times"></i>
-												</button>
-											</div>
+							</div>
+						<div class="interface_button">
+							<button class="button">
+								<b>add dependency</b> &nbsp; <i class = "fa fa-plus"></i>    
+							</button>		
+							</div>
+						<div id="dependency_wrapper">
+							<div class="panel_main">
+								<div class="panel_main_sub" id="depandency_panel">
+									<div class="box_panel_top" id="value_cat">
+										<div class="close_button">
+											<button class="button_mini">
+												<i class = "fa fa-times"></i>
+											</button>
 										</div>
-										<form>
-											<div class="col_textfield-25">
-												<label for ="dependency_pre">
-													<b>pre</b>
-												</label>
+									</div>
+									<form>
+										<div class="col_textfield-25">
+											<label for ="dependency_pre">
+												<b>pre</b>
+											</label>
 											</div>
 											<div class="col_textfield-75">
 												<input type="text" id="dependency_pre_field" name="dependency_pre_field" placeholder="pre dependency here ...">	
 											</div>
-
+		
 											<div class="col_textfield-25">
 												<label for ="dependency_post">
 													<b>post</b>
@@ -261,7 +263,7 @@
 											<div class="col_textfield-75">
 												<input type="text" id="dependency_post_field" name="dependency_post_field" placeholder="post dependency here...">	
 											</div>
-											</form>
+										</form>
 									</div>
 								</div>
 							</div>
