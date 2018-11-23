@@ -28,52 +28,8 @@
 									<b>add requiered interface</b> &nbsp; <i class = "fa fa-plus"></i>    
 								</button>		
 							</div>
-							<div id ="wrapper_interface_panel">
-								<div class="box_panel_top">
-										<div class="close_button">
-												<button class="button_mini">
-														<i class = "fa fa-times"></i>
-												</button>
-										</div>
-								</div>
-								<div class="panel_main">
-									<div class="panel_main_sub">
-										<form action="id">
-											<div class="col_textfield-25">
-												<label for ="id_field">
-														<b>interface ID</b>
-												</label>
-											</div>
-											<div class="col_textfield-75">
-												<input type="text" id="id_field" name="interface_id_field" placeholder="ID here ...">	
-											</div>
-										</form>	
-									</div>	
-									<div class="panel_main_sub">
-										<form action="interface_name">	
-											<div class="col_textfield-25">
-												<label for ="interface_name">
-													<b>interface name</b>
-												</label>
-											</div>
-											<div class="col_textfield-75">
-												<input type="text" id="interface_name" name="interface_name" placeholder="Interface name here ...">	
-											</div>
-										</form>	
-									</div>
-									<div class="panel_main_sub">
-										<form action="piority">
-											<div class="col_textfield-25">
-												<label for ="piority">
-													<b>piority</b>
-												</label>
-											</div>
-											<div class="col_textfield-75">
-												<input type="text" id="piority" name="piority" placeholder="Piority here ...">	
-											</div>
-										</form>
-									</div>
-								</div>			
+							<div id="req_interface_space">
+
 							</div>
 							<div class="interface_button">
 								<button class="button">
@@ -278,11 +234,27 @@
 				</div>
 			</div>
 	</div>
-	<script>  
+	<script> 
+	 var requiered_html = '<div id ="wrapper_interface_panel">' +
+					'<div class="box_panel_top"><div class="close_button"><button class="button_mini"><i class = "fa fa-times"></i></button></div></div>'+
+					'<div class="panel_main"><div class="panel_main_sub"><form action="id"><div class="col_textfield-25"><label for ="id_field"><b>interface ID</b></label>'+
+					'</div><div class="col_textfield-75"><input type="text" id="id_field" name="interface_id_field" placeholder="ID here ..."></div></form></div>'+
+					'<div class="panel_main_sub"><form action="interface_name"><div class="col_textfield-25"><label for ="interface_name"><b>interface name</b>'+
+					'</label></div><div class="col_textfield-75"><input type="text" id="interface_name" name="interface_name" placeholder="Interface name here ...">'+
+					'</div></form></div>'+
+					'<div class="panel_main_sub"><form action="piority"><div class="col_textfield-25"><label for ="piority"><b>piority</b></label>'+
+					'</div>	<div class="col_textfield-75"><input type="text" id="piority" name="piority" placeholder="Piority here ..."></div>'+
+					'</form></div></div></div>';
+
+	
 		$(document).ready(function(){
-			$("add requiered").click(function(){
-       			$("p").hide();
-   			});
+			$("#add_requiered").click(function(){	
+       			$("#req_interface_space").append(requiered_html);									
+			});
+
+			$(".button_mini").click(function(){
+				$(this).parent().parent().parent().remove();
+			});
 
 		}); 
   	</script>		
