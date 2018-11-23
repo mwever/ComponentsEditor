@@ -252,8 +252,12 @@
        			$("#req_interface_space").append(requiered_html);									
 			});
 
-			$(".button_mini").click(function(){
-				$(this).parent().parent().parent().remove();
+			//$(".button_mini").click(function(){
+				
+			//});
+
+			$('#req_interface_space').on('click', '.button_mini', function (event) {
+  				$(this).parent().parent().parent().remove();
 			});
 
 		}); 
