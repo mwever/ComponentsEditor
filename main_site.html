@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
 		<title>ML-PLan</title>
+		<script src="jquery-3.3.1.min.js"></script>
 		<link rel="stylesheet" href = "style.css">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 		
@@ -28,7 +30,7 @@
 							<div class="col">
 									<div id = "main_right_panel">
 											<div id="bp_right_top">
-														<button class="button" > <i class = "fa fa-plus" ></i> &nbsp; <b>new Component</b>  </button>
+														<button class="button" id="new_Component"> <i class = "fa fa-plus" ></i> &nbsp; <b>new Component</b>  </button>
 											</div>
 											<div id="bp_right_bottom">
 														<button class="button"> <i class = "fa fa-download" style ="font-size:100%"></i> &nbsp; <b>download JSON</b>  </button>
@@ -38,17 +40,45 @@
 					</div>
 
 					<div id = "komponent_space">
-						<div class="component_wrapper">  <div class="componente"><b>Component 1</b> <div class ="button_mini_container"><button class="button_mini"> <i class = "fa fa-pencil" ></i> </button></div> 
-																								 <div class="button_mini_container"><button class="button_mini"> <i class = "fa fa-trash" ></i> </button></div> 
-														</div>
-						</div>
-						<div class="component_wrapper"><div class="componente"><b>Component 2</b> </div></div>
+							
+					</div>
+						
 					</div>
 			</div>		
 		</div>
 		
 	<script>
+		var componentHTML = '<div class="component_wrapper">'+
+								'<div class="componente">'+
+									'<b>Component 1</b> '+
+									'<div class ="button_mini_container">'+
+										'<button class="button_mini" id = "edit">'+
+										 	'<i class = "fa fa-pencil" ></i>'+
+										'</button>'+
+									'</div> '+
+							 		'<div class="button_mini_container">'+
+								 		'<button class="button_mini" id = "close">'+
+									 		'<i class = "fa fa-trash">'+
+									 		'</i> '+
+										'</button>'+
+									'</div> '+
+						 		'</div>' +
+							'</div>';
 
+		$("#new_Component").click(function(){	
+       		$("#komponent_space").append(componentHTML);									
+		});
+
+		$('#komponent_space').on('click', '#close', function (event) {
+  			$(this).parent().parent().parent().remove();
+		});
+
+		$(document).ready(function(){
+			var test = localStorage.getItem("test");
+			console.log(test);
+			localStorage.clear();	
+		});
+		
   	</script>		
 	</body>
 </html>
