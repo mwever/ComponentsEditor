@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
+		<title>ML-PLan</title>
+		<script src="jquery-3.3.1.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+		<link rel="stylesheet" href ="style.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		
+	</head>
+	<body>
+
+            <script>
+  /*                 class Component{
+                        constructor(name, reqInterface, providedInterface, param, dependency){
+                            this.name = name;
+                            this.reqInterface = reqInterface;
+                            this.providedInterface = providedInterface;
+                            this.param = param;
+                            this.dependency = dependency;
+                        }
+                    }; */
+        
+                    class reqInterface{
+                        constructor(id, name, prio){
+                            this.id = id;
+                            this.name = name;
+                            this.prio = prio;
+                        }
+                    };
+        
+                 /*   class providedInterface{
+                        constructor(interfaces){
+                            this.interfaces = interfaces;
+                        }
+                    };
+        
+                    class param{
+                        constructor(name, defaultValue, numberParams , boolParams, catParams){
+                            this.name = name;
+                            this.defaultValue = defaultValue;
+                            this.numberParams = numberParams;
+                            this.catParams = catParams;
+                        }
+                    };
+        
+                    class dependency{
+                        constructor(pre, post){
+                            this.pre = pre;
+                            this.post = post;
+                        }
+                    }; */
+        
+                    var ComponentApp = angular.module('ComponentCreationApp',[]);
+                    
+                    ComponentApp.controller('ComponentCreationController', function($scope){
+                            $scope.reqInterfaces = [];
+                            $scope.addReqInterface = function(){
+                                $scope.errortext="";
+                                if(!($scope.reqInterfaces.indexOf($scope.addReqInterface)== -1)){
+                                    $scope.errortext="The requiered Interface is allready added";
+                                }else{
+                                    $scope.reqInterfaces.push(new reqInterface(null,null,null));
+                                }
+                            }
+                            $scope.removeReqInterface = function(x){
+                                $scope.errortext="";
+                                $scope.reqInterfaces.splice(x,1);
+                            }
+
+                            $scope.buttonStyle = {
+                                "border":"none",
+                                "border": "1px solid  rgba(16, 41, 44, 0.9)",
+                                "background-color": "#2FD4CE",
+                                "color": "rgb(43, 65, 65)",
+                                "padding": "2% 5%",
+                                "text-align": "center",
+                                "font-size": "80%",
+                                "font-family": "Verdana",
+                                "cursor": "pointer",
+                                "width": "100%",
+                                "height": "100%",
+                                "box-sizing": "border-box"
+                            } 
+                        }
+
+                        
+                    );
+                    
+                    ComponentApp.directive('reqInterfaceDirect',function(){
+                        return{
+                            template: '<h1> Das hat geklappt <button ng-click="removeReqInterface($index)">&times</button> </h1>'
+                        };
+                    }
+                    );
+                </script>
+
+        <div ng-app="ComponentCreationApp" ng-controller="ComponentCreationController">
+            <!-- <ul>
+                <li ng-repeat="x in reqInterfaces">{{x}}<span ng-click="removeReqInterface($index)">&times</span></li>
+            </ul> -->
+            <input ng-model="newReqInterface">
+            <button ng-style = "buttonStyle" ng-click="addReqInterface()">Add requiered Interface</button>
+            <div id = "reqInterfaceSpacee">
+                <req-interface-direct ng-repeat="x in reqInterfaces"></req-interface-direct>
+            </div>
+          
+        </div>
+
+
+        
+    </body>
+</html>

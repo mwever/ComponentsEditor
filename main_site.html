@@ -5,6 +5,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
 		<title>ML-PLan</title>
 		<script src="jquery-3.3.1.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
 		<link rel="stylesheet" href = "style.css">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 		
@@ -78,6 +79,21 @@
 			console.log(test);
 			localStorage.clear();	
 		});
+
+		download("hello.txt","This is the content of my file :)");
+		function download(filename, text) {
+  			var element = document.createElement('a');
+  			element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+  			element.setAttribute('download', filename);
+
+  			element.style.display = 'none';
+  			document.body.appendChild(element);
+
+ 	 		element.click();
+
+  			document.body.removeChild(element);
+		}
+		
 		
   	</script>		
 	</body>
