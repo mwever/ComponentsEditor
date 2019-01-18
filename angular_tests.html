@@ -6,8 +6,8 @@
 		<title>ML-PLan</title>
 		<script src="jquery-3.3.1.min.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
-		<link rel="stylesheet" href ="style.css">
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" type="text/css" href ="style.css">
 		
 	</head>
 	<body>
@@ -57,6 +57,7 @@
                     
                     ComponentApp.controller('ComponentCreationController', function($scope){
                             $scope.reqInterfaces = [];
+							
                             $scope.addReqInterface = function(){
                                 $scope.errortext="";
                                 if(!($scope.reqInterfaces.indexOf($scope.addReqInterface)== -1)){
@@ -65,6 +66,7 @@
                                     $scope.reqInterfaces.push(new reqInterface(null,null,null));
                                 }
                             }
+							
                             $scope.removeReqInterface = function(x){
                                 $scope.errortext="";
                                 $scope.reqInterfaces.splice(x,1);
@@ -89,25 +91,23 @@
                         
                     );
                     
-                    ComponentApp.directive('reqInterfaceDirect',function(){
-                        return{
-                            template: '<h1> Das hat geklappt <button ng-click="removeReqInterface($index)">&times</button> </h1>'
-                        };
-                    }
-                    );
                 </script>
+				
+				<script src="directives/requiredInterface/directive.required-interface.js"></script>
 
         <div ng-app="ComponentCreationApp" ng-controller="ComponentCreationController">
             <!-- <ul>
                 <li ng-repeat="x in reqInterfaces">{{x}}<span ng-click="removeReqInterface($index)">&times</span></li>
             </ul> -->
             <input ng-model="newReqInterface">
-            <button ng-style = "buttonStyle" ng-click="addReqInterface()">Add requiered Interface</button>
+            <button ng-click="addReqInterface()">Add required Interface</button>
             <div id = "reqInterfaceSpacee">
                 <req-interface-direct ng-repeat="x in reqInterfaces"></req-interface-direct>
             </div>
           
+			<req-interface-direct></req-interface-direct>
         </div>
+		
 
 
         
