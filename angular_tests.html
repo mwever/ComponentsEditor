@@ -125,9 +125,13 @@
 
         <div ng-app="ComponentCreationApp" ng-controller="ComponentCreationController">
             
-            <button ng-click="addReqInterface()">Add requiered Interface</button>
+            <button ng-click="addReqInterface()">Add required Interface</button>
             <div id = "reqInterfaceSpace">
-                <req-interface-direct ng-repeat="x in reqInterfaces"></req-interface-direct>
+				<div ng-repeat="x in reqInterfaces">
+					ID: <input type="text" ng-model="x.id">
+					Name: <input type="text" ng-model="x.name">
+					Prio: <input type="text" ng-model="x.prio">
+				</div>
             </div>
             
             <button ng-click="addProvidedInterface()">Add povided Interface </button>
