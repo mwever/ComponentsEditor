@@ -32,7 +32,7 @@ body {
 
 button {
     
-    border:none;
+    /* border:5px solid yellow; */
     border: 1px solid  rgba(16, 41, 44, 0.9);
     background-color: #2FD4CE;
     color: rgb(43, 65, 65);

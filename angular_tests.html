@@ -6,7 +6,8 @@
 		<title>ML-PLan</title>
 		<script src="jquery-3.3.1.min.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
-		<link rel="stylesheet" href ="style.css">
+        <link rel="stylesheet" href ="CSS/style.css">
+        <link rel="stylesheet" href ="CSS/style_sub.css">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 		
 	</head>
@@ -23,20 +24,32 @@
                         }
                     }; */
         
-                    class reqInterface{
-                        constructor(id, name, prio){
-                            this.id = id;
-                            this.name = name;
-                            this.prio = prio;
-                        }
-                    };
+                class reqInterface{
+                    constructor(id, name, prio){
+                        this.id = id;
+                        this.name = name;
+                        this.prio = prio;
+                    }
+                     /*set setId(value){
+                         this.id = value;
+                    } */
+
+                    set setName(value){
+                        this.name = value;
+                    } 
+
+                    /*set setPrio(value){
+                        this.prio = prio
+                    } */
+                };  
         
-                 /*   class providedInterface{
+                 class providedInterface{
                         constructor(interfaces){
                             this.interfaces = interfaces;
                         }
                     };
-        
+
+                    /*   
                     class param{
                         constructor(name, defaultValue, numberParams , boolParams, catParams){
                             this.name = name;
@@ -57,6 +70,10 @@
                     
                     ComponentApp.controller('ComponentCreationController', function($scope){
                             $scope.reqInterfaces = [];
+                            $scope.providedInterfaces = [];
+
+                            $scope.reqInterfaceName = 'nix';
+
                             $scope.addReqInterface = function(){
                                 $scope.errortext="";
                                 if(!($scope.reqInterfaces.indexOf($scope.addReqInterface)== -1)){
@@ -64,51 +81,59 @@
                                 }else{
                                     $scope.reqInterfaces.push(new reqInterface(null,null,null));
                                 }
+                                console.log($scope.reqInterfaces);
+                                console.log($scope.reqInterfaceName);
+                                
                             }
+
+                            $scope.addProvidedInterface = function(){
+                                $scope.errortext = "";
+                                if(!($scope.providedInterfaces.indexOf($scope.addProvidedInterface)== -1)){
+                                    $scope.errortext="The requiered Interface is allready added";
+                                }
+                                else{
+                                    $scope.providedInterfaces.push(new providedInterface(null,null,null));
+                                }
+                            }
+
                             $scope.removeReqInterface = function(x){
                                 $scope.errortext="";
                                 $scope.reqInterfaces.splice(x,1);
                             }
 
-                            $scope.buttonStyle = {
-                                "border":"none",
-                                "border": "1px solid  rgba(16, 41, 44, 0.9)",
-                                "background-color": "#2FD4CE",
-                                "color": "rgb(43, 65, 65)",
-                                "padding": "2% 5%",
-                                "text-align": "center",
-                                "font-size": "80%",
-                                "font-family": "Verdana",
-                                "cursor": "pointer",
-                                "width": "100%",
-                                "height": "100%",
-                                "box-sizing": "border-box"
-                            } 
-                        }
+                            $scope.removeProvidedInterface = function(x){
+                                $scope.errortext="";
+                                $scope.providedInterfaces.splice(x,1);
+                            }
 
-                        
+                            $scope.setReqInterfaceName = function(index){
+                                console.log("hello");
+                                $scope.reqInterfaces[index].setName($scope.reqInterfaceName);
+                               
+                            } 
+
+                        }
                     );
                     
-                    ComponentApp.directive('reqInterfaceDirect',function(){
-                        return{
-                            template: '<h1> Das hat geklappt <button ng-click="removeReqInterface($index)">&times</button> </h1>'
-                        };
-                    }
-                    );
                 </script>
 
+                <script src="reqInterfaces/directive/reqInterfaceDirect.js"></script>
+                <script src="providedInterfacs/directive/providedInterfaces.js"></script>
+
+
         <div ng-app="ComponentCreationApp" ng-controller="ComponentCreationController">
-            <!-- <ul>
-                <li ng-repeat="x in reqInterfaces">{{x}}<span ng-click="removeReqInterface($index)">&times</span></li>
-            </ul> -->
-            <input ng-model="newReqInterface">
-            <button ng-style = "buttonStyle" ng-click="addReqInterface()">Add requiered Interface</button>
-            <div id = "reqInterfaceSpacee">
+            
+            <button ng-click="addReqInterface()">Add requiered Interface</button>
+            <div id = "reqInterfaceSpace">
                 <req-interface-direct ng-repeat="x in reqInterfaces"></req-interface-direct>
+            </div>
+            
+            <button ng-click="addProvidedInterface()">Add povided Interface </button>
+            <div id="providedInterfaceSpace">
+                    <provided-interface-direct ng-repeat="x in providedInterfaces"></provided-interface-direct>
             </div>
           
         </div>
-
 
         
     </body>
