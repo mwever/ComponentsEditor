@@ -14,15 +14,15 @@
 	<body>
 
             <script>
-  /*                 class Component{
-                        constructor(name, reqInterface, providedInterface, param, dependency){
-                            this.name = name;
-                            this.reqInterface = reqInterface;
-                            this.providedInterface = providedInterface;
-                            this.param = param;
-                            this.dependency = dependency;
-                        }
-                    }; */
+                class Component{
+                    constructor(name, reqInterface, providedInterface, param, dependency){
+                        this.name = name;
+                        this.reqInterface = reqInterface;
+                        this.providedInterface = providedInterface;
+                        this.param = param;
+                        this.dependency = dependency;
+                    }
+                }; 
         
                 class reqInterface{
                     constructor(id, name, prio){
@@ -30,49 +30,38 @@
                         this.name = name;
                         this.prio = prio;
                     }
-                     /*set setId(value){
-                         this.id = value;
-                    } */
-
-                    set setName(value){
-                        this.name = value;
-                    } 
-
-                    /*set setPrio(value){
-                        this.prio = prio
-                    } */
                 };  
         
-                 class providedInterface{
-                        constructor(interfaces){
-                            this.interfaces = interfaces;
-                        }
-                    };
-
-                    /*   
-                    class param{
-                        constructor(name, defaultValue, numberParams , boolParams, catParams){
-                            this.name = name;
-                            this.defaultValue = defaultValue;
-                            this.numberParams = numberParams;
-                            this.catParams = catParams;
-                        }
-                    };
+                class providedInterface{
+                    constructor(interfaces){
+                        this.interfaces = interfaces;
+                    }
+                };
+ 
+                class param{
+                    constructor(name, defaultVal, prio, paramtype){
+                        this.name = name;
+                        this.defaultVal = defaultVal;
+                        this.prio = prio;
+                        this.paramtype = paramtype;
+                    }
+                };
         
                     class dependency{
                         constructor(pre, post){
                             this.pre = pre;
                             this.post = post;
                         }
-                    }; */
+                    }; 
         
                     var ComponentApp = angular.module('ComponentCreationApp',[]);
                     
                     ComponentApp.controller('ComponentCreationController', function($scope){
                             $scope.reqInterfaces = [];
                             $scope.providedInterfaces = [];
-
-                            $scope.reqInterfaceName = 'nix';
+                            $scope.parameters =[];
+                            $scope.type =["bool","cat","number"];
+                            $scope.selectedType = $scope.type[0];
 
                             $scope.addReqInterface = function(){
                                 $scope.errortext="";
@@ -81,23 +70,32 @@
                                 }else{
                                     $scope.reqInterfaces.push(new reqInterface(null,null,null));
                                 }
-                                console.log($scope.reqInterfaces);
-                                console.log($scope.reqInterfaceName);
-                                
                             }
 
                             $scope.addProvidedInterface = function(){
                                 $scope.errortext = "";
                                 if(!($scope.providedInterfaces.indexOf($scope.addProvidedInterface)== -1)){
-                                    $scope.errortext="The requiered Interface is allready added";
+                                    $scope.errortext="The provided Interface is allready added";
                                 }
                                 else{
                                     $scope.providedInterfaces.push(new providedInterface(null,null,null));
                                 }
                             }
 
-                            $scope.removeReqInterface = function(x){
+                            $scope.addParameter = function(){
                                 $scope.errortext="";
+                                if(!($scope.parameters.indexOf($scope.addParameter)== -1)){
+                                    $scope.errortext="The parameter is allready added";
+                                }else{
+                                    $scope.parameters.push(new param(null,null,null,null));
+                                }
+                            }
+
+                            $scope.addCat = function(x){
+                                $scope.parameters[x].paramtype.push(new Cat());
+                            }
+
+                            $scope.removeReqInterface = function(x){
                                 $scope.reqInterfaces.splice(x,1);
                             }
 
@@ -106,41 +104,81 @@
                                 $scope.providedInterfaces.splice(x,1);
                             }
 
-                            $scope.setReqInterfaceName = function(index){
-                                console.log("hello");
-                                $scope.reqInterfaces[index].setName($scope.reqInterfaceName);
-                               
-                            } 
+                            $scope.removeParameter = function(x){
+                                $scope.errortext="";
+                                $scope.parameters.splice(x,1);
+                            }
 
                         }
                     );
                     
                 </script>
 
-                <script src="reqInterfaces/directive/reqInterfaceDirect.js"></script>
-                <script src="providedInterfacs/directive/providedInterfaces.js"></script>
-
 
         <div ng-app="ComponentCreationApp" ng-controller="ComponentCreationController">
-            
-            <button ng-click="addReqInterface()">Add required Interface</button>
-            <div id = "reqInterfaceSpace">
+
+          <div id="componentNameSpace">
+            <div><label>Component name:</label><input type="text" ng-model="componentName"></div>
+          </div>
+
+          <button ng-click="addReqInterface()">Add required Interface</button>
+              <div id = "reqInterfaceSpace">
 				<div ng-repeat="x in reqInterfaces">
-					ID: <input type="text" ng-model="x.id">
-					Name: <input type="text" ng-model="x.name">
-					Prio: <input type="text" ng-model="x.prio">
+                    <div>
+                        <div class="button-wrapper">
+                            <button ng-click="removeReqInterface($index)">&times </button>
+                        </div>
+                        <div>
+                            <div><label>ID:</label><input type="text" ng-model="x.id"></div>
+                            <div><label>Name:</label><input type="text" ng-model="x.name"></div>
+                            <div><label>Prio:</label> <input type="text" ng-model="x.prio"></div>
+                        </div>    
+                    </div>
 				</div>
-            </div>
+            </div>             
             
             <button ng-click="addProvidedInterface()">Add povided Interface </button>
             <div id="providedInterfaceSpace">
-                    <provided-interface-direct ng-repeat="x in providedInterfaces"></provided-interface-direct>
+                <div ng-repeat="x in providedInterfaces">
+                    <div>
+                        <div class="button-wrapper">
+                            <button ng-click="removeProvidedInterface($index)">&times </button>
+                        </div>
+                        <div id ="input-wrapper">
+                            <div><label>Interface:</label> <input type="text" ng-model="x.interfaces"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          
-			<req-interface-direct></req-interface-direct>
-        </div>
-		
 
-        
+            <button ng-click="addParameter()">Add prameter </button>
+            <div id="ParameterSpace">
+                <div ng-repeat="x in parameters">
+                    <div>
+                        <div class="button-wrapper">
+                            <button ng-click="removeParameter($index)">&times </button>
+                        </div>
+                        <div id ="input-wrapper">
+                            <div><label>Name:</label> <input type="text" ng-model="x.name"></div>
+                            <div><label>Prority:</label> <input type="text" ng-model="x.prio"></div>
+                            <div><label>Default:</label> <input type="text" ng-model="x.defaultVal"></div> 
+                            <select ng-model="selectedType" ng-options="x for x in type"></select>
+                            <div>
+                                <div ng-show="selectedType=='cat'">
+                                    <div class="button-wrapper">
+                                        <button ng-click="addCat($index)">Add cat</button>
+                                    </div>
+                                </div>
+                                <div ng-show="selectedType=='number'">
+                                        <div>
+
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </body>
 </html>
