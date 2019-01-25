@@ -87,7 +87,7 @@
                                 if(!($scope.parameters.indexOf($scope.addParameter)== -1)){
                                     $scope.errortext="The parameter is allready added";
                                 }else{
-                                    $scope.parameters.push(new param(null,null,null,null));
+                                    $scope.parameters.push(new param(null,null,null,"bool"));
                                 }
                             }
 
@@ -162,14 +162,14 @@
                             <div><label>Name:</label> <input type="text" ng-model="x.name"></div>
                             <div><label>Prority:</label> <input type="text" ng-model="x.prio"></div>
                             <div><label>Default:</label> <input type="text" ng-model="x.defaultVal"></div> 
-                            <select ng-model="selectedType" ng-options="x for x in type"></select>
+                            <select ng-model="x.paramtype" ng-options="x for x in type"></select>
                             <div>
-                                <div ng-show="selectedType=='cat'">
+                                <div ng-show="x.paramtype=='cat'">
                                     <div class="button-wrapper">
-                                        <button ng-click="addCat($index)">Add cat</button>
+                                        <button>Add cat</button>
                                     </div>
                                 </div>
-                                <div ng-show="selectedType=='number'">
+                                <div ng-show="x.paramtype=='number'">
                                         <div>
 
                                         </div>
