@@ -39,29 +39,63 @@
                 };
  
                 class param{
-                    constructor(name, defaultVal, prio, paramtype){
+                    constructor(name, prio, paramtype){
                         this.name = name;
-                        this.defaultVal = defaultVal;
                         this.prio = prio;
                         this.paramtype = paramtype;
                     }
                 };
-        
-                    class dependency{
-                        constructor(pre, post){
-                            this.pre = pre;
-                            this.post = post;
-                        }
-                    }; 
+                
+                class dependency{
+                    constructor(pre, post){
+                        this.pre = pre;
+                        this.post = post;
+                    }
+                }; 
+
+                class cat{
+                    constructor(defaultVal){
+                        this.defaultVal = defaultVal;
+                        this.name = 'cat';
+                        this.cats = [];
+                    }
+                }
+
+                class number{
+                    constructor(min,max,defaultVal){
+                        this.name = 'number';
+                        this.min = min;
+                        this.max = max;
+                        this.defaultVal = defaultVal;
+                    }
+                }
+
+                class boolVal{
+                    constructor(defaultVal){
+                        this.name = 'bool';
+                        this.defaultVal = defaultVal;
+                    }
+                }
+
+                class kitten{
+                    constructor(name){
+                        this.name = name;
+                    }
+                }
         
                     var ComponentApp = angular.module('ComponentCreationApp',[]);
                     
                     ComponentApp.controller('ComponentCreationController', function($scope){
+                            
+                            $scope.components=[];
+                            
+                            $scope.ComponentName;
+
                             $scope.reqInterfaces = [];
                             $scope.providedInterfaces = [];
                             $scope.parameters =[];
-                            $scope.type =["bool","cat","number"];
-                            $scope.selectedType = $scope.type[0];
+                            $scope.dependencys=[];
+                            $scope.types =[new cat(null),new number(null,null,null), new boolVal(null)];
 
                             $scope.addReqInterface = function(){
                                 $scope.errortext="";
@@ -87,13 +121,43 @@
                                 if(!($scope.parameters.indexOf($scope.addParameter)== -1)){
                                     $scope.errortext="The parameter is allready added";
                                 }else{
-                                    $scope.parameters.push(new param(null,null,null,"bool"));
+                                    $scope.parameters.push(new param(null,null,null));
                                 }
                             }
 
-                            $scope.addCat = function(x){
-                                $scope.parameters[x].paramtype.push(new Cat());
+                            $scope.addKitten = function(x){
+                                /* $scope.errortext="";
+                                if(!($scope.parameters.indexOf($scope.addParameter)== -1)){
+                                    $scope.errortext="The parameter is allready added";
+                                }else{ */
+                                    $scope.parameters[x].paramtype.cats.push(new kitten(null));
+                                //}
                             }
+
+                            $scope.addDependency = function(){
+                                $scope.errortext="";
+                                if(!($scope.dependencys.indexOf($scope.dependencys)== -1)){
+                                    $scope.errortext="The dependency is allready added";
+                                }else{
+                                    $scope.dependencys.push(new dependency(null,null));
+                                }
+                            }
+
+                            $scope.reset = function(){
+                                parameters = [];
+                                reqInterfaces =[];
+                                providedInterfaces=[];
+                                parameters=[];
+                                dependencys=[];
+                            }
+
+
+                            $scope.addComponent=function(){
+                                $scope.components.push(new Component(ComponentName,reqInterfaces,providedInterfaces,parameters,dependencys));
+                                $scope.reset();
+                                $route.reload();
+                            }
+
 
                             $scope.removeReqInterface = function(x){
                                 $scope.reqInterfaces.splice(x,1);
@@ -109,6 +173,15 @@
                                 $scope.parameters.splice(x,1);
                             }
 
+                            $scope.removeDependency = function(x){
+                                $scope.errortext="";
+                                $scope.dependencys.splice(x,1);
+                            }
+
+                            $scope.removeKitten = function(x,y){
+                                $scope.parameters[$scope.parameters.indexOf(x)].paramtype.cats.splice(y,1);
+                            }
+
                         }
                     );
                     
@@ -116,19 +189,19 @@
 
 
         <div ng-app="ComponentCreationApp" ng-controller="ComponentCreationController">
-
-          <div id="componentNameSpace">
-            <div><label>Component name:</label><input type="text" ng-model="componentName"></div>
+        <div id = "ComponentSapce">
+          <div id="ComponentNameSpace">
+            <div class="input-wrapper"><label>Component name:</label><input type="text" ng-model="ComponentName"></div>
           </div>
 
           <button ng-click="addReqInterface()">Add required Interface</button>
-              <div id = "reqInterfaceSpace">
+              <div id = "ReqInterfaceSpace">
 				<div ng-repeat="x in reqInterfaces">
                     <div>
                         <div class="button-wrapper">
                             <button ng-click="removeReqInterface($index)">&times </button>
                         </div>
-                        <div>
+                        <div class="input-wrapper">
                             <div><label>ID:</label><input type="text" ng-model="x.id"></div>
                             <div><label>Name:</label><input type="text" ng-model="x.name"></div>
                             <div><label>Prio:</label> <input type="text" ng-model="x.prio"></div>
@@ -138,13 +211,13 @@
             </div>             
             
             <button ng-click="addProvidedInterface()">Add povided Interface </button>
-            <div id="providedInterfaceSpace">
+            <div id="ProvidedInterfaceSpace">
                 <div ng-repeat="x in providedInterfaces">
                     <div>
                         <div class="button-wrapper">
                             <button ng-click="removeProvidedInterface($index)">&times </button>
                         </div>
-                        <div id ="input-wrapper">
+                        <div class ="input-wrapper">
                             <div><label>Interface:</label> <input type="text" ng-model="x.interfaces"></div>
                         </div>
                     </div>
@@ -158,27 +231,56 @@
                         <div class="button-wrapper">
                             <button ng-click="removeParameter($index)">&times </button>
                         </div>
-                        <div id ="input-wrapper">
+                        <div class ="input-wrapper">
                             <div><label>Name:</label> <input type="text" ng-model="x.name"></div>
                             <div><label>Prority:</label> <input type="text" ng-model="x.prio"></div>
-                            <div><label>Default:</label> <input type="text" ng-model="x.defaultVal"></div> 
-                            <select ng-model="x.paramtype" ng-options="x for x in type"></select>
+                            <select  ng-model="x.paramtype" ng-options="type.name for type in types"></select>
                             <div>
-                                <div ng-show="x.paramtype=='cat'">
+                                <div ng-if="x.paramtype.name=='cat'">
                                     <div class="button-wrapper">
-                                        <button>Add cat</button>
+                                        <button ng-click="addKitten($index)">Add cat</button>
+                                        <div ng-repeat="cat in x.paramtype.cats">
+                                            <div calss="button-wrapper">
+                                                <button ng-click="removeKitten(x,$index)">&times</button>
+                                            </div>
+                                            <div class = "input-wrapper">
+                                                    <label>Name:</label><input type="text" ng-model="cat.name">
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div ng-show="x.paramtype=='number'">
-                                        <div>
-
+                                <div ng-if="x.paramtype.name=='number'">
+                                    <div>
+                                        <div class= "input-wrapper">
+                                            <label>Min:</label><input type="number" ng-model="x.paramtype.min">
+                                            <label>Max:</label><input type="number" ng-model="x.paramtype.max">
+                                            <label>Default value:</label><input type="text" ng-model="x.paramtype.defaultVal">
                                         </div>
+                                    </div>
                                 </div>
-                            </div>
+                                <div ng-if="x.paramtype.name =='bool'">
+                                    <div class = "input-wrapper">
+                                        <label>Default value:</label><input type="text" ng-model="x.paramtype.defaultVal">
+                                    </div>
+                                </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <button ng-click="addDependency()">Add dependency</button>
+            <div id = "DependencySpace">
+                <div ng-repeat="x in dependencys">
+                    <div class="button-wrapper">
+                        <button ng-click="removeDependency($index)">&times</button>
+                    </div>
+                    <div class="input-wrapper">
+                        <label>Pre:</label><input type="text" ng-model="x.pre">
+                        <label>Post:</label><input type="text" ng-model="x.post">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button ng-click="addComponent()">Create Component</button>
         </div>
     </body>
 </html>
