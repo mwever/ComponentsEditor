@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>ML-PLan</title>
+		<link rel="stylesheet" href = "style_sub.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<script src="jquery-3.3.1.min.js"></script>
+	</head>
+	<body>
+		<div class="banner">
+			<div class="head">
+				<div id="text_head"><div id="gradiant_left"></div><h1>Component Creation</h1><div id="gradient_right"></div> </div>
+				</div>
+			<div class="empty_strip"></div>
+			<div class="banner_wrapper">
+					
+						<div class="main">
+							<div id="name_row">
+								<form onsubmit="create_Component()">
+									<label for ="name" id="component_name">
+										<b>Component Name</b>
+									</label>
+									<input type="text" id="name" name="name_field" placeholder="Name here ...">
+								</form>
+							</div>	
+							<div class="interface_button">
+								<button class="button" id="add_requiered">
+									<b>add requiered interface</b> &nbsp; <i class = "fa fa-plus"></i>    
+								</button>		
+							</div>
+							<div id="req_interface_space">
+
+							</div>
+							<div class="interface_button">
+								<button class="button" id="add_provided">
+									<b>add provided interface</b> &nbsp; <i class = "fa fa-plus"></i>    
+								</button>		
+							</div>
+							<div id="prov_interface_space">
+
+							</div>
+							<div class="interface_button">
+								<button class="button" id="add_parameter">
+									<b>add parameter</b> &nbsp; <i class = "fa fa-plus"></i>    
+								</button>		
+							</div>
+							<div id="parameter_space">
+
+							</div>
+						<div class="interface_button">
+							<button class="button" id="add_dependency">
+								<b>add dependency</b> &nbsp; <i class = "fa fa-plus"></i>    
+							</button>		
+						</div>
+						<div id="dependency_space">
+
+						</div>
+					</div>
+			</div>
+			<div class = "submit_area">
+				<div class="interface_button" id="submit_button">
+					<button type="submit" class="button">
+						<b>Component Creation</b>    
+					</button>
+				</div>
+			</div>
+	</div>
+	<script> 
+
+	var parameter_panel= '<div id="wrapper_parameter_panel">'+
+						'<div class="box_panel_top"><div class="close_button">'+
+						'<button class="button_mini"><i class = "fa fa-times"></i>'+
+						'</button></div></div><div class="panel_main"><div class="panel_main_sub">'+
+						'<form onsubmit = "create_Component()"><div class="col_textfield-25">'+
+						'<label for ="prameter_name_field">	<b>parameter name</b>'+
+						'</label></div>	<div class="col_textfield-75">'+
+						'<input type="text" id="prameter_name_field" name="prameter_name_field" placeholder="parameter name here ...">'+	
+						'</div></form></div><div class="panel_main_sub"><form onsubmit="create_Component()">'+
+						'<div class="col_textfield-25" id="prio_label"><label for ="priority">'+
+						'<b>priority</b></label>'+
+						'</div><div class="col_textfield-75" id="prio_text_field">'+
+						'<input type="text" id="priority_field" name="priority_field" placeholder="priority...">'+
+						'</div><div class="col_textfield-25" id="type_label"><label for ="priority">'+
+						'<b>type</b></label></div><div class="col_textfield-75" id="type_selct">'+
+						'<select id="type_select">'+
+							'<option value="bool">bool</option>'+
+							'<option value="integer">integer</option>'+
+							'<option value="double">double</option>'+
+							'<option value="cat">cat</option>'+
+						'</select>'+	
+						'</div>	<div class="col_textfield-25" id="default_label">'+
+						'<label for ="default"><b>default</b></label></div>'+
+						'<div class="col_textfield-75" id="default_text_field">'+
+						'<input type="text" id="default_field" name="default_field" placeholder="default ...">'+
+						'</div></form></div></div><div id="add_on_space"></div></div>';
+	
+	var number_add_on=  '<div class="panel_main" id="number_add_on">'+
+						'<div class="panel_main_sub"><form action="parameter_number_add_on">'+
+						'<div class="col_textfield-25" id="min_label"><label for ="min">'+
+						'<b>min</b></label></div><div class="col_textfield-75" id="min_text_field">'+
+						'<input type="text" id="min_field" name="min_field" placeholder="min ...">'+
+						'</div><div class="col_textfield-25" id="max_label">'+
+						'<label for ="max"><b>max</b></label></div>'+
+						'<div class="col_textfield-75" id="max_text_field">'+
+						'<input type="text" id="max_field" name="max_field" placeholder="max ...">'+
+						'</div><div class="col_textfield-25" id="refine_label">'+
+						'<label for ="refine"><b>refine splits</b></label></div>'+
+						'<div class="col_textfield-75" id="refine_text_field">'+
+						'<input type="text" id="refine_field" name="refine_field" placeholder="splits ...">'+
+						'</div><div class="col_textfield-25" id="min_interval_label">'+
+						'<label for ="min_interval"><b>min interval</b></label>'+
+						'</div><div class="col_textfield-75" id="min_interval_text_field">'+
+						'<input type="text" id="min_interval_field" name="min_interval_field" placeholder="min ...">'+	
+						'</div></form></div></div>';
+	
+	var cat_add_on= '<div class="panel_main" id="cat_add_on"><div class="interface_button" id="value_button">'+
+					'<button class="button" id="add_value"><b>add value</b> &nbsp; <i class = "fa fa-plus"></i>'+ 
+					'</button></div></div>';
+	
+	var cat_add_on_value = '<div class="panel_main_sub" id="value_panel">'+
+					'<div class="box_panel_top" id="value_cat"><div class="close_button">'+
+					'<button class="button_mini"><i class = "fa fa-times"></i>'+
+					'</button></div></div><form>'+
+					'<div class="col_textfield-25" id="value_label">'+
+					'<label for ="value"><b>value</b></label></div>'+
+					'<div class="col_textfield-75" id="value_text_field">'+
+					'<input type="text" id="value_field" name="value_field" placeholder="value ...">'+	
+					'</div></form></div>';
+	
+	// The requiered interface sub panel
+
+	var requiered_html = '<div id ="wrapper_interface_panel">' +
+					'<div class="box_panel_top"><div class="close_button"><button class="button_mini"><i class = "fa fa-times"></i></button></div></div>'+
+					'<div class="panel_main"><div class="panel_main_sub"><form action="id"><div class="col_textfield-25"><label for ="id_field"><b>interface ID</b></label>'+
+					'</div><div class="col_textfield-75"><input type="text" id="id_field" name="interface_id_field" placeholder="ID here ..."></div></form></div>'+
+					'<div class="panel_main_sub"><form action="interface_name"><div class="col_textfield-25"><label for ="interface_name"><b>interface name</b>'+
+					'</label></div><div class="col_textfield-75"><input type="text" id="interface_name" name="interface_name" placeholder="Interface name here ...">'+
+					'</div></form></div>'+
+					'<div class="panel_main_sub"><form action="piority"><div class="col_textfield-25"><label for ="piority"><b>piority</b></label>'+
+					'</div>	<div class="col_textfield-75"><input type="text" id="piority" name="piority" placeholder="Piority here ..."></div>'+
+					'</form></div></div></div>';
+	var provided_html='<div id="wrapper_requiered_interface">'+
+					'<div class="box_panel_top"><div class="close_button">'+
+					'<button class="button_mini"><i class = "fa fa-times"></i></button>'+
+					'</div>	</div>'+
+					'<div class="panel_main"><div class="panel_main_sub">'+
+					'<form action="requiered_name">	<div class="col_textfield-25">'+
+					'<label for ="requiered_name_field"><b>interface name</b>'+
+					'</label></div>	<div class="col_textfield-75">'+
+					'<input type="text" id="requiered_name_field" name="requiered_name_field" placeholder="name here ...">'+
+					'</div></form></div></div></div>';
+
+	var dependency_html= '<div id="dependency_wrapper">'+
+					'<div class="panel_main"><div class="panel_main_sub" id="depandency_panel">'+
+					'<div class="box_panel_top" id="value_cat"><div class="close_button">'+
+					'<button class="button_mini"><i class = "fa fa-times"></i>'+
+					'</button></div></div><form><div class="col_textfield-25">'+
+					'<label for ="dependency_pre"><b>pre</b></label></div>'+
+					'<div class="col_textfield-75"><input type="text" id="dependency_pre_field" name="dependency_pre_field" placeholder="pre dependency here ...">'+
+					'</div>	<div class="col_textfield-25"><label for ="dependency_post">'+
+					'<b>post</b></label></div><div class="col_textfield-75">'+
+					'<input type="text" id="dependency_post_field" name="dependency_post_field" placeholder="post dependency here...">'+
+					'</div></form></div></div></div>';
+		
+		$(document).ready(function(){
+			
+			// The function for adding and deleting a requeired interface subpanel
+			$("#add_requiered").click(function(){	
+       			$("#req_interface_space").append(requiered_html);									
+			});
+
+			$('#req_interface_space').on('click', '.button_mini', function (event) {
+  				$(this).parent().parent().parent().remove();
+			});
+			
+			// The function for adding and deleting a provided interface subpanel
+			$("#add_provided").click(function(){
+				$("#prov_interface_space").append(provided_html);
+			});
+
+			$('#prov_interface_space').on('click', '.button_mini', function (event) {
+  				$(this).parent().parent().parent().remove();
+			});
+			
+			// The function for adding and deleting a dependency panel
+			$("#add_dependency").click(function(){
+				$("#dependency_space").append(dependency_html);
+			});
+
+			$('#dependency_space').on('click','.button_mini', function (event) {
+  				$(this).parent().parent().parent().parent().parent().remove();
+			});
+
+			// The function for adding and deleting a parameter panel
+			$("#add_parameter").click(function(){
+				$("#parameter_space").append(parameter_panel);
+			});
+
+			$('#parameter_space').on('click','.button_mini', function (event) {
+  				$(this).parent().parent().parent().remove();
+			});
+
+			//select test
+			
+			$('#parameter_space').on('change','select',function(event){
+				
+				var selection = $(this).find(":selected").text();				
+				
+				if(selection == "double"){
+
+					if(($(this).parent().parent().parent().parent().has('#number_add_on').length)>=1);
+					else{
+						if(($(this).parent().parent().parent().parent().has('#cat_add_on').length)>=1){
+							$(this).parent().parent().parent().parent().find('#cat_add_on').remove();
+							$(this).parent().parent().parent().parent().append(number_add_on);
+						}
+						else{
+							$(this).parent().parent().parent().parent().append(number_add_on);
+						}
+					}
+					
+					
+				} else if(selection == "cat"){
+					if(($(this).parent().parent().parent().parent().has('#cat_add_on').length)>=1);
+					else{
+						if(($(this).parent().parent().parent().parent().parent().has('#number_add_on').length)>=1){
+							$(this).parent().parent().parent().parent().parent().find('#number_add_on').remove();
+							$(this).parent().parent().parent().parent().append(cat_add_on);
+						}
+						else{
+							$(this).parent().parent().parent().parent().append(cat_add_on);
+						}
+					}
+				} else if(selection == "integer"){
+					if(($(this).parent().parent().parent().parent().has('#number_add_on').length)>=1){
+			
+					}else if(($(this).parent().parent().parent().parent().has('#cat_add_on').length)>=1){
+								$(this).parent().parent().parent().parent().find('#cat_add_on').remove();
+								$(this).parent().parent().parent().parent().append(number_add_on);
+							} 
+							else{
+								$(this).parent().parent().parent().parent().append(number_add_on);
+							}
+				} else if(selection == "bool"){
+					if(($(this).parent().parent().parent().parent().has('#number_add_on').length)>=1){
+							$(this).parent().parent().parent().parent().find('#number_add_on').remove();
+					}else if(($(this).parent().parent().parent().parent().has('#cat_add_on').length)>=1){
+							$(this).parent().parent().parent().parent().find('#cat_add_on').remove();
+							} 
+				}
+			}); 	
+
+			$('#parameter_space').on('click', '#add_value', function (event) {
+				$(this).parent().parent().append(cat_add_on_value);
+			});
+
+			$('#cat_add_on').on('click', '.button_mini', function (event) {
+  				$(this).parent().parent().parent().remove();
+			});
+
+			localStorage.setItem("test","test");
+		}); 
+
+		function create_Component(){
+			
+		}
+
+
+		
+	
+  	</script>		
+	</body>
+</html>

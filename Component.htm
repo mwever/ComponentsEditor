@@ -1,0 +1,97 @@
+
+        <div id = "ComponentSapce">
+          <div id="ComponentNameSpace">
+            <div class="input-wrapper">
+                <label>Component name:</label><input type="text" ng-model="componentName[0]">
+                {{componentName}}
+            </div>
+          </div>
+
+          <button ng-click="addReqInterface()">Add required Interface</button>
+              <div id = "ReqInterfaceSpace">
+				<div ng-repeat="x in reqInterfaces">
+                    <div>
+                        <div class="button-wrapper">
+                            <button ng-click="removeReqInterface($index)">&times </button>
+                        </div>
+                        <div class="input-wrapper">
+                            <div><label>ID:</label><input type="text" ng-model="x.id"></div>
+                            <div><label>Name:</label><input type="text" ng-model="x.name"></div>
+                            <div><label>Prio:</label> <input type="text" ng-model="x.prio"></div>
+                        </div>    
+                    </div>
+				</div>
+            </div>             
+            
+            <button ng-click="addProvidedInterface()">Add povided Interface </button>
+            <div id="ProvidedInterfaceSpace">
+                <div ng-repeat="x in providedInterfaces">
+                    <div>
+                        <div class="button-wrapper">
+                            <button ng-click="removeProvidedInterface($index)">&times </button>
+                        </div>
+                        <div class ="input-wrapper">
+                            <div><label>Interface:</label> <input type="text" ng-model="x.interfaces"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button ng-click="addParameter()">Add prameter </button>
+            <div id="ParameterSpace">
+                <div ng-repeat="x in parameters">
+                    <div>
+                        <div class="button-wrapper">
+                            <button ng-click="removeParameter($index)">&times </button>
+                        </div>
+                        <div class ="input-wrapper">
+                            <div><label>Name:</label> <input type="text" ng-model="x.name"></div>
+                            <div><label>Prority:</label> <input type="text" ng-model="x.prio"></div>
+                            <select  ng-model="x.paramtype" ng-options="type.name for type in types"></select>
+                            <div>
+                                <div ng-if="x.paramtype.name=='cat'">
+                                    <div class="button-wrapper">
+                                        <button ng-click="addKitten($index)">Add cat</button>
+                                        <div ng-repeat="cat in x.paramtype.cats">
+                                            <div calss="button-wrapper">
+                                                <button ng-click="removeKitten(x,$index)">&times</button>
+                                            </div>
+                                            <div class = "input-wrapper">
+                                                    <label>Name:</label><input type="text" ng-model="cat.name">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div ng-if="x.paramtype.name=='number'">
+                                    <div>
+                                        <div class= "input-wrapper">
+                                            <label>Min:</label><input type="number" ng-model="x.paramtype.min">
+                                            <label>Max:</label><input type="number" ng-model="x.paramtype.max">
+                                            <label>Default value:</label><input type="text" ng-model="x.paramtype.defaultVal">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div ng-if="x.paramtype.name =='bool'">
+                                    <div class = "input-wrapper">
+                                        <label>Default value:</label><input type="text" ng-model="x.paramtype.defaultVal">
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button ng-click="addDependency()">Add dependency</button>
+            <div id = "DependencySpace">
+                <div ng-repeat="x in dependencys">
+                    <div class="button-wrapper">
+                        <button ng-click="removeDependency($index)">&times</button>
+                    </div>
+                    <div class="input-wrapper">
+                        <label>Pre:</label><input type="text" ng-model="x.pre">
+                        <label>Post:</label><input type="text" ng-model="x.post">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button ng-click="addComponent()">Create Component</button>
+        
