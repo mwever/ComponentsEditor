@@ -21,17 +21,39 @@
             ComponentApp.config(function($routeProvider){
                 $routeProvider
                     .when("/",{
+						controller: "ComponentCreationController",
                         templateUrl:"Component.htm"
                     })
                     .when("/Repro",{
+						controller: "ComponentCreationController",
                         templateUrl:"Repro.htm"
                     })
                     
-            }
-
-            );
+            });
+			
+			ComponentApp.service('ComponentRepositoryService', ['$log', '$http', function($log, $http) {
+			
+				this.componentArray = [];
+				
+				this.addComponent = function(component) {
+					this.componentArray.push(component);
+				};
+				
+				this.getComponents = function() {
+					return this.componentArray;
+				};
+				
+				this.sendComponentToServer = function(c) {
+					$http.post('http://localhost:8080/api/component', c).then(function(r) {
+					//success
+					}, function(r) {
+					// failed
+					);
+				}
+			
+			}]);
         </script>
-        <div ng-app="ComponentCreationApp" ng-controller="ComponentCreationController">
+        <div ng-app="ComponentCreationApp">
             <!-- <div ng-include="'Component.htm'"></div> -->
             <div ng-view></div>
         </div>

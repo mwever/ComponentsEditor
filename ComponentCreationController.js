@@ -67,14 +67,13 @@ class kitten{
     }
 }
 
-ComponentApp.controller('ComponentCreationController',['$scope','$location', function($scope,$location){
+ComponentApp.controller('ComponentCreationController',['$scope','$location','ComponentRepositoryService', function($scope,$location, crs){
                             
     $scope.repro=[];
 
     $scope.components=[];
     
-    $scope.componentName =[];
-
+    $scope.componentName ="";
     $scope.reqInterfaces = [];
     $scope.providedInterfaces = [];
     $scope.parameters =[];
@@ -128,22 +127,30 @@ ComponentApp.controller('ComponentCreationController',['$scope','$location', fun
         }
     }
 
-    $scope.reset = function(){
+    $scope.resetForm = function(){
         $scope.parameters = [];
         $scope.reqInterfaces =[];
         $scope.providedInterfaces=[];
         $scope.parameters=[];
         $scope.dependencys=[];
-        $scope.componentName=[];
+        $scope.componentName="";
     }
 
 
     $scope.addComponent=function(){
-        $scope.components.push(new Component($scope.componentName[0],$scope.reqInterfaces,$scope.providedInterfaces,$scope.parameters,$scope.dependencys));
-        $scope.reset();
+		console.log("add component via the service");
+		crs.addComponent(new Component($scope.componentName,$scope.reqInterfaces,$scope.providedInterfaces,$scope.parameters,$scope.dependencys));
+		console.log("added component to the service ", crs.getComponents());
+		console.log($scope.componentName);
+        $scope.components.push(new Component($scope.componentName,$scope.reqInterfaces,$scope.providedInterfaces,$scope.parameters,$scope.dependencys));
+        $scope.resetForm();
+		console.log("redirect to repo");
         $location.path('/Repro');
     }
-
+	
+	$scope.getComponents = function() {
+		return crs.getComponents();
+	}
 
     $scope.removeReqInterface = function(x){
         $scope.reqInterfaces.splice(x,1);

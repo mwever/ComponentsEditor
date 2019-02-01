@@ -2,10 +2,11 @@
         <div id = "ComponentSapce">
           <div id="ComponentNameSpace">
             <div class="input-wrapper">
-                <label>Component name:</label><input type="text" ng-model="componentName[0]">
-                {{componentName}}
+                <label>Component name:</label><input type="text" ng-model="componentName">
             </div>
           </div>
+		  
+		  {{getComponents()}}
 
           <button ng-click="addReqInterface()">Add required Interface</button>
               <div id = "ReqInterfaceSpace">
