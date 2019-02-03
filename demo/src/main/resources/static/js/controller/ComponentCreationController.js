@@ -138,14 +138,14 @@ ComponentApp.controller('ComponentCreationController',['$scope','$location','Com
 
 
     $scope.addComponent=function(){
-		console.log("add component via the service");
+		//console.log("add component via the service");
 		crs.addComponent(new Component($scope.componentName,$scope.reqInterfaces,$scope.providedInterfaces,$scope.parameters,$scope.dependencys));
-		console.log("added component to the service ", crs.getComponents());
-		console.log($scope.componentName);
-        $scope.components.push(new Component($scope.componentName,$scope.reqInterfaces,$scope.providedInterfaces,$scope.parameters,$scope.dependencys));
+		//console.log("added component to the service ", crs.getComponents());
+		//console.log($scope.componentName);
+        //$scope.components.push(new Component($scope.componentName,$scope.reqInterfaces,$scope.providedInterfaces,$scope.parameters,$scope.dependencys));
         $scope.resetForm();
-		console.log("redirect to repo");
-        $location.path('/Repro');
+		//console.log("redirect to repo");
+        $location.path('/Repo');
     }
 	
 	$scope.getComponents = function() {
@@ -175,12 +175,14 @@ ComponentApp.controller('ComponentCreationController',['$scope','$location','Com
         $scope.parameters[$scope.parameters.indexOf(x)].paramtype.cats.splice(y,1);
     }
 
-    $scope.removeComponent=function(x){
-        $scope.components.splice(x,1);
-    }
 
     $scope.goToComponentView=function(){
         $location.path('');
     }
+    
+    $scope.removeComponent = function(x){
+    	crs.deleteComponent(x);
+    }
+    
 }
 ]);

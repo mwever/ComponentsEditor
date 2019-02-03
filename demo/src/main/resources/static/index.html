@@ -5,14 +5,16 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
 		<title>ML-PLan</title>
         
-        <script src="jquery-3.3.1.min.js"></script>
+        <script src="js/jquery-3.3.1.min.js"></script>
         
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
 
-        <link rel="stylesheet" href ="CSS/style.css">
-        <link rel="stylesheet" href ="CSS/style_sub.css">
+        <link rel="stylesheet" href ="css/style.css">
+        <link rel="stylesheet" href ="css/style_sub.css">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		
+		<link rel="icon" type="image/png" href="css/icon.png">
 		
 	</head>
 	<body>
@@ -22,41 +24,23 @@
                 $routeProvider
                     .when("/",{
 						controller: "ComponentCreationController",
-                        templateUrl:"Component.htm"
+                        templateUrl:"views/Component.htm"
                     })
-                    .when("/Repro",{
+                    .when("/Repo",{
 						controller: "ComponentCreationController",
-                        templateUrl:"Repro.htm"
+                        templateUrl:"views/Repo.htm"
                     })
                     
             });
-			
-			ComponentApp.service('ComponentRepositoryService', ['$log', '$http', function($log, $http) {
-			
-				this.componentArray = [];
-				
-				this.addComponent = function(component) {
-					this.componentArray.push(component);
-				};
-				
-				this.getComponents = function() {
-					return this.componentArray;
-				};
-				
-				this.sendComponentToServer = function(c) {
-					$http.post('http://localhost:8080/api/component', c).then(function(r) {
-					//success
-					}, function(r) {
-					// failed
-					);
-				}
-			
-			}]);
+	
         </script>
+        
         <div ng-app="ComponentCreationApp">
             <!-- <div ng-include="'Component.htm'"></div> -->
             <div ng-view></div>
         </div>
-        <script src="ComponentCreationController.js"></script>  
+        
+        <script type="text/javascript" src="js/services/ComponentRepositoryService.js"></script>
+        <script type="text/javascript" src="js/controller/ComponentCreationController.js"></script>  
     </body>
 </html>
