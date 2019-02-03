@@ -3,7 +3,7 @@
         <button ng-click="goToComponentView()">Create Component</button>
     </div>
     <div id=ComponentSpace>
-        <div ng-repeat="x in getComponents()">
+        <div ng-repeat="x in componentsStorage.getComponents()">
             <div class="button-wrapper">
                 <button ng-click="removeComponent($index)">&times</button>
             </div>

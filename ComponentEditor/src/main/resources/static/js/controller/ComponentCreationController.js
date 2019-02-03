@@ -69,10 +69,11 @@ class kitten{
 
 ComponentApp.controller('ComponentCreationController',['$scope','$location','ComponentRepositoryService', function($scope,$location, crs){
                             
-    $scope.repro=[];
+   /* $scope.repro=[];
 
-    $scope.components=[];
+    $scope.components=[];*/
     
+	$scope.currentComponent = crs.getLatestComponent();
     $scope.componentName ="";
     $scope.reqInterfaces = [];
     $scope.providedInterfaces = [];
@@ -145,7 +146,7 @@ ComponentApp.controller('ComponentCreationController',['$scope','$location','Com
         //$scope.components.push(new Component($scope.componentName,$scope.reqInterfaces,$scope.providedInterfaces,$scope.parameters,$scope.dependencys));
         $scope.resetForm();
 		//console.log("redirect to repo");
-        $location.path('/Repo');
+        $location.path('/');
     }
 	
 	$scope.getComponents = function() {
@@ -176,13 +177,13 @@ ComponentApp.controller('ComponentCreationController',['$scope','$location','Com
     }
 
 
-    $scope.goToComponentView=function(){
+    /*$scope.goToComponentView=function(){
         $location.path('');
-    }
+    }*/
     
-    $scope.removeComponent = function(x){
+    /*$scope.removeComponent = function(x){
     	crs.deleteComponent(x);
-    }
+    }*/
     
 }
 ]);

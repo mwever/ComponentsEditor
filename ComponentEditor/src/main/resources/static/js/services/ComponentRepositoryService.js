@@ -2,8 +2,27 @@
 			
 				this.componentArray = [];
 				
+				class Component{
+				    constructor(name, reqInterface, providedInterface, param, dependency){
+				        this.name = name;
+				        this.reqInterface = reqInterface;
+				        this.providedInterface = providedInterface;
+				        this.param = param;
+				        this.dependency = dependency;
+				    }
+				}; 
+				
 				this.addComponent = function(component) {
 					this.componentArray.push(component);
+				};
+				
+				
+				this.getLatestComponent = function(){
+					return this.componentArray[this.componentArray.length-1];
+				};
+				
+				this.addnewComponent = function(){
+					this.componentArray.push(new Component(null,null,null,null,null));
 				};
 				
 				this.getComponents = function() {

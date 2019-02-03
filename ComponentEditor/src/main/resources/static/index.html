@@ -22,15 +22,15 @@
             var ComponentApp = angular.module('ComponentCreationApp',["ngRoute"]);
             ComponentApp.config(function($routeProvider){
                 $routeProvider
-                    .when("/",{
+                	.when("/",{
+					//controller: "ComponentCreationController",
+					controller: "RepoitoryController",
+                    templateUrl:"views/Repo.htm"
+                	})
+                    .when("/Comp",{
 						controller: "ComponentCreationController",
                         templateUrl:"views/Component.htm"
                     })
-                    .when("/Repo",{
-						controller: "ComponentCreationController",
-                        templateUrl:"views/Repo.htm"
-                    })
-                    
             });
 	
         </script>
@@ -39,6 +39,9 @@
             <!-- <div ng-include="'Component.htm'"></div> -->
             <div ng-view></div>
         </div>
+        
+        <script type="text/javascript" src="js/services/ComponentServerService.js"></script>
+        <script type="text/javascript" src="js/controller/RepoitoryController.js"></script>
         
         <script type="text/javascript" src="js/services/ComponentRepositoryService.js"></script>
         <script type="text/javascript" src="js/controller/ComponentCreationController.js"></script>  
