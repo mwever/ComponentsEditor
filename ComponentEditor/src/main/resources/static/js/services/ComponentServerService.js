@@ -9,7 +9,7 @@ ComponentApp.factory('ComponentServerService', ['$log','$q', '$http', function($
  			},
  			
  			createComponent: function(component){
- 				return $http.post('http://localhost:8080/component', comp).then(
+ 				return $http.post('http://localhost:8080/component/', comp).then(
  					function(response){
  						return response.data;
  					},
@@ -21,7 +21,7 @@ ComponentApp.factory('ComponentServerService', ['$log','$q', '$http', function($
  			},
  			
  		 updateComponent: function(comp, name){
-            return $http.put('http://localhost:8080/component'+name, comp).then(
+            return $http.put('http://localhost:8080/component/'+name, comp).then(
                     function(response){
                         return response.data;
                     }, 
@@ -33,7 +33,7 @@ ComponentApp.factory('ComponentServerService', ['$log','$q', '$http', function($
         },
      
         deleteComponent: function(name){
-            return $http.delete('http://localhost:8080/component'+name)
+            return $http.delete('http://localhost:8080/component/'+name)
             .then(
                     function(response){
                         return response.data;
