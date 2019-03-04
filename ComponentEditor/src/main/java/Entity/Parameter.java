@@ -1,12 +1,20 @@
 package Entity;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Parameter {
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public class Parameter implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7823822356385091837L;
 	private String name;
 	private int prio;
-	private List<ParamType> param;
+	private ParamType paramtype;
 	
 	public String getName() {
 		return name;
@@ -20,18 +28,18 @@ public class Parameter {
 	public void setPrio(int prio) {
 		this.prio = prio;
 	}
-	public List<ParamType> getParam() {
-		return param;
+	public ParamType getParam() {
+		return paramtype;
 	}
-	public void setParam(List<ParamType> param) {
-		this.param = param;
+	public void setParam(ParamType param) {
+		this.paramtype = param;
 	}
 	
-	public Parameter(String name, int prio, List<ParamType> param) {
-		super();
+	@JsonCreator
+	public Parameter(@JsonProperty("name") String name,@JsonProperty("prio") int prio, @JsonProperty("param") ParamType param) {
 		this.name = name;
 		this.prio = prio;
-		this.param = param;
+		this.paramtype = param;
 	}
 	
 	public Parameter() {

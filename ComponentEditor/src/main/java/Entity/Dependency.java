@@ -1,7 +1,16 @@
 package Entity;
 
-public class Dependency {
+import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public class Dependency implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4593319221057634255L;
 	private String pre;
 	private String post;
 	
@@ -18,8 +27,8 @@ public class Dependency {
 		this.post = post;
 	}
 	
-	public Dependency(String pre, String post) {
-		super();
+	@JsonCreator
+	public Dependency(@JsonProperty("pre") String pre, @JsonProperty("post") String post) {
 		this.pre = pre;
 		this.post = post;
 	}

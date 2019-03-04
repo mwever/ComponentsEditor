@@ -1,22 +1,54 @@
 package Entity;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Cat implements ParamType {
-	private List<Kitten> kittens;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public class Cat implements ParamType, Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4256579033771944858L;
+	private List<Kitten> cats;
+	private String name;
+	private String defaultVal;
+	
+	public String getName() {
+		return name;
+	}
+	
+	public List<Kitten> getCats() {
+		return cats;
+	}
+
+	public void setCats(List<Kitten> cats) {
+		this.cats = cats;
+	}
+
+	public String getDefaultVal() {
+		return defaultVal;
+	}
+
+	public void setDefaultVal(String defaultVal) {
+		this.defaultVal = defaultVal;
+	}
 
 	public List<Kitten> getKittens() {
-		return kittens;
+		return cats;
 	}
 
 	public void setKittens(List<Kitten> kittens) {
-		this.kittens = kittens;
+		this.cats = kittens;
 	}
-
-	public Cat(List<Kitten> kittens) {
-		super();
-		this.kittens = kittens;
+	
+	@JsonCreator
+	public Cat(@JsonProperty("defaultVal") String defaultVal) {
+		this.defaultVal = defaultVal;
+		this.name = "cat";
 	}
+	
 	public Cat() {
 		
 	}

@@ -1,9 +1,19 @@
 package Entity;
 
-public class Number implements ParamType {
+import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public class Number implements ParamType, Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -773566885424022919L;
 	private double min;
 	private double max;
-	private double defaultValue;
+	private double defaultVal;
+	private String name; 
 	
 	public double getMin() {
 		return min;
@@ -18,19 +28,30 @@ public class Number implements ParamType {
 		this.max = max;
 	}
 	public double getDefaultValue() {
-		return defaultValue;
+		return defaultVal;
 	}
 	public void setDefaultValue(double defaultValue) {
-		this.defaultValue = defaultValue;
+		this.defaultVal = defaultValue;
 	}
-	public Number(double min, double max, double defaultValue) {
-		super();
+	
+	public String getName() {
+		return name;
+	}
+	
+	/*
+	 * public void setName(String name) { this.name = name; }
+	 */
+	@JsonCreator
+	public Number(@JsonProperty("min") double min,@JsonProperty("max") double max,@JsonProperty("defaultVal") double defaultVal) {
+		
+		this.name = "number";
 		this.min = min;
 		this.max = max;
-		this.defaultValue = defaultValue;
+		this.defaultVal = defaultVal;
 	}
 	
 	public Number() {
 		
 	}
+	
 }

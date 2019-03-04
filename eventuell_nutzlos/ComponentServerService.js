@@ -1,5 +1,5 @@
-ComponentApp.factory('ComponentServerService', ['$log','$q', '$http', function($log,$q ,$http) {
- 	return{};
+//ComponentApp.factory('ComponentServerService', ['$log','$q', '$http', function($log,$q ,$http) {
+ //	return{};
  		/*getAllComponents: function (){
  				return $http.get('http://localhost:8080/component').then(
  					function(response){
@@ -45,4 +45,4 @@ ComponentApp.factory('ComponentServerService', ['$log','$q', '$http', function($
             	);
         	}
  	};*/
-}]);
+//}]);

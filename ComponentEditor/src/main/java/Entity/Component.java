@@ -1,11 +1,19 @@
 package Entity;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Component {
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public class Component implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 508345428627420760L;
 	private String name;
-	private List<RequieredInterface> reqInterface;
-	private List<ProvidedInterface> provInterface;
+	private List<ReqInterface> reqInterface;
+	private List<ProvidedInterface> providedInterface;
 	private List<Parameter> param;
 	private List<Dependency> dependency;
 	
@@ -17,20 +25,20 @@ public class Component {
 		this.name = name;
 	}
 
-	public List<RequieredInterface> getReqInterface() {
+	public List<ReqInterface> getReqInterface() {
 		return reqInterface;
 	}
 
-	public void setReqInterface(List<RequieredInterface> reqInterface) {
+	public void setReqInterface(List<ReqInterface> reqInterface) {
 		this.reqInterface = reqInterface;
 	}
 
 	public List<ProvidedInterface> getProvInterface() {
-		return provInterface;
+		return providedInterface;
 	}
 
 	public void setProvInterface(List<ProvidedInterface> provInterface) {
-		this.provInterface = provInterface;
+		this.providedInterface = provInterface;
 	}
 
 	public List<Parameter> getParam() {
@@ -49,13 +57,12 @@ public class Component {
 		this.dependency = dependency;
 	}
 
-	
-	public Component(String name, List<RequieredInterface> reqInterface, List<ProvidedInterface> provInterface,
-			List<Parameter> param, List<Dependency> dependency) {
-		super();
+	@JsonCreator
+	public Component(@JsonProperty("name") String name, @JsonProperty("reqInterface") List<ReqInterface> reqInterface,  @JsonProperty("provInterface") List<ProvidedInterface> provInterface,
+			@JsonProperty("param") List<Parameter> param, @JsonProperty("dependency") List<Dependency> dependency) {
 		this.name = name;
 		this.reqInterface = reqInterface;
-		this.provInterface = provInterface;
+		this.providedInterface = provInterface;
 		this.param = param;
 		this.dependency = dependency;
 	}

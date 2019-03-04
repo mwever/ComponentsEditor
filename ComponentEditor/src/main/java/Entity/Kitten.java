@@ -1,6 +1,15 @@
 package Entity;
 
-public class Kitten {
+import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public class Kitten  implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3567436498306816067L;
 	private String name;
 
 	public String getName() {
@@ -10,9 +19,9 @@ public class Kitten {
 	public void setName(String name) {
 		this.name = name;
 	}
-
-	public Kitten(String name) {
-		super();
+	
+	@JsonCreator
+	public Kitten(@JsonProperty("name") String name) {
 		this.name = name;
 	}
 	

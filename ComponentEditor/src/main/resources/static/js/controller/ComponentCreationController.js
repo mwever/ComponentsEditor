@@ -8,7 +8,7 @@ class Component{
     }
 }; 
 
-class reqInterface{
+class ReqInterface{
     constructor(id, name, prio){
         this.id = id;
         this.name = name;
@@ -16,13 +16,13 @@ class reqInterface{
     }
 };  
 
-class providedInterface{
+class ProvidedInterface{
     constructor(interfaces){
         this.interfaces = interfaces;
     }
 };
 
-class param{
+class Param{
     constructor(name, prio, paramtype){
         this.name = name;
         this.prio = prio;
@@ -30,14 +30,14 @@ class param{
     }
 };
 
-class dependency{
+class Dependency{
     constructor(pre, post){
         this.pre = pre;
         this.post = post;
     }
 }; 
 
-class cat{
+class Cat{
     constructor(defaultVal){
         this.defaultVal = defaultVal;
         this.name = 'cat';
@@ -45,7 +45,7 @@ class cat{
     }
 }
 
-class number{
+class Number{
     constructor(min,max,defaultVal){
         this.name = 'number';
         this.min = min;
@@ -54,40 +54,40 @@ class number{
     }
 }
 
-class boolVal{
+class BoolVal{
     constructor(defaultVal){
         this.name = 'bool';
         this.defaultVal = defaultVal;
     }
 }
 
-class kitten{
+class Kitten{
     constructor(name){
         this.name = name;
     }
 }
 
-ComponentApp.controller('ComponentCreationController',['$scope','$location','ComponentRepositoryService', function($scope,$location, crs){
+ComponentApp.controller('ComponentCreationController',['$scope','$location','$http','ComponentRepositoryService', function($scope,$location,$http ,crs){
                             
    /* $scope.repro=[];
 
     $scope.components=[];*/
     
-	$scope.currentComponent = crs.getLatestComponent();
+	//$scope.currentComponent = crs.getLatestComponent();
     $scope.componentName ="";
     $scope.reqInterfaces = [];
     $scope.providedInterfaces = [];
     $scope.parameters =[];
     $scope.dependencys=[];
 
-    $scope.types =[new cat(null),new number(null,null,null), new boolVal(null)];
+    $scope.types =[new Cat(null),new Number(null,null,null), new BoolVal(null)];
 
     $scope.addReqInterface = function(){
         $scope.errortext="";
         if(!($scope.reqInterfaces.indexOf($scope.addReqInterface)== -1)){
             $scope.errortext="The requiered Interface is allready added";
         }else{
-            $scope.reqInterfaces.push(new reqInterface(null,null,null));
+            $scope.reqInterfaces.push(new ReqInterface(null,null,null));
         }
     }
 
@@ -97,7 +97,7 @@ ComponentApp.controller('ComponentCreationController',['$scope','$location','Com
             $scope.errortext="The provided Interface is allready added";
         }
         else{
-            $scope.providedInterfaces.push(new providedInterface(null,null,null));
+            $scope.providedInterfaces.push(new ProvidedInterface(null,null,null));
         }
     }
 
@@ -106,7 +106,7 @@ ComponentApp.controller('ComponentCreationController',['$scope','$location','Com
         if(!($scope.parameters.indexOf($scope.addParameter)== -1)){
             $scope.errortext="The parameter is allready added";
         }else{
-            $scope.parameters.push(new param(null,null,null));
+            $scope.parameters.push(new Param(null,null,null));
         }
     }
 
@@ -115,7 +115,7 @@ ComponentApp.controller('ComponentCreationController',['$scope','$location','Com
         if(!($scope.parameters.indexOf($scope.addParameter)== -1)){
             $scope.errortext="The parameter is allready added";
         }else{ */
-            $scope.parameters[x].paramtype.cats.push(new kitten(null));
+            $scope.parameters[x].paramtype.cats.push(new Kitten(null));
         //}
     }
 
@@ -124,7 +124,7 @@ ComponentApp.controller('ComponentCreationController',['$scope','$location','Com
         if(!($scope.dependencys.indexOf($scope.dependencys)== -1)){
             $scope.errortext="The dependency is allready added";
         }else{
-            $scope.dependencys.push(new dependency(null,null));
+            $scope.dependencys.push(new Dependency(null,null));
         }
     }
 
@@ -140,18 +140,68 @@ ComponentApp.controller('ComponentCreationController',['$scope','$location','Com
 
     $scope.addComponent=function(){
 		//console.log("add component via the service");
-		crs.addComponent(new Component($scope.componentName,$scope.reqInterfaces,$scope.providedInterfaces,$scope.parameters,$scope.dependencys));
+    	var comp = new Component($scope.componentName,$scope.reqInterfaces,$scope.providedInterfaces,$scope.parameters,$scope.dependencys); 
+		
 		//console.log("added component to the service ", crs.getComponents());
 		//console.log($scope.componentName);
         //$scope.components.push(new Component($scope.componentName,$scope.reqInterfaces,$scope.providedInterfaces,$scope.parameters,$scope.dependencys));
-        $scope.resetForm();
+		
+		
+		console.log("Hello");
+		
+		var jsonString =  angular.toJson(comp, true);
+		//var jsonString = JSON.stringify(comp);
+		console.log(jsonString);
+		
+		if(crs.checkComponent(comp)){
+			console.log("POST");
+			$http({
+				method: 'POST',
+				url: 'http://localhost:8080/components',
+				//Content-Type: 'application/json',
+				data: jsonString  //comp
+			}).then(
+					function(response){
+						console.log("worked");
+					},
+					function(response){
+						console.log(response);
+						console.log("Error");
+					}		
+	    	);
+			
+		}
+		else{
+			
+			console.log("PUT");
+			$http({
+				method: 'PUT',
+				url: 'http://localhost:8080/components',
+				//Content-Type: 'application/json',
+				data: jsonString //comp 
+			}).then(
+					function(response){
+						console.log("worked");
+					},
+					function(response){
+						console.log(response);
+						console.log("Error");
+					}
+					
+	    	);
+		}
+		
+		crs.addComponent(comp);
+		
+		
+		$scope.resetForm();
 		//console.log("redirect to repo");
         $location.path('/');
     }
 	
-	$scope.getComponents = function() {
+	/*$scope.getComponents = function() {
 		return crs.getComponents();
-	}
+	}*/
 
     $scope.removeReqInterface = function(x){
         $scope.reqInterfaces.splice(x,1);

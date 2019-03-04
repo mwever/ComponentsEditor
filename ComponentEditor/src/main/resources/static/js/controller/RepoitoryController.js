@@ -1,10 +1,10 @@
-ComponentApp.controller('RepoitoryController',['$scope','$location','$log','ComponentRepositoryService','ComponentServerService',function($scope,$location,$log,ComponentRepositoryService,ComponentServerService){
+ComponentApp.controller('RepoitoryController',['$scope','$location','$log','ComponentRepositoryService',function($scope,$location,$log,ComponentRepositoryService,ComponentServerService){
 		$scope.componentsStorage = ComponentRepositoryService;
 		
 		
 		$scope.goToComponentView=function(){
         	$location.path('/Comp');
-        	$scope.componentsStorage.addnewComponent();
+        	//$scope.componentsStorage.addnewComponent();
     	}
     	
     	$scope.removeComponent = function(x){

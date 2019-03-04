@@ -1,6 +1,15 @@
 package Entity;
 
-public class RequieredInterface {
+import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public class ReqInterface implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int id;
 	private String name;
 	private int prio;
@@ -24,14 +33,15 @@ public class RequieredInterface {
 		this.prio = prio;
 	}
 	
-	public RequieredInterface(int id, String name, int prio) {
-		super();
+	@JsonCreator
+	public ReqInterface(@JsonProperty("id")int id,@JsonProperty("name") String name,@JsonProperty("prio") int prio) {
+		
 		this.id = id;
 		this.name = name;
 		this.prio = prio;
 	}
 	
-	public RequieredInterface() {
+	public ReqInterface() {
 		
 	}
 }
