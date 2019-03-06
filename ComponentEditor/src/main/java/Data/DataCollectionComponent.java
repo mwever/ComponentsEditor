@@ -2,7 +2,9 @@ package Data;
 
 import java.util.Collection;
 
-import Entity.Component;
+import hasco.model.Component;
+
+
 
 public interface DataCollectionComponent {
 

@@ -18,13 +18,13 @@
                         <div class="input-wrapper">
                             <div><label>ID:</label><input type="text" ng-model="x.id"></div>
                             <div><label>Name:</label><input type="text" ng-model="x.name"></div>
-                            <div><label>Prio:</label> <input type="text" ng-model="x.prio"></div>
+                            <!-- <div><label>Prio:</label> <input type="text" ng-model="x.prio"></div> -->
                         </div>    
                     </div>
 				</div>
             </div>             
             
-            <button ng-click="addProvidedInterface()">Add povided Interface </button>
+            <button ng-click="addProvidedInterface()">Add provided Interface </button>
             <div id="ProvidedInterfaceSpace">
                 <div ng-repeat="x in providedInterfaces">
                     <div>
@@ -38,7 +38,7 @@
                 </div>
             </div>
 
-            <button ng-click="addParameter()">Add prameter </button>
+            <button ng-click="addParameter()">Add parameter </button>
             <div id="ParameterSpace">
                 <div ng-repeat="x in parameters">
                     <div>
@@ -47,34 +47,39 @@
                         </div>
                         <div class ="input-wrapper">
                             <div><label>Name:</label> <input type="text" ng-model="x.name"></div>
-                            <div><label>Property:</label> <input type="text" ng-model="x.prio"></div>
-                            <select  ng-model="x.paramtype" ng-options="type.name for type in types"></select>
+                            <div><label>Default Value:</label> <input type="text" ng-model="x.defaultValue"></div>
+                            <!-- <div><label>Priority:</label> <input type="text" ng-model="x.prio"></div> -->
+                            <select  ng-model="x.defaultDomain" ng-options="type.actualType as type.label for type in types"></select>
                             <div>
-                                <div ng-if="x.paramtype.name=='cat'">
+                            	{{x.defaultDomain}}
+                                <div ng-if="isCat(x.defaultDomain)">
                                     <div class="button-wrapper">
                                         <button ng-click="addKitten($index)">Add cat</button>
-                                        <div ng-repeat="cat in x.paramtype.cats">
+                                        <div ng-repeat="cat in x.defaultDomain.values">
                                             <div calss="button-wrapper">
                                                 <button ng-click="removeKitten(x,$index)">&times</button>
                                             </div>
+                                            {{x.defaultDomain}}
+                                            {{cat}}
                                             <div class = "input-wrapper">
-                                                    <label>Name:</label><input type="text" ng-model="cat.name">
+                                                    <label>Name:</label><input type="text" ng-model="cat">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div ng-if="x.paramtype.name=='number'">
+                                <div ng-if="isNumber(x.defaultDomain)">
                                     <div>
                                         <div class= "input-wrapper">
-                                            <label>Min:</label><input type="number" ng-model="x.paramtype.min">
-                                            <label>Max:</label><input type="number" ng-model="x.paramtype.max">
-                                            <label>Default value:</label><input type="text" ng-model="x.paramtype.defaultVal">
+                                            <label>Min:</label><input type="number" ng-model="x.defaultDomain.min">
+                                            <label>Max:</label><input type="number" ng-model="x.defaultDomain.max">
+                                           <!--  <label>Default value:</label><input type="text" ng-model="x.paramtype.defaultVal"> -->
                                         </div>
                                     </div>
                                 </div>
-                                <div ng-if="x.paramtype.name =='bool'">
+                                <div ng-if="isBool(x.defaultDomain)">
                                     <div class = "input-wrapper">
-                                        <label>Default value:</label><input type="text" ng-model="x.paramtype.defaultVal">
+                                    	<!-- <label> Value</label> <select> </select> -->
+                                        <!-- <label>Default value:</label><input type="text" ng-model="x.paramtype.defaultVal"> -->
                                     </div>
                                 </div>
                         </div>

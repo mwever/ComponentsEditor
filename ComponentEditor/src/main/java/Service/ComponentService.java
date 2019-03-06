@@ -8,8 +8,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 
 import Data.DataCollectionComponent;
-import Data.DataCollectionComponentFile;
-import Entity.Component;
+import hasco.model.Component;
+
 
 @Service
 @ComponentScan(basePackageClasses = DataCollectionComponent.class)

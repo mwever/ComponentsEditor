@@ -13,13 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.jsontype.NamedType;
 
-import Entity.BoolVal;
-import Entity.Cat;
-import Entity.Component;
 import Service.ComponentService;
+import hasco.model.Component;
 
 
 
@@ -50,24 +46,15 @@ public class ComponentsController{
 	}
 	
 	@RequestMapping(method = RequestMethod.PUT)
-	public void updateComponent(@RequestBody String json) throws JsonParseException, JsonMappingException, IOException {
+	public void updateComponent(@RequestBody Component component) throws JsonParseException, JsonMappingException, IOException {
 		System.out.println("TEST");
 		
-		ObjectMapper objectMapper = new ObjectMapper();
-		
-		objectMapper.registerSubtypes(new NamedType(Number.class, "Number"));
-		objectMapper.registerSubtypes(new NamedType(BoolVal.class, "Boolval"));
-		objectMapper.registerSubtypes(new NamedType(Cat.class, "Cat"));
-		
-		Component component = objectMapper.readValue(json, Component.class);
 		this.componentService.updateComponent(component);
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
-	public void insertComponent(@RequestBody String json) throws JsonParseException, JsonMappingException, IOException {
+	public void insertComponent(@RequestBody Component component) throws JsonParseException, JsonMappingException, IOException {
 		System.out.println("TEST");
-		ObjectMapper objectMapper = new ObjectMapper();
-		Component component = objectMapper.readValue(json, Component.class);
 		this.componentService.insertComponent(component);
 	}
 }
