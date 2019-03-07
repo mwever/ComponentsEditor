@@ -25,11 +25,10 @@ sourceCompatibility = '1.8'
 
 
 dependencies {
+	compile ('com.github.fmohr.AILibs:hasco:0.0.7a')
 	compile 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	
-	
 }
 
 
@@ -39,6 +38,5 @@ repositories {
 	maven {
         url "http://clojars.org/repo/"
     }
-    
-
+	maven { url "https://jitpack.io" }
 }
