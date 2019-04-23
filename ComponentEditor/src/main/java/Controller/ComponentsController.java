@@ -67,7 +67,8 @@ public class ComponentsController{
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
-	public void insertComponent(@RequestBody String str) throws JsonParseException, JsonMappingException, IOException {
+	public void insertComponent(@RequestBody String str) throws IOException {
+		System.out.println("str: "+ str);	
 		Component comp = parseComponent(str);
 		componentService.updateComponent(comp);
 	}
@@ -76,7 +77,11 @@ public class ComponentsController{
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
 		IntermediateComponent icomp = mapper.readValue(input, IntermediateComponent.class);
+		if(icomp.getName() == "") {
+			throw new IllegalArgumentException("Components must have a name");
+		}
 		Component comp = new Component(icomp.getName());
+		
 		
 		if(icomp.getProvidedInterfaces() != null) {
 			List<ProvidedInterface> provI =  icomp.getProvidedInterfaces();
@@ -126,6 +131,7 @@ public class ComponentsController{
 				comp.addDependency(dep);
 			}
 		}
+		
 		
 		return comp;
 	}

@@ -32,9 +32,18 @@
 				};
 				
 				this.checkComponent = function(x){
-					var contained = Boolean(this.componentArray.indexOf(x) > -1);
-					return contained;
+					/*for(var i = 0; i < this.componentArray.length; i++){
+						if(x.name == this.componentArray[i].name){
+							return true
+						}
+					}*/
+//					var contained = Boolean(this.componentArray.indexOf(x) > -1);
+					return this.componentArray.includes[x];
 				};
+				
+				this.updateComponent = function(x){
+					
+				}
 				
 				this.deleteComponent = function(x){
 					

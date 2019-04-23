@@ -174,7 +174,7 @@ ComponentApp.controller('ComponentCreationController',['$scope','$location','$ht
     $scope.addComponent=function(){
 		
     	var comp = new Component($scope.componentName,$scope.reqInterfaces,$scope.providedInterfaces,$scope.parameters,$scope.dependencys); 
-    	crs.addComponent(comp);
+    	
 		var jsonString =  angular.toJson(comp, true);
 		
 		if(crs.checkComponent(comp)){
@@ -212,7 +212,12 @@ ComponentApp.controller('ComponentCreationController',['$scope','$location','$ht
 					
 	    	);
 		}
-		
+		if(!crs.checkComponent(comp)){
+			crs.addComponent(comp);
+		}
+		else{
+			crs.updateComponent(comp);
+		}
 		
 		$scope.resetForm();
         $location.path('/');
@@ -276,7 +281,7 @@ ComponentApp.controller('ComponentCreationController',['$scope','$location','$ht
     		$scope.parameters = $scope.toLoad.param;
     		$scope.dependencys = $scope.toLoad.dependency;
     	}
-    	return true;
+    	
     }
     /*$scope.goToComponentView=function(){
         $location.path('');

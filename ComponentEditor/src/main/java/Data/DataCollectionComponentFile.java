@@ -49,28 +49,60 @@ public class DataCollectionComponentFile implements DataCollectionComponent {
 	@Override
 	public void updateComponent(Component component) {
 		Component comp = this.components.get(component.getName());
-		System.out.println("Comp not found "+comp == null);
-		for(Dependency dependency : (component.getDependencies())){
-			comp.addDependency(dependency);
+		
+		if(!component.getDependencies().isEmpty()) {
+			for(Dependency dependency : (component.getDependencies())){
+				if(!(comp.getDependencies().contains(dependency))) {
+					comp.addDependency(dependency);
+				}
+			}
+		}
+		else {
+			if(!comp.getDependencies().isEmpty()) {
+				comp.getDependencies().clear();
+			}
 		}
 		
-		for(Parameter param : (component.getParameters())) {
-			/*
-			 * if(!comp.getParameters().contains(param)) {
-			 * 
-			 * }
-			 */
-			comp.addParameter(param);
+		if(!component.getParameters().isEmpty()) {
+			for(Parameter param : (component.getParameters())) {
+				if(! comp.getParameters().contains(param)) {
+					comp.addParameter(param);
+				}
+			}
+		}
+		else {
+			if(comp.getParameters() != null) {
+				comp.getParameters().clear();
+			}
 		}
 		
-		for(String provInterface : component.getProvidedInterfaces()) {
-			component.addProvidedInterface(provInterface);
+		if(!component.getProvidedInterfaces().isEmpty()) {
+			for(String provInterface : component.getProvidedInterfaces()) {
+				if(!comp.getProvidedInterfaces().contains(provInterface)) {
+					comp.addProvidedInterface(provInterface);
+				}
+			}
+		}
+		else {
+			if(!comp.getProvidedInterfaces().isEmpty()) {
+				comp.getProvidedInterfaces().clear();
+			}
 		}
 		
-		LinkedHashMap<String,String> toAdd = component.getRequiredInterfaces();
-		for(String str : toAdd.keySet()) {
-			comp.addRequiredInterface(str, toAdd.get(str));
+		if(!component.getRequiredInterfaces().isEmpty()) {
+			LinkedHashMap<String,String> toAdd = component.getRequiredInterfaces();
+			for(String str : toAdd.keySet()) {
+				if(!comp.getRequiredInterfaces().containsKey(str)) {
+					comp.addRequiredInterface(str, toAdd.get(str));
+				}
+			}
 		}
+		else {
+			if(!comp.getRequiredInterfaces().isEmpty()) {
+				comp.getRequiredInterfaces().clear();
+			}
+		}
+		
 		
 	
 		this.components.put(component.getName(), comp);
