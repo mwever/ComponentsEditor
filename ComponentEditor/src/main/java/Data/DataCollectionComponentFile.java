@@ -1,9 +1,8 @@
 package Data;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
@@ -16,7 +15,7 @@ import hasco.model.Parameter;
 @Repository
 @Qualifier("FileData")
 public class DataCollectionComponentFile implements DataCollectionComponent {
-	private Map<String,Component> components;
+	private HashMap<String,Component> components = new HashMap<>();
 	
 	
 	/* (non-Javadoc)
@@ -28,7 +27,8 @@ public class DataCollectionComponentFile implements DataCollectionComponent {
 	}
 	
 	/* (non-Javadoc)
-	 * @see Data.ComponentData#getComponentByName(java.lang.String)
+	 * @see Data.ComponentData#getComponentByName(java.lang.String
+	 * )
 	 */
 	@Override
 	public Component getComponentByName(String name) {
@@ -49,11 +49,17 @@ public class DataCollectionComponentFile implements DataCollectionComponent {
 	@Override
 	public void updateComponent(Component component) {
 		Component comp = this.components.get(component.getName());
+		System.out.println("Comp not found "+comp == null);
 		for(Dependency dependency : (component.getDependencies())){
 			comp.addDependency(dependency);
 		}
 		
 		for(Parameter param : (component.getParameters())) {
+			/*
+			 * if(!comp.getParameters().contains(param)) {
+			 * 
+			 * }
+			 */
 			comp.addParameter(param);
 		}
 		

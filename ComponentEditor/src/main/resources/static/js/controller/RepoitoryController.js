@@ -11,9 +11,12 @@ ComponentApp.controller('RepoitoryController',['$scope','$location','$log','Comp
     		$scope.componentsStorage.deleteComponent(x);
     	}
     	
+    	
+    	$scope.editComponent = function(x){
+    		$scope.componentsStorage.editComponent(x);
+    		$location.path('/Comp');
+    	}
     	//-----------------------test area ---------------------
-    	
-    	
 }]
 );
 

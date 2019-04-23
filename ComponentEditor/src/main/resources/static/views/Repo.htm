@@ -5,7 +5,8 @@
     <div id=ComponentSpace>
         <div ng-repeat="x in componentsStorage.getComponents()">
             <div class="button-wrapper">
-                <button ng-click="removeComponent($index)">&times</button>
+                <button ng-click="removeComponent($index)"><b>&times</b></button>
+                <button ng-click="editComponent($index)"><b>&#9999</b></button>
             </div>
             <div>
                 <label>{{x.name}}</label>

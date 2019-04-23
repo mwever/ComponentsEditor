@@ -1,4 +1,4 @@
-
+	<div ng-if="loadCheck()">
         <div id = "ComponentSapce">
           <div id="ComponentNameSpace">
             <div class="input-wrapper">
@@ -16,7 +16,7 @@
                             <button ng-click="removeReqInterface($index)">&times </button>
                         </div>
                         <div class="input-wrapper">
-                            <div><label>ID:</label><input type="text" ng-model="x.id"></div>
+                            <div><label>ID:</label><input type="number" ng-model="x.id"></div>
                             <div><label>Name:</label><input type="text" ng-model="x.name"></div>
                             <!-- <div><label>Prio:</label> <input type="text" ng-model="x.prio"></div> -->
                         </div>    
@@ -47,39 +47,41 @@
                         </div>
                         <div class ="input-wrapper">
                             <div><label>Name:</label> <input type="text" ng-model="x.name"></div>
-                            <div><label>Default Value:</label> <input type="text" ng-model="x.defaultValue"></div>
+                            <!-- <div><label>Default Value:</label> <input type="text" ng-model="x.defaultValue"></div> -->
                             <!-- <div><label>Priority:</label> <input type="text" ng-model="x.prio"></div> -->
-                            <select  ng-model="x.defaultDomain" ng-options="type.actualType as type.label for type in types"></select>
+                            <select  ng-model="x.defaultDomain" ng-options="type.actualType as type.label for type in x.types"></select>
                             <div>
                             	{{x.defaultDomain}}
-                                <div ng-if="isCat(x.defaultDomain)">
+                            	{{x.paramTypeName}}
+                                <div ng-if="isCat(x.defaultDomain,x)">
                                     <div class="button-wrapper">
+                                    	<label>Default value:</label><input type="text" ng-model="x.defaultDomain.defaultValue">
                                         <button ng-click="addKitten($index)">Add cat</button>
-                                        <div ng-repeat="cat in x.defaultDomain.values">
+                                        <div ng-repeat="kitten in x.defaultDomain.values">
                                             <div calss="button-wrapper">
                                                 <button ng-click="removeKitten(x,$index)">&times</button>
                                             </div>
                                             {{x.defaultDomain}}
                                             {{cat}}
                                             <div class = "input-wrapper">
-                                                    <label>Name:</label><input type="text" ng-model="cat">
+                                                    <label>Name:</label><input type="text" ng-model="kitten.name">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div ng-if="isNumber(x.defaultDomain)">
+                                <div ng-if="isNumber(x.defaultDomain,x)">
                                     <div>
                                         <div class= "input-wrapper">
                                             <label>Min:</label><input type="number" ng-model="x.defaultDomain.min">
                                             <label>Max:</label><input type="number" ng-model="x.defaultDomain.max">
-                                           <!--  <label>Default value:</label><input type="text" ng-model="x.paramtype.defaultVal"> -->
+                                          	<label>Default value:</label><input type="number" ng-model="x.defaultDomain.defaultValue">
                                         </div>
                                     </div>
                                 </div>
-                                <div ng-if="isBool(x.defaultDomain)">
+                                <div ng-if="isBool(x.defaultDomain,x)">
                                     <div class = "input-wrapper">
                                     	<!-- <label> Value</label> <select> </select> -->
-                                        <!-- <label>Default value:</label><input type="text" ng-model="x.paramtype.defaultVal"> -->
+                                        <label>Default value:</label><input type="text" ng-model="x.defaultDomain.defaultValue">
                                     </div>
                                 </div>
                         </div>
@@ -100,4 +102,4 @@
             </div>
         </div>
         <button ng-click="addComponent()">Create Component</button>
-        
+      </div>  

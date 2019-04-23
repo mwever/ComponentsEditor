@@ -1,6 +1,8 @@
 			ComponentApp.service('ComponentRepositoryService', ['$log', '$http', function($log, $http) {
 			
 				this.componentArray = [];
+				this.componentToEdit = null;
+				this.editMode = false;
 				
 				class Component{
 				    constructor(name, reqInterface, providedInterface, param, dependency){
@@ -35,11 +37,34 @@
 				};
 				
 				this.deleteComponent = function(x){
+					
+					$http({
+						method: 'DELETE',
+						url: 'http://localhost:8080/components'+'/'+this.componentArray[x].name,
+					}).then(
+							function(response){
+								console.log("Delete worked");
+							},
+							function(response){
+								console.log(response);
+								console.log("Error");
+							}		
+			    	);
 					this.componentArray.splice(x,1);
 				};
 				
+				this.editComponent = function(x){
+					this.componentToEdit = this.componentArray[x];
+					this.editMode = true;
+				};
 				
+				this.toLoad = function(){
+					return this.editMode;
+				};
 				
+				this.getToLoadComponent = function(){
+					return this.componentToEdit;
+				};
 				/* this.sendComponentToServer = function(c) {
 					$http.post('http://localhost:8080/api/component', c).then(function(r) {
 					//success

@@ -23,10 +23,11 @@ class ProvidedInterface{
 };
 
 class Parameter{
-    constructor(name , paramtype, defaultValue /*, prio  */){
+    constructor(name , paramtype /*, prio  */){
         this.name = name;
+        this.paramTypeName = "";
         this.defaultDomain = paramtype;
-        this.defaultValue = defaultValue;
+        this.types = [new SelectionType('Cat',new CategoricalParameterDomain(new Array(),"")),new SelectionType('Number',new NumericParameterDomain(null,null,false,null)),new SelectionType('Bool',new BooleanParameterDomain())];
         //this.prio = prio;
     }
 };
@@ -39,20 +40,23 @@ class Dependency{
 }; 
 
 class CategoricalParameterDomain{
-    constructor(values){
+    constructor(values,defaultValue){
+    	this.type = "cat";
         /*this.defaultVal = defaultVal;
         this.name = 'cat';*/
         this.values = values;
+        this.defaultValue = defaultValue;
     }
 }
 
 class NumericParameterDomain{
-    constructor(min,max,isInteger){
+    constructor(min,max,isInteger,defaultValue){
        /* this.name = 'number';*/
-        this.min = min;
+        this.type = "number";
+    	this.min = min;
         this.max = max;
         this.isInteger = isInteger;
-       /* this.defaultVal = defaultVal;*/
+        this.defaultValue = defaultValue;
     }
 }
 
@@ -60,15 +64,24 @@ class BooleanParameterDomain extends CategoricalParameterDomain{
     constructor(/*defaultVal*/){
         /*this.name = 'bool';
         this.defaultVal = defaultVal;*/
-    	super(new Array("true","false"));
+    	super(new Array("true","false"),"");
+    	this.type = "bool";
     }
 }
 
-/*class Kitten{
-    constructor(name){
-        this.name = name;
-    }
-}*/
+class SelectionType{
+	constructor(TypeName, Type){
+		this.label = TypeName;
+		this.actualType = Type;
+	}
+}
+
+class Kitten{
+  constructor(name){
+	  this.name = name;
+  }
+}
+
 
 ComponentApp.controller('ComponentCreationController',['$scope','$location','$http','ComponentRepositoryService', function($scope,$location,$http ,crs){
                             
@@ -82,9 +95,24 @@ ComponentApp.controller('ComponentCreationController',['$scope','$location','$ht
     $scope.providedInterfaces = [];
     $scope.parameters =[];
     $scope.dependencys=[];
+    $scope.toLoad = null;
+    
+    //{label: 'Cat', actualType: new CategoricalParameterDomain(new Array())},{label: 'Number', actualType: new NumericParameterDomain(null,null,false) },{label: 'Bool', actualType: new BooleanParameterDomain()}
+   
 
-    $scope.types =[{label: 'Cat', actualType: new CategoricalParameterDomain(new Array())},{label: 'Number', actualType: new NumericParameterDomain(null,null,false) },{label: 'Bool', actualType: new BooleanParameterDomain()}];
+/*    $scope.componentToString = function(x){
+    	var str = "";
+    	if(x instanceof Component){
+        	for(i in x){
+        		for(j in i){
+        			str+= j;
+        		}
+        	}
+    	}
+    	return str; 
+    }*/
 
+    
     $scope.addReqInterface = function(){
         $scope.errortext="";
         if(!($scope.reqInterfaces.indexOf($scope.addReqInterface)== -1)){
@@ -109,7 +137,8 @@ ComponentApp.controller('ComponentCreationController',['$scope','$location','$ht
         if(!($scope.parameters.indexOf($scope.addParameter)== -1)){
             $scope.errortext="The parameter is allready added";
         }else{
-            $scope.parameters.push(new Parameter(null,null,null));
+        	
+            $scope.parameters.push(new Parameter(null,null));
         }
     }
 
@@ -119,7 +148,7 @@ ComponentApp.controller('ComponentCreationController',['$scope','$location','$ht
             $scope.errortext="The parameter is allready added";
         }else{ */
     		
-            $scope.parameters[x].defaultDomain.values.push("");
+            $scope.parameters[x].defaultDomain.values.push(new Kitten(""));
         //}
     }
 
@@ -140,30 +169,20 @@ ComponentApp.controller('ComponentCreationController',['$scope','$location','$ht
         $scope.dependencys=[];
         $scope.componentName="";
     }
-
+    
 
     $scope.addComponent=function(){
-		//console.log("add component via the service");
+		
     	var comp = new Component($scope.componentName,$scope.reqInterfaces,$scope.providedInterfaces,$scope.parameters,$scope.dependencys); 
-		
-		//console.log("added component to the service ", crs.getComponents());
-		//console.log($scope.componentName);
-        //$scope.components.push(new Component($scope.componentName,$scope.reqInterfaces,$scope.providedInterfaces,$scope.parameters,$scope.dependencys));
-		
-		
-		console.log("Hello");
-		
+    	crs.addComponent(comp);
 		var jsonString =  angular.toJson(comp, true);
-		//var jsonString = JSON.stringify(comp);
-		console.log(jsonString);
 		
 		if(crs.checkComponent(comp)){
 			console.log("POST");
 			$http({
 				method: 'POST',
 				url: 'http://localhost:8080/components',
-				//Content-Type: 'application/json',
-				data: jsonString  //comp
+				data: jsonString
 			}).then(
 					function(response){
 						console.log("worked");
@@ -181,8 +200,7 @@ ComponentApp.controller('ComponentCreationController',['$scope','$location','$ht
 			$http({
 				method: 'PUT',
 				url: 'http://localhost:8080/components',
-				//Content-Type: 'application/json',
-				data: jsonString //comp 
+				data: jsonString 
 			}).then(
 					function(response){
 						console.log("worked");
@@ -195,11 +213,8 @@ ComponentApp.controller('ComponentCreationController',['$scope','$location','$ht
 	    	);
 		}
 		
-		crs.addComponent(comp);
-		
 		
 		$scope.resetForm();
-		//console.log("redirect to repo");
         $location.path('/');
     }
 	
@@ -230,16 +245,38 @@ ComponentApp.controller('ComponentCreationController',['$scope','$location','$ht
         $scope.parameters[$scope.parameters.indexOf(x)].defaultDomain.values.splice(y,1);
     }
 
-    $scope.isNumber = function(x){
+    $scope.isNumber = function(x,y){
+    	if(x instanceof NumericParameterDomain){
+    		y.paramTypeName = "Number"
+    	}
     	return x instanceof NumericParameterDomain;
     }
     
-    $scope.isCat = function(x){
+    $scope.isCat = function(x,y){
+    	if(x instanceof CategoricalParameterDomain && !(x instanceof BooleanParameterDomain))
+    	{	y.paramTypeName = "Cat";
+    		}
     	return (x instanceof CategoricalParameterDomain && !(x instanceof BooleanParameterDomain))
     }
     
-    $scope.isBool = function(x){
+    $scope.isBool = function(x,y){
+    	if(x instanceof BooleanParameterDomain){
+    		y.paramTypeName ="Bool"
+    	}
     	return (x instanceof BooleanParameterDomain)
+    }
+    
+    $scope.loadCheck = function(){
+    	if(crs.toLoad()){
+    		$scope.toLoad = crs.getToLoadComponent();
+    		console.log($scope.toLoad);
+    		$scope.componentName = $scope.toLoad.name;
+    		$scope.reqInterfaces = $scope.toLoad.requiredInterfaces;
+    		$scope.providedInterfaces = $scope.toLoad.providedInterface;
+    		$scope.parameters = $scope.toLoad.param;
+    		$scope.dependencys = $scope.toLoad.dependency;
+    	}
+    	return true;
     }
     /*$scope.goToComponentView=function(){
         $location.path('');
