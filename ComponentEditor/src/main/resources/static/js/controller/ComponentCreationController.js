@@ -200,6 +200,9 @@ ComponentApp.controller('ComponentCreationController',['$scope','$location','$ht
 			$http({
 				method: 'PUT',
 				url: 'http://localhost:8080/components',
+				headers: {
+			        "Content-Type": "application/json"
+			    },
 				data: jsonString 
 			}).then(
 					function(response){
@@ -276,10 +279,15 @@ ComponentApp.controller('ComponentCreationController',['$scope','$location','$ht
     		$scope.toLoad = crs.getToLoadComponent();
     		console.log($scope.toLoad);
     		$scope.componentName = $scope.toLoad.name;
+    		console.log("Component Name", $scope.componentName);
     		$scope.reqInterfaces = $scope.toLoad.requiredInterfaces;
-    		$scope.providedInterfaces = $scope.toLoad.providedInterface;
-    		$scope.parameters = $scope.toLoad.param;
-    		$scope.dependencys = $scope.toLoad.dependency;
+    		console.log("Req Interfaces ", $scope.reqInterfaces);
+    		$scope.providedInterfaces = $scope.toLoad.providedInterfaces;
+    		console.log("Prov Interfaces " , $scope.providedInterfaces);
+    		$scope.parameters = $scope.toLoad.parameters;
+    		console.log("Parameters ", $scope.parameters);
+    		$scope.dependencys = $scope.toLoad.dependencies;
+    		console.log("Dependencies ", $scope.dependencys);
     	}
     	
     }
