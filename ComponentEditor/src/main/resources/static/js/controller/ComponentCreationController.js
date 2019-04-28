@@ -168,6 +168,9 @@ ComponentApp.controller('ComponentCreationController',['$scope','$location','$ht
         $scope.parameters=[];
         $scope.dependencys=[];
         $scope.componentName="";
+        
+        $scope.toLoad = null;
+        
     }
     
 
@@ -277,11 +280,19 @@ ComponentApp.controller('ComponentCreationController',['$scope','$location','$ht
     		console.log($scope.toLoad);
     		$scope.componentName = $scope.toLoad.name;
     		$scope.reqInterfaces = $scope.toLoad.requiredInterfaces;
-    		$scope.providedInterfaces = $scope.toLoad.providedInterface;
-    		$scope.parameters = $scope.toLoad.param;
-    		$scope.dependencys = $scope.toLoad.dependency;
+    		$scope.providedInterfaces = $scope.toLoad.providedInterfaces;
+    		$scope.parameters = $scope.toLoad.parameters;
+    		$scope.dependencys = $scope.toLoad.dependencies;
     	}
     	
+    }
+    
+    $scope.inEditMode = function(){
+    	return $scope.toLoad != null
+    }
+    
+    $scope.inNormalMode = function(){
+    	return $scope.toLoad == null
     }
     /*$scope.goToComponentView=function(){
         $location.path('');

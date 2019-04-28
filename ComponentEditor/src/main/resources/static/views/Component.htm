@@ -1,105 +1,194 @@
- <div ng-init="loadCheck()">
-        <div id = "ComponentSapce">
-          <div id="ComponentNameSpace">
-            <div class="input-wrapper">
-                <label>Component name:</label><input type="text" ng-model="componentName">
-            </div>
-          </div>
-		  
-		  <!--{{getComponents()}}-->
 
-          <button ng-click="addReqInterface()">Add required Interface</button>
-              <div id = "ReqInterfaceSpace">
-				<div ng-repeat="x in reqInterfaces">
-                    <div>
-                        <div class="button-wrapper">
-                            <button ng-click="removeReqInterface($index)">&times </button>
-                        </div>
-                        <div class="input-wrapper">
-                            <div><label>ID:</label><input type="number" ng-model="x.id"></div>
-                            <div><label>Name:</label><input type="text" ng-model="x.name"></div>
-                            <!-- <div><label>Prio:</label> <input type="text" ng-model="x.prio"></div> -->
-                        </div>    
-                    </div>
+<div ng-init="loadCheck()">
+	<div id="ComponentSapce" class="banner">
+		<div class="container">
+
+			<div id="ComponentNameSpace" class="row-fluid mx-3">
+				<div class="input-group">
+					<label class="col-4 center">Component name:</label> <input
+						class="col-8" type="text" ng-model="componentName"
+						placeholder="Name ...">
 				</div>
-            </div>             
-            
-            <button ng-click="addProvidedInterface()">Add provided Interface </button>
-            <div id="ProvidedInterfaceSpace">
-                <div ng-repeat="x in providedInterfaces">
-                    <div>
-                        <div class="button-wrapper">
-                            <button ng-click="removeProvidedInterface($index)">&times </button>
-                        </div>
-                        <div class ="input-wrapper">
-                            <div><label>Interface:</label> <input type="text" ng-model="x.interfaces"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+			</div>
 
-            <button ng-click="addParameter()">Add parameter </button>
-            <div id="ParameterSpace">
-                <div ng-repeat="x in parameters">
-                    <div>
-                        <div class="button-wrapper">
-                            <button ng-click="removeParameter($index)">&times </button>
-                        </div>
-                        <div class ="input-wrapper">
-                            <div><label>Name:</label> <input type="text" ng-model="x.name"></div>
-                            <!-- <div><label>Default Value:</label> <input type="text" ng-model="x.defaultValue"></div> -->
-                            <!-- <div><label>Priority:</label> <input type="text" ng-model="x.prio"></div> -->
-                            <select  ng-model="x.defaultDomain" ng-options="type.actualType as type.label for type in x.types"></select>
-                            <div>
-                            	{{x.defaultDomain}}
-                            	{{x.paramTypeName}}
-                                <div ng-if="isCat(x.defaultDomain,x)">
-                                    <div class="button-wrapper">
-                                    	<label>Default value:</label><input type="text" ng-model="x.defaultDomain.defaultValue">
-                                        <button ng-click="addKitten($index)">Add cat</button>
-                                        <div ng-repeat="kitten in x.defaultDomain.values">
-                                            <div calss="button-wrapper">
-                                                <button ng-click="removeKitten(x,$index)">&times</button>
-                                            </div>
-                                            {{x.defaultDomain}}
-                                            {{cat}}
-                                            <div class = "input-wrapper">
-                                                    <label>Name:</label><input type="text" ng-model="kitten.name">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div ng-if="isNumber(x.defaultDomain,x)">
-                                    <div>
-                                        <div class= "input-wrapper">
-                                            <label>Min:</label><input type="number" ng-model="x.defaultDomain.min">
-                                            <label>Max:</label><input type="number" ng-model="x.defaultDomain.max">
-                                          	<label>Default value:</label><input type="number" ng-model="x.defaultDomain.defaultValue">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div ng-if="isBool(x.defaultDomain,x)">
-                                    <div class = "input-wrapper">
-                                    	<!-- <label> Value</label> <select> </select> -->
-                                        <label>Default value:</label><input type="text" ng-model="x.defaultDomain.defaultValue">
-                                    </div>
-                                </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <button ng-click="addDependency()">Add dependency</button>
-            <div id = "DependencySpace">
-                <div ng-repeat="x in dependencys">
-                    <div class="button-wrapper">
-                        <button ng-click="removeDependency($index)">&times</button>
-                    </div>
-                    <div class="input-wrapper">
-                        <label>Pre:</label><input type="text" ng-model="x.pre">
-                        <label>Post:</label><input type="text" ng-model="x.post">
-                    </div>
-                </div>
-            </div>
-        </div>
-        <button ng-click="addComponent()">Create Component</button>
-        </div>
+			<!--{{getComponents()}}-->
+
+			<button ng-click="addReqInterface()" type="button"
+				class="btn btn-info btn-lg btn-block my-3">Add required
+				Interface</button>
+			<div id="ReqInterfaceSpace" class="row-fluid">
+				<div ng-repeat="x in reqInterfaces">
+					<div class="row border border-white rounded px-2 py-2">
+						<div class="col">
+							<div class="row">
+								<div class="col">
+									<button ng-click="removeReqInterface($index)" type="button"
+										class="btn btn-info pull-right mb-2">&times</button>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col">
+									<div class="row">
+										<label class="col-2 center">ID:</label><input type="text"
+											class="col-10" ng-model="x.id">
+									</div>
+									<div class="row">
+										<label class="col-2 center">Name:</label><input type="text"
+											class="col-10" ng-model="x.name">
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- <div><label>Prio:</label> <input type="text" ng-model="x.prio"></div> -->
+					</div>
+				</div>
+			</div>
+
+			<button ng-click="addProvidedInterface()" type="button"
+				class="btn btn-info btn-lg btn-block my-3">Add provided
+				Interface</button>
+			<div id="ProvidedInterfaceSpace" class="row-fluid">
+				<div ng-repeat="x in providedInterfaces">
+					<div class="row border border-white rounded px-2 py-2">
+						<div class="col">
+							<div class="row">
+								<div class="col">
+									<div class="button-wrapper">
+										<button ng-click="removeProvidedInterface($index)"
+											class="btn btn-info pull-right mb-2">&times</button>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<label class="col-2">Interface:</label> <input type="text"
+									ng-model="x.interfaces" class="col-10">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<button ng-click="addParameter()" type="button"
+				class="btn btn-info btn-lg btn-block my-3">Add parameter</button>
+			<div id="ParameterSpace" class="row-fluid">
+				<div ng-repeat="x in parameters">
+					<div class="row border border-white rounded px-2 py-2">
+						<div class="col">
+							<div class="row">
+								<div class="col">
+									<div class="button-wrapper">
+										<button ng-click="removeParameter($index)">&times</button>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col">
+									<div class="input-wrapper">
+										<div class="row">
+											<label class="col-2">Name:</label> <input type="text" ng-model="x.name" class="col-10">
+										</div>
+										<!-- <div><label>Default Value:</label> <input type="text" ng-model="x.defaultValue"></div> -->
+										<!-- <div><label>Priority:</label> <input type="text" ng-model="x.prio"></div> -->
+										<div class="row">
+											<label class="col-2">Type:</label><select ng-model="x.defaultDomain"
+											ng-options="type.actualType as type.label for type in x.types" class="col-5"></select>
+											<div class="col-5"></div>
+										</div>
+										<div>
+											{{x.defaultDomain}} {{x.paramTypeName}}
+											<div ng-if="isCat(x.defaultDomain,x)">
+												<div class="button-wrapper">
+													<label>Default value:</label><input type="text"
+														ng-model="x.defaultDomain.defaultValue">
+													<button ng-click="addKitten($index)">Add cat</button>
+													<div ng-repeat="kitten in x.defaultDomain.values">
+														<div calss="button-wrapper">
+															<button ng-click="removeKitten(x,$index)">&times</button>
+														</div>
+														{{x.defaultDomain}} {{cat}}
+														<div class="input-wrapper">
+															<label>Name:</label><input type="text"
+																ng-model="kitten.name">
+														</div>
+													</div>
+												</div>
+											</div>
+											<div ng-if="isNumber(x.defaultDomain,x)">
+												<div>
+													<div class="input-wrapper">
+														<label>Min:</label><input type="number"
+															ng-model="x.defaultDomain.min"> <label>Max:</label><input
+															type="number" ng-model="x.defaultDomain.max"> <label>Default
+															value:</label><input type="number"
+															ng-model="x.defaultDomain.defaultValue">
+													</div>
+												</div>
+											</div>
+											<div ng-if="isBool(x.defaultDomain,x)">
+												<div class="input-wrapper">
+													<!-- <label> Value</label> <select> </select> -->
+													<label>Default value:</label><input type="text"
+														ng-model="x.defaultDomain.defaultValue">
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<button ng-click="addDependency()" type="button"
+					class="btn btn-info btn-lg btn-block my-3">Add dependency</button>
+				<div id="DependencySpace" class="row-fluid">
+					<div ng-repeat="x in dependencys">
+						<div class="row border border-white rounded px-2 py-2">
+							<div class="col">
+								<div class="row">
+									<div class="col">
+										<button ng-click="removeDependency($index)"
+											class="btn btn-info pull-right mb-2">&times</button>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<div class="input-wrapper">
+											<div class="row">
+												<label class="col-2">Pre:</label><input type="text"
+													ng-model="x.pre" class="col-10">
+											</div>
+											<div class="row">
+												<label class="col-2">Post:</label><input type="text"
+													ng-model="x.post" class="col-10">
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row-fluid">
+					<div class="col">
+						<div class="row">
+							<div class="col" id="centerButton">
+								<div ng-if="inEditMode()">
+									<button ng-click="addComponent()" type="button"
+										class="btn btn-lg btn-info my-3">EditComponent</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col" id="centerButton">
+							<div ng-if="inNormalMode()">
+								<button ng-click="addComponent()" type="button"
+									class="btn btn-lg btn-info my-3">Create Component</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
