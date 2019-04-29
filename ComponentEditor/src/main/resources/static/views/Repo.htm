@@ -1,16 +1,39 @@
-<div id="RepoSpace">
-    <div>
-        <button ng-click="goToComponentView()">Create Component</button>
-    </div>
-    <div id=ComponentSpace>
-        <div ng-repeat="x in componentsStorage.getComponents()">
-            <div class="button-wrapper">
-                <button ng-click="removeComponent($index)"><b>&times</b></button>
-                <button ng-click="editComponent($index)"><b>&#9999</b></button>
-            </div>
-            <div>
-                <label>{{x.name}}</label>
-            </div>
-        </div>
-    </div>
+<div id="RepoSpace" class="banner">
+	<div class="row">
+		<div class="col">
+			<div class="row">
+				<div class="col" id="centerButton">
+					<button ng-click="goToComponentView()" type="button"
+						class="btn btn-lg btn-info my-3">Create Component</button>
+				</div>
+			</div>
+			<div class="row" id=ComponentSpace>
+				<div class="col">
+					<div ng-repeat="x in componentsStorage.getComponents()">
+						<div class="row border round p-2">
+							<div class="col">
+								<div class="row">
+									<div class="col">
+										<button ng-click="removeComponent($index)" class="btn btn-info pull-right m-2">
+											<b>&times</b>
+										</button>
+										<div class="col">
+											<button ng-click="editComponent($index)" class="btn btn-info pull-right m-2">
+												<b>&#9999</b>
+											</button>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col" id="textCenter">
+										<label><h4>{{x.name}}</h4></label>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>

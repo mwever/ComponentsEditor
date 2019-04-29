@@ -43,7 +43,13 @@ body {
     align-items: center;
     justify-content: center;
 }
- 
+
+#textCenter{
+	display: flex;
+	display: flex;
+    align-items: center;
+    justify-content: center;
+}
 /*  input[type = text]{ */
 /*     cursor: text; */
 /*      width: 100%; */
