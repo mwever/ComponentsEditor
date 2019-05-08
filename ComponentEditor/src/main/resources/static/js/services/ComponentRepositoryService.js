@@ -4,16 +4,12 @@
 				this.componentToEdit = null;
 				this.editMode = false;
 				
-				/*class Component{
-				    constructor(name, reqInterface, providedInterface, param, dependency){
-				        this.name = name;
-				        this.reqInterface = reqInterface;
-				        this.providedInterface = providedInterface;
-				        this.param = param;
-				        this.dependency = dependency;
-				    }
-				}; 
-				*/
+				
+				this.repositoryArray = [];
+				this.repositoryToEdit = null;
+				this.editModeRepo = false;
+				
+				
 				this.addComponent = function(component) {
 					this.componentArray.push(component);
 					this.editMode = false;
@@ -73,6 +69,67 @@
 				
 				this.getToLoadComponent = function(){
 					return this.componentToEdit;
+				};
+				
+				//----------------------------------------------------------------------------------------
+				
+				this.addRepository = function(repository) {
+					this.repositoryArray.push(repository);
+					this.editMode = false;
+				};
+				
+				this.getRepository = function() {
+					return this.repositoryArray;
+				};
+				
+				this.checkRepository = function(x){
+					for(var i = 0; i < this.repositoryArray.length; i++){
+						if(x.name == this.repositoryArray[i].name){
+							return true
+						}
+					}
+
+				};
+				
+				this.updateRepository = function(x){
+					for(var i = 0; i < this.repositoryArray.length; i++){
+						if(x.name == this.repositoryArray[i].name){
+							this.repositoryArray[i].name = x.name;
+							this.repositoryArray[i].components = x.components;
+					        
+						}
+					}
+					this.editMode = false;
+				}
+				
+				this.deleteRepository = function(x){
+					
+					$http({
+						method: 'DELETE',
+						url: 'http://localhost:8080/repos'+'/'+this.repositoryArray[x].name,
+					}).then(
+							function(response){
+								console.log("Delete worked");
+							},
+							function(response){
+								console.log(response);
+								console.log("Error");
+							}		
+			    	);
+					this.repositoryArray.splice(x,1);
+				};
+				
+				this.editRepository = function(x){
+					this.repositoryToEdit = this.repositoryArray[x];
+					this.editMode = true;
+				};
+				
+				this.toLoad = function(){
+					return this.editMode;
+				};
+				
+				this.getToLoadRepo = function(){
+					return this.repositoryToEdit;
 				};
 				
 			}]);

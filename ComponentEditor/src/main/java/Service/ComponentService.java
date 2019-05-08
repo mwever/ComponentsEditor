@@ -13,7 +13,7 @@ import hasco.model.Component;
 
 @Service
 @ComponentScan(basePackageClasses = DataCollectionComponent.class)
-@Qualifier("FileData")
+@Qualifier("FileDataComp")
 public class ComponentService {
 	
 	@Autowired

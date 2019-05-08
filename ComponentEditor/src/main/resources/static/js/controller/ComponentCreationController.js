@@ -83,7 +83,7 @@ class Kitten{
 }
 
 
-ComponentApp.controller('ComponentCreationController',['$scope','$location','$http','ComponentRepositoryService', function($scope,$location,$http ,crs){
+ComponentApp.controller('ComponentCreationController',['$scope','$location','$http','ComponentRepositoryService', function($scope,$location,$http,crs){
                             
    /* $scope.repro=[];
 

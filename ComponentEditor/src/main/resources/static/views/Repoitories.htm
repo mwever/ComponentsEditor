@@ -1,0 +1,40 @@
+<div id="ReposSpace" class="banner">
+	<div class=row>
+		<div class="col">
+			<div class="row">
+				<div class="col">
+					<button type="button" ng-click="goToSingleRepositoryView()"
+						class="btn-lg btn-info m-2">New Repository</button>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col">
+					<div ng-repeat="x in repoStorage.getRepository()">
+						<div class="row border round p-2">
+							<div class="col">
+								<div class="row">
+									<div class="col">
+										<div class="row">
+											<div class="col">
+												<button ng-click="removeRepository($index)"
+													class="btn btn-info pull-right m-2">
+													<b>&times</b>
+												</button>
+											
+												<button ng-click="editRepository($index)"
+													class="btn btn-info pull-right m-2">
+													<b>&#9999</b>
+												</button>
+											</div>
+
+										</div>
+										<div class="row" id="textCenter"><h4>{{x.name}}</h4></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>

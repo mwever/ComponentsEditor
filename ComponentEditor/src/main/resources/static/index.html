@@ -35,6 +35,10 @@
 						controller: "ComponentCreationController",
                         templateUrl:"views/Component.htm"
                     })
+                     .when("/repos",{
+						controller: "RepositoryCreationController",
+                        templateUrl:"views/Repoitories.htm"
+                    })
             });
 	
         </script>
@@ -46,6 +50,10 @@
         
 <!--         <script type="text/javascript" src="js/services/ComponentServerService.js"></script> -->
         <script type="text/javascript" src="js/controller/RepoitoryController.js"></script>
+        
+        <script type="text/javascript" src="js/controller/RepositoryCreationController.js"></script>
+<!--         <script type="text/javascript" src="js/services/RepositoryService.js"></script> -->
+        
         
         <script type="text/javascript" src="js/services/ComponentRepositoryService.js"></script>
         <script type="text/javascript" src="js/controller/ComponentCreationController.js"></script>  
