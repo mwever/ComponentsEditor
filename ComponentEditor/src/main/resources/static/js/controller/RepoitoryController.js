@@ -8,21 +8,23 @@ class Repository{
 
 ComponentApp.controller('RepoitoryController',['$scope','$location','$log','$http','ComponentRepositoryService',function($scope,$location,$log,$http,ComponentRepositoryService){
 		
-	$scope.componentsStorage = ComponentRepositoryService;
-		
+		$scope.componentsStorage = ComponentRepositoryService;
 		
 		$scope.name = ""
-		$scope.components= [] 
+		$scope.components= []
+		
+		$scope.toLoad = null;
 		
 		$scope.goToComponentView=function(){
         	$location.path('/Comp');
-        	//$scope.componentsStorage.addnewComponent();
+        	// $scope.componentsStorage.addnewComponent();
     	}
 		
 		$scope.goToRepositoryView = function(){
 			$scope.addRepository();
-			//$location.path('/repos');
-        	//$scope.componentsStorage.addnewComponent();
+			
+			// $location.path('/repos');
+        	// $scope.componentsStorage.addnewComponent();
     	}
     	
     	$scope.removeComponent = function(x){
@@ -85,6 +87,7 @@ ComponentApp.controller('RepoitoryController',['$scope','$location','$log','$htt
     		}
     		
     		$scope.resetForm();
+    		$scope.componentsStorage.editModeRepo =false;
             $location.path('/repos');
         }
     	
@@ -93,8 +96,24 @@ ComponentApp.controller('RepoitoryController',['$scope','$location','$log','$htt
         	$scope.name = "";
         }
         
+        $scope.loadCheck = function(){
+        	if($scope.componentsStorage.toLoadRepo()){
+        		$scope.toLoad = $scope.componentsStorage.getToLoadRepo();
+        		console.log($scope.toLoad);
+        		$scope.name = $scope.toLoad.name;
+        		$scope.components= $scope.toLoad.components;
+        	}	
+        }
+        
+        $scope.inEditMode = function(){
+        	return $scope.toLoad != null
+        }
+        
+        $scope.inNormalMode = function(){
+        	return $scope.toLoad == null
+        }
     	
-    	//-----------------------test area ---------------------
+    	// -----------------------test area ---------------------
 }]
 );
 

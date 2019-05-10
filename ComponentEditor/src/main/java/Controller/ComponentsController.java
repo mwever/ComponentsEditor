@@ -70,7 +70,7 @@ public class ComponentsController{
 		componentService.updateComponent(comp);
 	}
 
-	private Component parseComponent(String input) throws IOException {
+	public static Component parseComponent(String input) throws IOException {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
 		IntermediateComponent icomp = mapper.readValue(input, IntermediateComponent.class);
@@ -133,14 +133,14 @@ public class ComponentsController{
 		return comp;
 	}
 
-	private hasco.model.Dependency convertToDependency(String pre, String post) {
+	private static hasco.model.Dependency convertToDependency(String pre, String post) {
 		Collection<Collection<Pair<hasco.model.Parameter, ParameterDomain>>> preCollection = new ArrayList<>();
 		preCollection.add(initPairofParameterAndDomain(pre));
 		ArrayList<Pair<hasco.model.Parameter, ParameterDomain>> postCollection = initPairofParameterAndDomain(post);
 		return new hasco.model.Dependency(preCollection, postCollection);
 	}
 	
-	private ArrayList<Pair<hasco.model.Parameter, ParameterDomain>> initPairofParameterAndDomain(String input){
+	private static ArrayList<Pair<hasco.model.Parameter, ParameterDomain>> initPairofParameterAndDomain(String input){
 		
 		input = input.trim();
 		input = input.replaceAll("\\s+","");

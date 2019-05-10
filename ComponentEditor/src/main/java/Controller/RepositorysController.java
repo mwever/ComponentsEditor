@@ -11,8 +11,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import Data.intermediate.Repository;
 import Service.RepositoryService;
+import hasco.model.Component;
 
 @RestController
 @ComponentScan(basePackageClasses = RepositoryService.class)
@@ -40,8 +46,20 @@ public class RepositorysController {
 	
 	@RequestMapping(method = RequestMethod.PUT)
 	public void updateRepository(@RequestBody String str) throws IOException {
-		System.out.println("str: "+ str);	
-		//reproService.insertRepository(repro);
+		System.out.println("str: "+ str);
+		ObjectMapper map = new ObjectMapper();
+		BufferRepo buffer = map.readValue(str, BufferRepo.class); 
+		Component [] comps = new Component[buffer.comps.length];
+		int count = 0;
+		for(String components : buffer.comps) {
+			Component component = ComponentsController.parseComponent(components);
+			comps[count] = component;
+			count++;
+		}
+		
+		//Repository repo = new Repository(buffer.name, comps);
+		
+		//reproService.insertRepository(repo);
 	}
 	
 	
@@ -49,5 +67,38 @@ public class RepositorysController {
 	public void insertComponent(@RequestBody String str) throws IOException {
 		System.out.println("str: "+ str);	
 		//reproService.updateRepository(repro);
+	}
+	
+	@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY )
+	class BufferRepo {
+		private String name;
+		private String [] comps;
+		
+		
+		public String getName() {
+			return name;
+		}
+
+
+		public void setName(String name) {
+			this.name = name;
+		}
+
+
+		public String[] getComps() {
+			return comps;
+		}
+
+
+		public void setComps(String[] comps) {
+			this.comps = comps;
+		}
+
+
+		@JsonCreator
+		BufferRepo(@JsonProperty("name") String name,@JsonProperty("comps") String [] comps){
+			this.name = name;
+			this.comps= comps;
+		}
 	}
 }

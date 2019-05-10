@@ -75,7 +75,7 @@
 				
 				this.addRepository = function(repository) {
 					this.repositoryArray.push(repository);
-					this.editMode = false;
+					this.editModeRepo = false;
 				};
 				
 				this.getRepository = function() {
@@ -121,11 +121,11 @@
 				
 				this.editRepository = function(x){
 					this.repositoryToEdit = this.repositoryArray[x];
-					this.editMode = true;
+					this.editModeRepo = true;
 				};
 				
-				this.toLoad = function(){
-					return this.editMode;
+				this.toLoadRepo = function(){
+					return this.editModeRepo;
 				};
 				
 				this.getToLoadRepo = function(){

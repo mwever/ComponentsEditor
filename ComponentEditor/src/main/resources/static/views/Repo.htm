@@ -1,42 +1,65 @@
-<div id="RepoSpace" class="banner">
-	<div class="row">
-		<div class="col">
-			<div class="row">
-				<label class="col-3"> Name: </label> <input type="text"
-					class="col-9" ng-model="name" placeholder="Name ...">
-			</div>
-			<div class="row">
-				<div class="col">
-					<button ng-click="goToComponentView()" type="button"
-						class="btn btn-lg btn-info my-3">Create Component</button>
+<div ng-init="loadCheck()">
+	<div id="RepoSpace" class="banner">
+		<div class="row">
+			<div class="col">
+				<div class="row">
+					<label class="col-3"> Name: </label> <input type="text"
+						class="col-9" ng-model="name" placeholder="Name ...">
 				</div>
-				<div class="col">
-					<button ng-click="goToRepositoryView()" type="button"
-						class="btn btn-lg btn-info my-3">Create Repository</button>
-				</div>
-			</div>
-			<div class="row" id=ComponentSpace>
-				<div class="col">
-					<div ng-repeat="x in componentsStorage.getComponents()">
-						<div class="row border round p-2">
-							<div class="col">
-								<div class="row">
-									<div class="col">
-										<button ng-click="removeComponent($index)"
-											class="btn btn-info pull-right m-2">
-											<b>&times</b>
-										</button>
-										<div class="col">
-											<button ng-click="editComponent($index)"
-												class="btn btn-info pull-right m-2">
-												<b>&#9999</b>
-											</button>
-										</div>
+				<div class="row">
+					<div class="col">
+						<button ng-click="goToComponentView()" type="button"
+							class="btn btn-lg btn-info my-3">Create Component</button>
+					</div>
+					<div class="row-fluid">
+						<div class="col">
+							<div class="row">
+								<div class="col" id="centerButton">
+									<div ng-if="inEditMode()">
+										<button ng-click="goToRepositoryView()" type="button"
+											class="btn btn-lg btn-info my-3">Edit Repository</button>
 									</div>
 								</div>
-								<div class="row">
-									<div class="col" id="textCenter">
-										<label><h4>{{x.name}}</h4></label>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col" id="centerButton">
+								<div ng-if="inNormalMode()">
+									<button ng-click="goToRepositoryView()" type="button"
+										class="btn btn-lg btn-info my-3">Create Repository</button>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- <div class="col">
+						<button ng-click="goToRepositoryView()" type="button"
+							class="btn btn-lg btn-info my-3">Create Repository</button>
+					</div> -->
+				</div>
+				<div class="row" id=ComponentSpace>
+					<div class="col">
+						<div ng-repeat="x in componentsStorage.getComponents()">
+							<div class="row border round p-2">
+								<div class="col">
+									<div class="row">
+										<div class="col">
+											<button ng-click="removeComponent($index)"
+												class="btn btn-info pull-right m-2">
+												<b>&times</b>
+											</button>
+											<div class="col">
+												<button ng-click="editComponent($index)"
+													class="btn btn-info pull-right m-2">
+													<b>&#9999</b>
+												</button>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col" id="textCenter">
+											<label><h4>{{x.name}}</h4></label>
+										</div>
 									</div>
 								</div>
 							</div>
