@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import Data.DataCollectionComponentFile;
 import Data.intermediate.Repository;
 import Service.RepositoryService;
 import hasco.model.Component;
@@ -48,29 +50,40 @@ public class RepositorysController {
 	public void updateRepository(@RequestBody String str) throws IOException {
 		System.out.println("str: "+ str);
 		ObjectMapper map = new ObjectMapper();
+		map.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
 		BufferRepo buffer = map.readValue(str, BufferRepo.class); 
-		Component [] comps = new Component[buffer.comps.length];
-		int count = 0;
+		DataCollectionComponentFile comps = new DataCollectionComponentFile();
 		for(String components : buffer.comps) {
 			Component component = ComponentsController.parseComponent(components);
-			comps[count] = component;
-			count++;
+			comps.insertComponent(component);	
 		}
 		
-		//Repository repo = new Repository(buffer.name, comps);
+		Repository repo = new Repository(buffer.name, comps);
+		reproService.insertRepository(repo);
 		
-		//reproService.insertRepository(repo);
 	}
 	
 	
 	@RequestMapping(method = RequestMethod.POST)
 	public void insertComponent(@RequestBody String str) throws IOException {
+		ObjectMapper map = new ObjectMapper();
+		map.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
+		BufferRepo buffer = map.readValue(str, BufferRepo.class); 
+		DataCollectionComponentFile comps = new DataCollectionComponentFile();
+		for(String components : buffer.comps) {
+			Component component = ComponentsController.parseComponent(components);
+			comps.insertComponent(component);	
+		}
+		
+		Repository repo = new Repository(buffer.name, comps);
+		reproService.updateRepository(repo);
+		
 		System.out.println("str: "+ str);	
 		//reproService.updateRepository(repro);
 	}
 	
 	@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY )
-	class BufferRepo {
+	static class BufferRepo {
 		private String name;
 		private String [] comps;
 		
@@ -96,7 +109,7 @@ public class RepositorysController {
 
 
 		@JsonCreator
-		BufferRepo(@JsonProperty("name") String name,@JsonProperty("comps") String [] comps){
+		BufferRepo(@JsonProperty("name") String name,@JsonProperty("components") String [] comps){
 			this.name = name;
 			this.comps= comps;
 		}
