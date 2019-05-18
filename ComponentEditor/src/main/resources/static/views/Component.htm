@@ -2,8 +2,12 @@
 <div ng-init="loadCheck()">
 	<div id="ComponentSapce" class="banner">
 		<div class="container">
-
-			<div id="ComponentNameSpace" class="row-fluid mx-3">
+			<div id="cancelButtonSpace" class="row mb-3 mt-2 mr-1">
+				<div class="col">
+					<button ng-click="cancel()" class=" row btn btn-info pull-right">&times</button>
+				</div>
+			</div>
+			<div id="ComponentNameSpace" class="row-fluid">
 				<div class="input-group">
 					<label class="col-4 center">Component name:</label> <input
 						class="col-8" type="text" ng-model="componentName"
@@ -173,9 +177,10 @@
 												<div ng-if="isBool(x.defaultDomain,x)">
 													<div class="row p-2 m-2 border round">
 														<div class="col">
-																<!-- <label> Value</label> <select> </select> -->
-																<label class="col-3">Default value:</label><input type="text"
-																	ng-model="x.defaultDomain.defaultValue" class="col-9">
+															<!-- <label> Value</label> <select> </select> -->
+															<label class="col-3">Default value:</label><input
+																type="text" ng-model="x.defaultDomain.defaultValue"
+																class="col-9">
 														</div>
 													</div>
 												</div>
@@ -224,7 +229,7 @@
 						<div class="col" id="centerButton">
 							<div ng-if="inEditMode()">
 								<button ng-click="addComponent()" type="button"
-									class="btn btn-lg btn-info my-3">Edit Component</button>
+									class="btn btn-lg btn-info my-3">Save Changes</button>
 							</div>
 						</div>
 					</div>
@@ -233,7 +238,7 @@
 					<div class="col" id="centerButton">
 						<div ng-if="inNormalMode()">
 							<button ng-click="addComponent()" type="button"
-								class="btn btn-lg btn-info my-3">Create Component</button>
+								class="btn btn-lg btn-info my-3">Save Component</button>
 						</div>
 					</div>
 				</div>

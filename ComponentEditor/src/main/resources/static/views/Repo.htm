@@ -2,6 +2,11 @@
 	<div id="RepoSpace" class="banner">
 		<div class="row">
 			<div class="col">
+				<div class="row mt-2 mb-3 ">
+					<div class="col">
+						<button ng-click="cancel()" class=" row btn btn-info pull-right">&times</button>
+					</div>
+				</div>
 				<div class="row">
 					<label class="col-3"> Name: </label> <input type="text"
 						class="col-9" ng-model="name" placeholder="Name ...">
@@ -17,7 +22,7 @@
 								<div class="col" id="centerButton">
 									<div ng-if="inEditMode()">
 										<button ng-click="goToRepositoryView()" type="button"
-											class="btn btn-lg btn-info my-3">Edit Repository</button>
+											class="btn btn-lg btn-info my-3">Save Changes</button>
 									</div>
 								</div>
 							</div>
@@ -26,7 +31,7 @@
 							<div class="col" id="centerButton">
 								<div ng-if="inNormalMode()">
 									<button ng-click="goToRepositoryView()" type="button"
-										class="btn btn-lg btn-info my-3">Create Repository</button>
+										class="btn btn-lg btn-info my-3">Save Repository</button>
 								</div>
 							</div>
 						</div>
