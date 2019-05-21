@@ -14,6 +14,7 @@ ComponentApp.controller('RepoitoryController',['$scope','$location','$log','$htt
 		$scope.components= []
 		
 		$scope.toLoad = null;
+		$scope.original = null;
 		
 		$scope.goToComponentView=function(){
         	$location.path('/Comp');
@@ -94,6 +95,7 @@ ComponentApp.controller('RepoitoryController',['$scope','$location','$log','$htt
         $scope.resetForm = function(){
         	$scope.components=[];
         	$scope.name = "";
+        	$scope.toLoad= null;
         }
         
         $scope.loadCheck = function(){
@@ -102,6 +104,7 @@ ComponentApp.controller('RepoitoryController',['$scope','$location','$log','$htt
         		console.log($scope.toLoad);
         		$scope.name = $scope.toLoad.name;
         		$scope.components= $scope.toLoad.components;
+        		$scope.original = angular.copy($scope.toLoad);
         	}	
         }
         
@@ -113,6 +116,23 @@ ComponentApp.controller('RepoitoryController',['$scope','$location','$log','$htt
         	return $scope.toLoad == null
         }
     	
+        $scope.cancel = function(){
+        	$scope.componentsStorage.componentArray = [];
+        	//$scope.components = $scope.componentsStorage.originalRepo.components;
+        	if($scope.componentsStorage.toLoadRepo()){
+        		$scope.componentsStorage.editModeRepo = false;
+        		
+        		$scope.componentsStorage.updateRepository($scope.original);
+        		//$scope.componentsStorage.repositoryArray.push($scope.componentsStorage.originalRepo);
+        		console.log("in Edit Mode and to Load benutzt "+$scope.original)
+        	}
+        	
+        	$scope.componentsStorage.componentToEdit = null;
+        	$scope.componentsStorage.editMode = false;
+        	$scope.componentsStorage.originalRepo = null;
+        	$scope.resetForm();
+        	$location.path('/repos');
+        }
     	// -----------------------test area ---------------------
 }]
 );

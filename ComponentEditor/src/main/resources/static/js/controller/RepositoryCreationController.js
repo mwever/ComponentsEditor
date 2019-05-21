@@ -14,7 +14,8 @@ ComponentApp.controller('RepositoryCreationController',['$scope','$location','$l
     	$scope.goToSingleRepositoryView = function(){
         	$location.path('/');
     	}
-
+    	
+    	
     	//-----------------------test area ---------------------
 }]
 );

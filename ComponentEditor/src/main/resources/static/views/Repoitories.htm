@@ -10,7 +10,7 @@
 			<div class="row">
 				<div class="col">
 					<div ng-repeat="x in repoStorage.getRepository()">
-						<div class="row border round p-2">
+						<div class="row">
 							<div class="col">
 								<div class="row">
 									<div class="col">
@@ -20,7 +20,7 @@
 													class="btn btn-info pull-right m-2">
 													<b>&times</b>
 												</button>
-											
+
 												<button ng-click="editRepository($index)"
 													class="btn btn-info pull-right m-2">
 													<b>&#9999</b>
@@ -28,7 +28,22 @@
 											</div>
 
 										</div>
-										<div class="row" id="textCenter"><h4>{{x.name}}</h4></div>
+										<div class="row">
+											<div class="col">
+												<div class="row" id="textCenter">
+													<h4>{{x.name}}</h4>
+												</div>
+												<div class="row border-bottom border-top py-2">
+													<div class="col">
+														<div ng-repeat="c in x.components">
+															<div class="row p-2 my-1">
+																<h6>{{c.name}}</h6>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
 									</div>
 								</div>
 							</div>

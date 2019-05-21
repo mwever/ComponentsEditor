@@ -9,7 +9,6 @@
 				this.repositoryToEdit = null;
 				this.editModeRepo = false;
 				
-				
 				this.addComponent = function(component) {
 					this.componentArray.push(component);
 					this.editMode = false;
@@ -20,6 +19,10 @@
 				};
 				
 				this.checkComponent = function(x){
+					console.log(this.componentArray);
+					if(this.componentArray.length == 0){
+						return false;
+					}
 					for(var i = 0; i < this.componentArray.length; i++){
 						if(x.name == this.componentArray[i].name){
 							return true
@@ -75,6 +78,10 @@
 				
 				this.addRepository = function(repository) {
 					this.repositoryArray.push(repository);
+					this.repositoryToEdit = null;
+					this.componentArray = [];
+					this.componentToEdit = null;
+					this.editMode = false;
 					this.editModeRepo = false;
 				};
 				
@@ -99,7 +106,12 @@
 					        
 						}
 					}
+					this.repositoryToEdit = null;
+					this.componentArray = [];
+					this.componentToEdit = null;
 					this.editMode = false;
+					this.editModeRepo = false;
+					
 				}
 				
 				this.deleteRepository = function(x){
@@ -121,6 +133,7 @@
 				
 				this.editRepository = function(x){
 					this.repositoryToEdit = this.repositoryArray[x];
+					this.componentArray = this.repositoryToEdit.components;
 					this.editModeRepo = true;
 				};
 				
