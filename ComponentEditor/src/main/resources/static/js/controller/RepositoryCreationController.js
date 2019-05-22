@@ -8,11 +8,11 @@ ComponentApp.controller('RepositoryCreationController',['$scope','$location','$l
     	
     	$scope.editRepository = function(x){
     		$scope.repoStorage.editRepository(x);
-    		$location.path('/');
+    		$location.path('/repos');
     	}
     	
     	$scope.goToSingleRepositoryView = function(){
-        	$location.path('/');
+        	$location.path('/repos');
     	}
     	
     	

@@ -26,7 +26,7 @@
             var ComponentApp = angular.module('ComponentCreationApp',["ngRoute"]);
             ComponentApp.config(function($routeProvider){
                 $routeProvider
-                	.when("/",{
+                	.when("/repos",{
 					//controller: "ComponentCreationController",
 					controller: "RepoitoryController",
                     templateUrl:"views/Repo.htm"
@@ -35,7 +35,7 @@
 						controller: "ComponentCreationController",
                         templateUrl:"views/Component.htm"
                     })
-                     .when("/repos",{
+                     .when("/",{
 						controller: "RepositoryCreationController",
                         templateUrl:"views/Repoitories.htm"
                     })

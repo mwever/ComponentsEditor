@@ -48,7 +48,7 @@
 					
 					$http({
 						method: 'DELETE',
-						url: 'http://localhost:8080/components'+'/'+this.componentArray[x].name,
+						url: '/components'+'/'+this.componentArray[x].name,
 					}).then(
 							function(response){
 								console.log("Delete worked");
@@ -118,7 +118,7 @@
 					
 					$http({
 						method: 'DELETE',
-						url: 'http://localhost:8080/repos'+'/'+this.repositoryArray[x].name,
+						url: '/repos'+'/'+this.repositoryArray[x].name,
 					}).then(
 							function(response){
 								console.log("Delete worked");

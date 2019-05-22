@@ -24,94 +24,88 @@ import hasco.model.Component;
 
 @RestController
 @ComponentScan(basePackageClasses = RepositoryService.class)
-@RequestMapping("/repos")
+@RequestMapping("/")
 
 public class RepositorysController {
 
 	@Autowired
 	private RepositoryService reproService;
-	
-	@RequestMapping(method =RequestMethod.GET)
-	public Collection<Repository> getAllRepositories(){
+
+	@RequestMapping(method = RequestMethod.GET)
+	public Collection<Repository> getAllRepositories() {
 		return this.reproService.getAllRepository();
 	}
-	
+
 	@RequestMapping(value = "/{reproName}", method = RequestMethod.GET)
-	public Repository getRepositoryByName(@PathVariable("reproName") String name) {
+	public Repository getRepositoryByName(@PathVariable("reproName") final String name) {
 		return this.reproService.getRepositoryByName(name);
 	}
-	
+
 	@RequestMapping(value = "/{reproName}", method = RequestMethod.DELETE)
-	public void deleteRepositorybyName(@PathVariable("reproName") String name) {
+	public void deleteRepositorybyName(@PathVariable("reproName") final String name) {
 		this.reproService.removeRepositoryName(name);
 	}
-	
+
 	@RequestMapping(method = RequestMethod.PUT)
-	public void updateRepository(@RequestBody String str) throws IOException {
-		System.out.println("str: "+ str);
+	public void updateRepository(@RequestBody final String str) throws IOException {
+		System.out.println("str: " + str);
 		ObjectMapper map = new ObjectMapper();
 		map.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
-		BufferRepo buffer = map.readValue(str, BufferRepo.class); 
+		BufferRepo buffer = map.readValue(str, BufferRepo.class);
 		DataCollectionComponentFile comps = new DataCollectionComponentFile();
-		for(String components : buffer.comps) {
+		for (String components : buffer.comps) {
 			Component component = ComponentsController.parseComponent(components);
-			comps.insertComponent(component);	
+			comps.insertComponent(component);
 		}
-		
+
 		Repository repo = new Repository(buffer.name, comps);
-		reproService.insertRepository(repo);
-		
+		this.reproService.insertRepository(repo);
+
 	}
-	
-	
+
 	@RequestMapping(method = RequestMethod.POST)
-	public void insertComponent(@RequestBody String str) throws IOException {
+	public void insertComponent(@RequestBody final String str) throws IOException {
 		ObjectMapper map = new ObjectMapper();
 		map.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
-		BufferRepo buffer = map.readValue(str, BufferRepo.class); 
+		BufferRepo buffer = map.readValue(str, BufferRepo.class);
 		DataCollectionComponentFile comps = new DataCollectionComponentFile();
-		for(String components : buffer.comps) {
+		for (String components : buffer.comps) {
 			Component component = ComponentsController.parseComponent(components);
-			comps.insertComponent(component);	
+			comps.insertComponent(component);
 		}
-		
+
 		Repository repo = new Repository(buffer.name, comps);
-		reproService.updateRepository(repo);
-		
-		System.out.println("str: "+ str);	
-		//reproService.updateRepository(repro);
+		this.reproService.updateRepository(repo);
+
+		System.out.println("str: " + str);
+		// reproService.updateRepository(repro);
 	}
-	
-	@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY )
+
+	@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 	static class BufferRepo {
 		private String name;
-		private String [] comps;
-		
-		
+		private String[] comps;
+
 		public String getName() {
-			return name;
+			return this.name;
 		}
 
-
-		public void setName(String name) {
+		public void setName(final String name) {
 			this.name = name;
 		}
 
-
 		public String[] getComps() {
-			return comps;
+			return this.comps;
 		}
 
-
-		public void setComps(String[] comps) {
+		public void setComps(final String[] comps) {
 			this.comps = comps;
 		}
 
-
 		@JsonCreator
-		BufferRepo(@JsonProperty("name") String name,@JsonProperty("components") String [] comps){
+		BufferRepo(@JsonProperty("name") final String name, @JsonProperty("components") final String[] comps) {
 			this.name = name;
-			this.comps= comps;
+			this.comps = comps;
 		}
 	}
 }

@@ -30,170 +30,160 @@ import hasco.model.Component;
 import hasco.model.ParameterDomain;
 import jaicore.basic.sets.SetUtil.Pair;
 
-
-
-
 @RestController
 @ComponentScan(basePackageClasses = ComponentService.class)
 @RequestMapping("/components")
-public class ComponentsController{
+public class ComponentsController {
 	@Autowired
 	private ComponentService componentService;
-	
-	@RequestMapping(method =RequestMethod.GET)
-	public Collection<Component> getAllComponents(){
+
+	@RequestMapping(method = RequestMethod.GET)
+	public Collection<Component> getAllComponents() {
 		return this.componentService.getAllComponents();
 	}
-	
+
 	@RequestMapping(value = "/{compName}", method = RequestMethod.GET)
-	public Component getComponentByName(@PathVariable("compName") String name) {
+	public Component getComponentByName(@PathVariable("compName") final String name) {
 		return this.componentService.getComponentByName(name);
 	}
-	
+
 	@RequestMapping(value = "/{compName}", method = RequestMethod.DELETE)
-	public void deleteComponentbyName(@PathVariable("compName") String name) {
+	public void deleteComponentbyName(@PathVariable("compName") final String name) {
 		this.componentService.removeComponentByName(name);
 	}
-	
+
 	@RequestMapping(method = RequestMethod.PUT)
-	public void updateComponent(@RequestBody String str) throws IOException {
-		System.out.println("str: "+ str);	
+	public void updateComponent(@RequestBody final String str) throws IOException {
+		System.out.println("str: " + str);
 		Component comp = parseComponent(str);
-		componentService.insertComponent(comp);
+		this.componentService.insertComponent(comp);
 
 	}
-	
+
 	@RequestMapping(method = RequestMethod.POST)
-	public void insertComponent(@RequestBody String str) throws IOException {
-		System.out.println("str: "+ str);	
+	public void insertComponent(@RequestBody final String str) throws IOException {
+		System.out.println("str: " + str);
 		Component comp = parseComponent(str);
-		componentService.updateComponent(comp);
+		this.componentService.updateComponent(comp);
 	}
 
-	public static Component parseComponent(String input) throws IOException {
+	public static Component parseComponent(final String input) throws IOException {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
 		IntermediateComponent icomp = mapper.readValue(input, IntermediateComponent.class);
-		if(icomp.getName() == "") {
+		if (icomp.getName() == "") {
 			throw new IllegalArgumentException("Components must have a name");
 		}
 		Component comp = new Component(icomp.getName());
-		
-		
-		if(icomp.getProvidedInterfaces() != null) {
-			List<ProvidedInterface> provI =  icomp.getProvidedInterfaces();
-			for(ProvidedInterface pI : provI) {
-			comp.addProvidedInterface(pI.getInterfaces());
+
+		if (icomp.getProvidedInterfaces() != null) {
+			List<ProvidedInterface> provI = icomp.getProvidedInterfaces();
+			for (ProvidedInterface pI : provI) {
+				comp.addProvidedInterface(pI.getInterfaces());
 			}
 		}
-		
-		if(icomp.getRequiredInterfaces() != null) {
+
+		if (icomp.getRequiredInterfaces() != null) {
 			List<RequiredInterface> reqI = icomp.getRequiredInterfaces();
-			for(RequiredInterface rI : reqI) {
+			for (RequiredInterface rI : reqI) {
 				comp.addRequiredInterface(Long.toString(rI.getId()), rI.getName());
 			}
 		}
-		
-		if(icomp.getParameters() != null) {
+
+		if (icomp.getParameters() != null) {
 			List<Parameter> param = icomp.getParameters();
-			for(Parameter p : param) {
-				if(p.getDefaultDomain() instanceof NumericParameterDomain) {
-					Data.intermediate.NumericParameterDomain inp = (Data.intermediate.NumericParameterDomain)p.getDefaultDomain();
+			for (Parameter p : param) {
+				if (p.getDefaultDomain() instanceof NumericParameterDomain) {
+					Data.intermediate.NumericParameterDomain inp = (Data.intermediate.NumericParameterDomain) p.getDefaultDomain();
 					hasco.model.NumericParameterDomain np = new hasco.model.NumericParameterDomain(inp.isInteger(), inp.getMin(), inp.getMax());
 					comp.addParameter(new hasco.model.Parameter(p.getName(), np, inp.getDefaultValue()));
-				}else
-				if(p.getDefaultDomain() instanceof CategoricalParameterDomain) {
-					Data.intermediate.CategoricalParameterDomain icp = (Data.intermediate.CategoricalParameterDomain)p.getDefaultDomain();
+				} else if (p.getDefaultDomain() instanceof CategoricalParameterDomain) {
+					Data.intermediate.CategoricalParameterDomain icp = (Data.intermediate.CategoricalParameterDomain) p.getDefaultDomain();
 					String[] values = new String[icp.getValues().size()];
 					int counter = 0;
-					for(Kitten k : icp.getValues()) {
+					for (Kitten k : icp.getValues()) {
 						values[counter] = k.getName();
 						counter++;
 					}
 					hasco.model.CategoricalParameterDomain cp = new hasco.model.CategoricalParameterDomain(values);
 					comp.addParameter(new hasco.model.Parameter(p.getName(), cp, icp.getDefaultValue()));
-				}else
-				if(p.getDefaultDomain() instanceof BooleanParameterDomain) {
-					Data.intermediate.BooleanParameterDomain ibp = (Data.intermediate.BooleanParameterDomain)p.getDefaultDomain();
+				} else if (p.getDefaultDomain() instanceof BooleanParameterDomain) {
+					Data.intermediate.BooleanParameterDomain ibp = (Data.intermediate.BooleanParameterDomain) p.getDefaultDomain();
 					hasco.model.BooleanParameterDomain bp = new hasco.model.BooleanParameterDomain();
 					comp.addParameter(new hasco.model.Parameter(p.getName(), bp, ibp.getDefaultValue()));
 				}
 			}
 		}
-		
-		if(icomp.getDependencies() != null) {
+
+		if (icomp.getDependencies() != null) {
 			List<Dependency> depen = icomp.getDependencies();
-			for(Dependency d : depen) {
-				hasco.model.Dependency dep = convertToDependency(d.getPre(),d.getPost()); 
+			for (Dependency d : depen) {
+				hasco.model.Dependency dep = convertToDependency(d.getPre(), d.getPost());
 				comp.addDependency(dep);
 			}
 		}
-		
-		
+
 		return comp;
 	}
 
-	private static hasco.model.Dependency convertToDependency(String pre, String post) {
+	private static hasco.model.Dependency convertToDependency(final String pre, final String post) {
 		Collection<Collection<Pair<hasco.model.Parameter, ParameterDomain>>> preCollection = new ArrayList<>();
 		preCollection.add(initPairofParameterAndDomain(pre));
 		ArrayList<Pair<hasco.model.Parameter, ParameterDomain>> postCollection = initPairofParameterAndDomain(post);
 		return new hasco.model.Dependency(preCollection, postCollection);
 	}
-	
-	private static ArrayList<Pair<hasco.model.Parameter, ParameterDomain>> initPairofParameterAndDomain(String input){
-		
+
+	private static ArrayList<Pair<hasco.model.Parameter, ParameterDomain>> initPairofParameterAndDomain(String input) {
+
 		input = input.trim();
-		input = input.replaceAll("\\s+","");
-		
+		input = input.replaceAll("\\s+", "");
+
 		String[] andSplitted = input.split("and");
-		
+
 		ArrayList<Pair<hasco.model.Parameter, ParameterDomain>> output = new ArrayList<>();
-		
-		for(String s : andSplitted) {
-			
+
+		for (String s : andSplitted) {
+
 			String[] inSplitted = s.split("in");
 			String preName = inSplitted[0];
-			
-			if(inSplitted[1].contains("{")) {
-				String catString = inSplitted[1].substring(inSplitted[1].indexOf('{')+1, inSplitted[1].indexOf('}')-1);
-				String [] catValues = catString.split(",");
-				
-				if(catValues.length == 2) {
-					if(catValues[0].equalsIgnoreCase("true")&&catValues[1].equalsIgnoreCase("false")) {
+
+			if (inSplitted[1].contains("{")) {
+				String catString = inSplitted[1].substring(inSplitted[1].indexOf('{') + 1, inSplitted[1].indexOf('}') - 1);
+				String[] catValues = catString.split(",");
+
+				if (catValues.length == 2) {
+					if (catValues[0].equalsIgnoreCase("true") && catValues[1].equalsIgnoreCase("false")) {
 						hasco.model.BooleanParameterDomain preDomain = new hasco.model.BooleanParameterDomain();
 						hasco.model.Parameter preParam = new hasco.model.Parameter(preName, preDomain, null);
-						output.add(new Pair<hasco.model.Parameter, ParameterDomain>(preParam,preDomain));
-						
-					}
-					else {
-						if(catValues[0].equalsIgnoreCase("false")&&catValues[1].equalsIgnoreCase("true")) {
+						output.add(new Pair<hasco.model.Parameter, ParameterDomain>(preParam, preDomain));
+
+					} else {
+						if (catValues[0].equalsIgnoreCase("false") && catValues[1].equalsIgnoreCase("true")) {
 							hasco.model.BooleanParameterDomain preDomain = new hasco.model.BooleanParameterDomain();
 							hasco.model.Parameter preParam = new hasco.model.Parameter(preName, preDomain, null);
-							output.add(new Pair<hasco.model.Parameter, ParameterDomain>(preParam,preDomain));
+							output.add(new Pair<hasco.model.Parameter, ParameterDomain>(preParam, preDomain));
 						}
 					}
-					hasco.model.CategoricalParameterDomain preDomain = new  hasco.model.CategoricalParameterDomain(catValues);
+					hasco.model.CategoricalParameterDomain preDomain = new hasco.model.CategoricalParameterDomain(catValues);
 					hasco.model.Parameter preParam = new hasco.model.Parameter(preName, preDomain, null);
-					output.add(new Pair<hasco.model.Parameter, ParameterDomain>(preParam,preDomain));
+					output.add(new Pair<hasco.model.Parameter, ParameterDomain>(preParam, preDomain));
 				}
-			}else
-			if(inSplitted[1].contains("[")) {
-				String tmp = inSplitted[1].substring(inSplitted[1].indexOf('[')+1, inSplitted[1].indexOf(']'));
+			} else if (inSplitted[1].contains("[")) {
+				String tmp = inSplitted[1].substring(inSplitted[1].indexOf('[') + 1, inSplitted[1].indexOf(']'));
 				String[] intervalValues = tmp.split(",");
 				double firstValue = Double.parseDouble(intervalValues[0]);
 				double secondValue = Double.parseDouble(intervalValues[1]);
 				boolean isInteger;
-				if(intervalValues[0].contains(".")) {
+				if (intervalValues[0].contains(".")) {
 					isInteger = false;
 					hasco.model.NumericParameterDomain preDomain = new hasco.model.NumericParameterDomain(isInteger, firstValue, secondValue);
 					hasco.model.Parameter preParam = new hasco.model.Parameter(preName, preDomain, null);
-					output.add(new Pair<hasco.model.Parameter, ParameterDomain>(preParam,preDomain));
-				}
-				else {
+					output.add(new Pair<hasco.model.Parameter, ParameterDomain>(preParam, preDomain));
+				} else {
 					isInteger = true;
 					hasco.model.NumericParameterDomain preDomain = new hasco.model.NumericParameterDomain(isInteger, firstValue, secondValue);
 					hasco.model.Parameter preParam = new hasco.model.Parameter(preName, preDomain, null);
-					output.add(new Pair<hasco.model.Parameter, ParameterDomain>(preParam,preDomain));
+					output.add(new Pair<hasco.model.Parameter, ParameterDomain>(preParam, preDomain));
 				}
 			}
 		}

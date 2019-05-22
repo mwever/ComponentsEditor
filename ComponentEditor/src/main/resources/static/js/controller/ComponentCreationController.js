@@ -184,7 +184,7 @@ ComponentApp.controller('ComponentCreationController',['$scope','$location','$ht
 			console.log("POST");
 			$http({
 				method: 'POST',
-				url: 'http://localhost:8080/components',
+				url: '/components',
 				data: jsonString
 			}).then(
 					function(response){
@@ -202,7 +202,7 @@ ComponentApp.controller('ComponentCreationController',['$scope','$location','$ht
 			console.log("PUT");
 			$http({
 				method: 'PUT',
-				url: 'http://localhost:8080/components',
+				url: '/components',
 				data: jsonString 
 			}).then(
 					function(response){
