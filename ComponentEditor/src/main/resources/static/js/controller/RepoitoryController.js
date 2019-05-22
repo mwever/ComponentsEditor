@@ -49,7 +49,7 @@ ComponentApp.controller('RepoitoryController',['$scope','$location','$log','$htt
     			console.log("POST");
     			$http({
     				method: 'POST',
-    				url: 'http://localhost:8080/repos',
+    				url: '/api/repo',
     				data: jsonString
     			}).then(
     					function(response){
@@ -67,7 +67,7 @@ ComponentApp.controller('RepoitoryController',['$scope','$location','$log','$htt
     			console.log("PUT");
     			$http({
     				method: 'PUT',
-    				url: 'http://localhost:8080/repos',
+    				url: '/api/repo',
     				data: jsonString 
     			}).then(
     					function(response){
@@ -89,7 +89,7 @@ ComponentApp.controller('RepoitoryController',['$scope','$location','$log','$htt
     		
     		$scope.resetForm();
     		$scope.componentsStorage.editModeRepo =false;
-            $location.path('/repos');
+            $location.path('/');
         }
     	
         $scope.resetForm = function(){
@@ -131,7 +131,7 @@ ComponentApp.controller('RepoitoryController',['$scope','$location','$log','$htt
         	$scope.componentsStorage.editMode = false;
         	$scope.componentsStorage.originalRepo = null;
         	$scope.resetForm();
-        	$location.path('/repos');
+        	$location.path('/');
         }
     	// -----------------------test area ---------------------
 }]
