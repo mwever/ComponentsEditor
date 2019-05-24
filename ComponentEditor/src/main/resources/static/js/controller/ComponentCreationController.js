@@ -90,12 +90,12 @@ ComponentApp.controller('ComponentCreationController',['$scope','$location','$ht
     $scope.components=[];*/
     
 	//$scope.currentComponent = crs.getLatestComponent();
-    $scope.componentName ="";
+    /*$scope.componentName ="";
     $scope.reqInterfaces = [];
     $scope.providedInterfaces = [];
     $scope.parameters =[];
     $scope.dependencys=[];
-    $scope.toLoad = null;
+    $scope.toLoad = null;*/
     
     //{label: 'Cat', actualType: new CategoricalParameterDomain(new Array())},{label: 'Number', actualType: new NumericParameterDomain(null,null,false) },{label: 'Bool', actualType: new BooleanParameterDomain()}
    
@@ -111,34 +111,34 @@ ComponentApp.controller('ComponentCreationController',['$scope','$location','$ht
     	}
     	return str; 
     }*/
-
+	$scope.compStorage = crs;
     
     $scope.addReqInterface = function(){
         $scope.errortext="";
-        if(!($scope.reqInterfaces.indexOf($scope.addReqInterface)== -1)){
+        if(!(crs.reqInterfaces.indexOf($scope.addReqInterface)== -1)){
             $scope.errortext="The requiered Interface is allready added";
         }else{
-            $scope.reqInterfaces.push(new ReqInterface(null,null /*,null*/));
+            crs.reqInterfaces.push(new ReqInterface(null,null /*,null*/));
         }
     }
 
     $scope.addProvidedInterface = function(){
         $scope.errortext = "";
-        if(!($scope.providedInterfaces.indexOf($scope.addProvidedInterface)== -1)){
+        if(!(crs.providedInterfaces.indexOf($scope.addProvidedInterface)== -1)){
             $scope.errortext="The provided Interface is allready added";
         }
         else{
-            $scope.providedInterfaces.push(new ProvidedInterface(null,null,null));
+            crs.providedInterfaces.push(new ProvidedInterface(null,null,null));
         }
     }
 
     $scope.addParameter = function(){
         $scope.errortext="";
-        if(!($scope.parameters.indexOf($scope.addParameter)== -1)){
+        if(!(crs.parameters.indexOf($scope.addParameter)== -1)){
             $scope.errortext="The parameter is allready added";
         }else{
         	
-            $scope.parameters.push(new Parameter(null,null));
+            crs.parameters.push(new Parameter(null,null));
         }
     }
 
@@ -148,35 +148,35 @@ ComponentApp.controller('ComponentCreationController',['$scope','$location','$ht
             $scope.errortext="The parameter is allready added";
         }else{ */
     		
-            $scope.parameters[x].defaultDomain.values.push(new Kitten(""));
+            crs.parameters[x].defaultDomain.values.push(new Kitten(""));
         //}
     }
 
     $scope.addDependency = function(){
         $scope.errortext="";
-        if(!($scope.dependencys.indexOf($scope.dependencys)== -1)){
+        if(!(crs.dependencys.indexOf($scope.dependencys)== -1)){
             $scope.errortext="The dependency is allready added";
         }else{
-            $scope.dependencys.push(new Dependency(null,null));
+            crs.dependencys.push(new Dependency(null,null));
         }
     }
 
     $scope.resetForm = function(){
-        $scope.parameters = [];
-        $scope.reqInterfaces =[];
-        $scope.providedInterfaces=[];
-        $scope.parameters=[];
-        $scope.dependencys=[];
-        $scope.componentName="";
+    	crs.parameters = [];
+    	crs.reqInterfaces =[];
+    	crs.providedInterfaces=[];
+    	crs.parameters=[];
+    	crs.dependencys=[];
+    	crs.componentName="";
         
-        $scope.toLoad = null;
+    	crs.componentToEdit = null;
         
     }
     
 
     $scope.addComponent=function(){
 		
-    	var comp = new Component($scope.componentName,$scope.reqInterfaces,$scope.providedInterfaces,$scope.parameters,$scope.dependencys); 
+    	var comp = new Component(crs.componentName,crs.reqInterfaces,crs.providedInterfaces,crs.parameters,crs.dependencys); 
     	
 		var jsonString =  angular.toJson(comp, true);
 		
@@ -216,14 +216,18 @@ ComponentApp.controller('ComponentCreationController',['$scope','$location','$ht
 	    	);
 		}
 		if(!crs.checkComponent(comp)){
-			crs.addComponent(comp);
+			if(crs.editMode){
+				crs.changeComponentName(crs.originalComp.name,comp);
+			}else{
+				crs.addComponent(comp);
+			}
 		}
 		else{
 			crs.updateComponent(comp);
 		}
 		
 		$scope.resetForm();
-        $location.path('/');
+        $location.path('/repos');
     }
 	
 	/*$scope.getComponents = function() {
@@ -231,26 +235,26 @@ ComponentApp.controller('ComponentCreationController',['$scope','$location','$ht
 	}*/
 
     $scope.removeReqInterface = function(x){
-        $scope.reqInterfaces.splice(x,1);
+    	crs.reqInterfaces.splice(x,1);
     }
 
     $scope.removeProvidedInterface = function(x){
         $scope.errortext="";
-        $scope.providedInterfaces.splice(x,1);
+        crs.providedInterfaces.splice(x,1);
     }
 
     $scope.removeParameter = function(x){
         $scope.errortext="";
-        $scope.parameters.splice(x,1);
+        crs.parameters.splice(x,1);
     }
 
     $scope.removeDependency = function(x){
         $scope.errortext="";
-        $scope.dependencys.splice(x,1);
+        crs.dependencys.splice(x,1);
     }
 
     $scope.removeKitten = function(x,y){
-        $scope.parameters[$scope.parameters.indexOf(x)].defaultDomain.values.splice(y,1);
+    	crs.parameters[crs.parameters.indexOf(x)].defaultDomain.values.splice(y,1);
     }
 
     $scope.isNumber = function(x,y){
@@ -275,24 +279,24 @@ ComponentApp.controller('ComponentCreationController',['$scope','$location','$ht
     }
     
     $scope.loadCheck = function(){
-    	if(crs.toLoad()){
-    		$scope.toLoad = crs.getToLoadComponent();
-    		console.log($scope.toLoad);
-    		$scope.componentName = $scope.toLoad.name;
-    		$scope.reqInterfaces = $scope.toLoad.requiredInterfaces;
-    		$scope.providedInterfaces = $scope.toLoad.providedInterfaces;
-    		$scope.parameters = $scope.toLoad.parameters;
-    		$scope.dependencys = $scope.toLoad.dependencies;
+    	if(crs.editMode){
+    		crs.componentToEdit = crs.getToLoadComponent();
+    		console.log(crs.componentToEdit);
+    		crs.componentName = crs.componentToEdit.name;
+    		crs.reqInterfaces = crs.componentToEdit.requiredInterfaces;
+    		crs.providedInterfaces = crs.componentToEdit.providedInterfaces;
+    		crs.parameters = crs.componentToEdit.parameters;
+    		crs.dependencys = crs.componentToEdit.dependencies;
     	}
     	
     }
     
     $scope.inEditMode = function(){
-    	return $scope.toLoad != null
+    	return crs.componentToEdit != null
     }
     
     $scope.inNormalMode = function(){
-    	return $scope.toLoad == null
+    	return crs.componentToEdit == null
     }
     /*$scope.goToComponentView=function(){
         $location.path('');

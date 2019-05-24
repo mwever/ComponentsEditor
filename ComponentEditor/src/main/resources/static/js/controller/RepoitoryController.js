@@ -10,11 +10,7 @@ ComponentApp.controller('RepoitoryController',['$scope','$location','$log','$htt
 		
 		$scope.componentsStorage = ComponentRepositoryService;
 		
-		$scope.name = ""
-		$scope.components= []
 		
-		$scope.toLoad = null;
-		$scope.original = null;
 		
 		$scope.goToComponentView=function(){
         	$location.path('/Comp');
@@ -41,7 +37,7 @@ ComponentApp.controller('RepoitoryController',['$scope','$location','$log','$htt
     	
     	$scope.addRepository=function(){
     		
-        	var repo = new Repository($scope.name,$scope.components); 
+        	var repo = new Repository($scope.componentsStorage.name,$scope.componentsStorage.components); 
         	
     		var jsonString =  angular.toJson(repo, true);
     		
@@ -93,38 +89,38 @@ ComponentApp.controller('RepoitoryController',['$scope','$location','$log','$htt
         }
     	
         $scope.resetForm = function(){
-        	$scope.components=[];
-        	$scope.name = "";
-        	$scope.toLoad= null;
+        	$scope.componentsStorage.components=[];
+        	$scope.componentsStorage.name = "";
+        	$scope.componentsStorage.toLoadRepo= null;
         }
         
         $scope.loadCheck = function(){
-        	if($scope.componentsStorage.toLoadRepo()){
-        		$scope.toLoad = $scope.componentsStorage.getToLoadRepo();
-        		console.log($scope.toLoad);
-        		$scope.name = $scope.toLoad.name;
-        		$scope.components= $scope.toLoad.components;
-        		$scope.original = angular.copy($scope.toLoad);
+        	if($scope.componentsStorage.getToLoadRepo()){
+        		$scope.componentsStorage.repositoryToEdit = $scope.componentsStorage.getToLoadRepo();
+        		console.log($scope.componentsStorage.toLoadRepo);
+        		$scope.componentsStorage.name = $scope.componentsStorage.repositoryToEdit.name;
+        		$scope.componentsStorage.components= $scope.componentsStorage.repositoryToEdit.components;
+        		//$scope.componentsStorage.original = angular.copy($scope.componentsStorage.toLoad);
         	}	
         }
         
         $scope.inEditMode = function(){
-        	return $scope.toLoad != null
+        	return $scope.componentsStorage.toLoadRepo != null
         }
         
         $scope.inNormalMode = function(){
-        	return $scope.toLoad == null
+        	return $scope.componentsStorage.toLoadRepo == null
         }
     	
         $scope.cancel = function(){
         	$scope.componentsStorage.componentArray = [];
         	//$scope.components = $scope.componentsStorage.originalRepo.components;
-        	if($scope.componentsStorage.toLoadRepo()){
+        	if($scope.componentsStorage.editModeRepo){
         		$scope.componentsStorage.editModeRepo = false;
         		
-        		$scope.componentsStorage.updateRepository($scope.original);
+        		$scope.componentsStorage.updateRepository($scope.componentsStorage.original);
         		//$scope.componentsStorage.repositoryArray.push($scope.componentsStorage.originalRepo);
-        		console.log("in Edit Mode and to Load benutzt "+$scope.original)
+        		console.log("in Edit Mode and to Load benutzt "+$scope.componentsStorage.original)
         	}
         	
         	$scope.componentsStorage.componentToEdit = null;

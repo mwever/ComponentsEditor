@@ -10,7 +10,7 @@
 			<div id="ComponentNameSpace" class="row-fluid">
 				<div class="input-group">
 					<label class="col-4 center">Component name:</label> <input
-						class="col-8" type="text" ng-model="componentName"
+						class="col-8" type="text" ng-model="compStorage.componentName"
 						placeholder="Name ...">
 				</div>
 			</div>
@@ -21,7 +21,7 @@
 				class="btn btn-info btn-lg btn-block my-3">Add required
 				Interface</button>
 			<div id="ReqInterfaceSpace" class="row-fluid">
-				<div ng-repeat="x in reqInterfaces">
+				<div ng-repeat="x in compStorage.getreqInterfaces()">
 					<div class="row border border-white rounded px-2 py-2">
 						<div class="col">
 							<div class="row">
@@ -52,7 +52,7 @@
 				class="btn btn-info btn-lg btn-block my-3">Add provided
 				Interface</button>
 			<div id="ProvidedInterfaceSpace" class="row-fluid">
-				<div ng-repeat="x in providedInterfaces">
+				<div ng-repeat="x in compStorage.getprovidedInterfaces()">
 					<div class="row border border-white rounded px-2 py-2">
 						<div class="col">
 							<div class="row">
@@ -75,7 +75,7 @@
 			<button ng-click="addParameter()" type="button"
 				class="btn btn-info btn-lg btn-block my-3">Add parameter</button>
 			<div id="ParameterSpace" class="row-fluid">
-				<div ng-repeat="x in parameters">
+				<div ng-repeat="x in compStorage.getparameters()">
 					<div class="row border border-white rounded px-2 py-2">
 						<div class="col">
 							<div class="row">
@@ -196,7 +196,7 @@
 			<button ng-click="addDependency()" type="button"
 				class="btn btn-info btn-lg btn-block my-3">Add dependency</button>
 			<div id="DependencySpace" class="row-fluid">
-				<div ng-repeat="x in dependencys">
+				<div ng-repeat="x in compStorage.getdependencys()">
 					<div class="row border border-white rounded p-2">
 						<div class="col">
 							<div class="row">

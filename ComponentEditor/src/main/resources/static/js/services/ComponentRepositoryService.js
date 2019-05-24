@@ -9,9 +9,64 @@
 				this.repositoryToEdit = null;
 				this.editModeRepo = false;
 				
+				//-------------------------------------------------------------------------------------------------------
+				
+				this.componentName ="";
+				this.reqInterfaces = [];
+				this.providedInterfaces = [];
+				this.parameters =[];
+				this.dependencys=[];
+				
+				this.originalComp = null;
+				
+				this.getCompName = function(){
+					return this.componentName;
+				}
+				
+				this.getreqInterfaces = function(){
+					return this.reqInterfaces;
+				}
+				
+				this.getprovidedInterfaces = function(){
+					return this.providedInterfaces;
+				}
+				
+				this.getparameters = function(){
+					return this.parameters;
+				}
+				
+				this.getdependencys = function(){
+					return this.dependencys;
+				}
+				
+				
+				
+				//-------------------------------------------------------------------------------------------------------
+				
+				this.name = ""
+				this.components= []
+					
+				
+				this.original = null;
+				
+				this.getname = function(){
+					return name;
+				}
+				
+				this.getcomponents = function(){
+					return components;
+				}
+				
+				this.getoriginal = function(){
+					return original;
+				}
+				
+				//-------------------------------------------------------------------------------------------------------
+				
 				this.addComponent = function(component) {
 					this.componentArray.push(component);
 					this.editMode = false;
+					this.componentToEdit= null;
 				};
 				
 				this.getComponents = function() {
@@ -42,6 +97,7 @@
 						}
 					}
 					this.editMode = false;
+					this.componentToEdit = null;
 				}
 				
 				this.deleteComponent = function(x){
@@ -63,10 +119,17 @@
 				
 				this.editComponent = function(x){
 					this.componentToEdit = this.componentArray[x];
+					this.originalComp = angular.copy(this.componentToEdit);
 					this.editMode = true;
 				};
 				
-				this.toLoad = function(){
+				this.changeComponentName = function(x,y){
+					this.componentArray[this.componentArray.indexOf(x)] = y;
+					this.editMode = false;
+					this.componentToEdit = null;
+				};
+				
+				this.istoLoad = function(){
 					return this.editMode;
 				};
 				
@@ -112,7 +175,7 @@
 					this.editMode = false;
 					this.editModeRepo = false;
 					
-				}
+				};
 				
 				this.deleteRepository = function(x){
 					
@@ -134,6 +197,8 @@
 				this.editRepository = function(x){
 					this.repositoryToEdit = this.repositoryArray[x];
 					this.componentArray = this.repositoryToEdit.components;
+					this.name = this.repositoryToEdit.name;
+					this.original = angular.copy(this.repositoryToEdit);
 					this.editModeRepo = true;
 				};
 				
