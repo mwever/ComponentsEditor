@@ -37,7 +37,7 @@ ComponentApp.controller('RepoitoryController',['$scope','$location','$log','$htt
     	
     	$scope.addRepository=function(){
     		
-        	var repo = new Repository($scope.componentsStorage.name,$scope.componentsStorage.components); 
+        	var repo = new Repository($scope.componentsStorage.name,$scope.componentsStorage.componentArray); 
         	
     		var jsonString =  angular.toJson(repo, true);
     		
@@ -89,7 +89,7 @@ ComponentApp.controller('RepoitoryController',['$scope','$location','$log','$htt
         }
     	
         $scope.resetForm = function(){
-        	$scope.componentsStorage.components=[];
+        	$scope.componentsStorage.componentArray=[];
         	$scope.componentsStorage.name = "";
         	$scope.componentsStorage.toLoadRepo= null;
         }
@@ -99,7 +99,7 @@ ComponentApp.controller('RepoitoryController',['$scope','$location','$log','$htt
         		$scope.componentsStorage.repositoryToEdit = $scope.componentsStorage.getToLoadRepo();
         		console.log($scope.componentsStorage.toLoadRepo);
         		$scope.componentsStorage.name = $scope.componentsStorage.repositoryToEdit.name;
-        		$scope.componentsStorage.components= $scope.componentsStorage.repositoryToEdit.components;
+        		$scope.componentsStorage.componentArray= $scope.componentsStorage.repositoryToEdit.components;
         		//$scope.componentsStorage.original = angular.copy($scope.componentsStorage.toLoad);
         	}	
         }

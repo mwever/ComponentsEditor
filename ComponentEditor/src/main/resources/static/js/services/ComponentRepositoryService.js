@@ -44,21 +44,21 @@
 				//-------------------------------------------------------------------------------------------------------
 				
 				this.name = ""
-				this.components= []
+				//this.components= []
 					
 				
 				this.original = null;
 				
 				this.getname = function(){
-					return name;
+					return this.name;
 				}
 				
 				this.getcomponents = function(){
-					return components;
+					return this.componentArray;
 				}
 				
 				this.getoriginal = function(){
-					return original;
+					return this.original;
 				}
 				
 				//-------------------------------------------------------------------------------------------------------
@@ -69,9 +69,9 @@
 					this.componentToEdit= null;
 				};
 				
-				this.getComponents = function() {
+				/*this.getComponents = function() {
 					return this.componentArray;
-				};
+				};*/
 				
 				this.checkComponent = function(x){
 					console.log(this.componentArray);
@@ -119,14 +119,15 @@
 				
 				this.editComponent = function(x){
 					this.componentToEdit = this.componentArray[x];
-					this.originalComp = angular.copy(this.componentToEdit);
+					this.originalComp = this.componentToEdit;
 					this.editMode = true;
 				};
 				
 				this.changeComponentName = function(x,y){
-					this.componentArray[this.componentArray.indexOf(x)] = y;
+					this.componentArray[this.componentArray.indexOf(x)]=y;
 					this.editMode = false;
 					this.componentToEdit = null;
+					this.originalComp = null;
 				};
 				
 				this.istoLoad = function(){

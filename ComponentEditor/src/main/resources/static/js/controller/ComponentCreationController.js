@@ -217,12 +217,15 @@ ComponentApp.controller('ComponentCreationController',['$scope','$location','$ht
 		}
 		if(!crs.checkComponent(comp)){
 			if(crs.editMode){
-				crs.changeComponentName(crs.originalComp.name,comp);
+				crs.changeComponentName(crs.originalComp,comp);
 			}else{
 				crs.addComponent(comp);
 			}
 		}
 		else{
+			if(crs.originalComp.name != comp.name){
+				crs.changeComponentName(crs.originalComp,comp);
+			}
 			crs.updateComponent(comp);
 		}
 		
