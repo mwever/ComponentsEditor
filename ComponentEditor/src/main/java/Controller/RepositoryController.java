@@ -50,44 +50,34 @@ public class RepositoryController {
 	@PutMapping(value = "/api/repo")
 	public void updateRepository(@RequestBody BufferRepo buffer) throws IOException {
 		System.out.println("str: " + buffer);
-		/*
-		 * ObjectMapper map = new ObjectMapper();
-		 * map.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
-		 * BufferRepo buffer = map.readValue(str, BufferRepo.class);
-		 */
-		/*
-		 * DataCollectionComponentFile comps = new DataCollectionComponentFile(); for
-		 * (IntermediateComponent components : buffer.comps) { Component component =
-		 * ComponentsController.parseComponent(components);
-		 * comps.insertComponent(component); }
-		 * 
-		 * Repository repo = new Repository(buffer.name, comps);
-		 * this.reproService.insertRepository(repo);
-		 * 
-		 * System.out.println("PUT");
-		 */
+		
+		  DataCollectionComponentFile comps = new DataCollectionComponentFile(); for
+		  (IntermediateComponent components : buffer.comps) { Component component =
+		  ComponentsController.parseComponent(components);
+		  comps.insertComponent(component); }
+		  
+		  Repository repo = new Repository(buffer.name, comps);
+		  this.reproService.insertRepository(repo);
+		  
+		  System.out.println("PUT");
+		 
 
 	}
 
 	@RequestMapping(value = "/api/repo", method = RequestMethod.POST)
 	public void insertComponent(@RequestBody BufferRepo buffer) throws IOException {
-		/*
-		 * ObjectMapper map = new ObjectMapper();
-		 * map.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
-		 * BufferRepo buffer = map.readValue(str, BufferRepo.class);
-		 */
-		/*
-		 * DataCollectionComponentFile comps = new DataCollectionComponentFile();
-		 * for(String [] str : buffer.comps) { for(String components : str){ Component
-		 * component = ComponentsController.parseComponent(components);
-		 * comps.insertComponent(component); } }
-		 * 
-		 * Repository repo = new Repository(buffer.name, comps);
-		 * this.reproService.updateRepository(repo);
-		 * 
-		 * System.out.println("str: " + repo.getData().getAllComponents());
-		 */
-		// reproService.updateRepository(repro);
+		
+		  DataCollectionComponentFile comps = new DataCollectionComponentFile();
+		  for(IntermediateComponent components : buffer.comps) {
+			  Component component = ComponentsController.parseComponent(components);
+			  comps.insertComponent(component);
+		   } 
+		  
+		  Repository repo = new Repository(buffer.name, comps);
+		  this.reproService.updateRepository(repo);
+		  
+		  System.out.println("str: " + repo.getData().getAllComponents());
+		 
 	}
 
 	@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)

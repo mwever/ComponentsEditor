@@ -55,7 +55,10 @@ public class ComponentsController {
 	@RequestMapping(method = RequestMethod.PUT)
 	public void updateComponent(@RequestBody final String str) throws IOException {
 		System.out.println("str: " + str);
-		Component comp = parseComponent(str);
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
+		IntermediateComponent icomp = mapper.readValue(str, IntermediateComponent.class);
+		Component comp = parseComponent(icomp);
 		this.componentService.insertComponent(comp);
 
 	}
@@ -63,14 +66,15 @@ public class ComponentsController {
 	@RequestMapping(method = RequestMethod.POST)
 	public void insertComponent(@RequestBody final String str) throws IOException {
 		System.out.println("str: " + str);
-		Component comp = parseComponent(str);
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
+		IntermediateComponent icomp = mapper.readValue(str, IntermediateComponent.class);
+		Component comp = parseComponent(icomp);
 		this.componentService.updateComponent(comp);
 	}
 
-	public static Component parseComponent(final String input) throws IOException {
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
-		IntermediateComponent icomp = mapper.readValue(input, IntermediateComponent.class);
+	public static Component parseComponent(IntermediateComponent icomp) throws IOException {
+		
 		if (icomp.getName() == "") {
 			throw new IllegalArgumentException("Components must have a name");
 		}
