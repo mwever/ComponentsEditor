@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import Data.DataCollectionComponentFile;
+import Data.intermediate.IntermediateComponent;
 import Data.intermediate.Repository;
 import Service.RepositoryService;
 import hasco.model.Component;
@@ -47,44 +48,52 @@ public class RepositoryController {
 	}
 
 	@PutMapping(value = "/api/repo")
-	public void updateRepository(@RequestBody final String str) throws IOException {
-		System.out.println("str: " + str);
-		ObjectMapper map = new ObjectMapper();
-		map.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
-		BufferRepo buffer = map.readValue(str, BufferRepo.class);
-		DataCollectionComponentFile comps = new DataCollectionComponentFile();
-		for (String components : buffer.comps) {
-			Component component = ComponentsController.parseComponent(components);
-			comps.insertComponent(component);
-		}
-
-		Repository repo = new Repository(buffer.name, comps);
-		this.reproService.insertRepository(repo);
+	public void updateRepository(@RequestBody BufferRepo buffer) throws IOException {
+		System.out.println("str: " + buffer);
+		/*
+		 * ObjectMapper map = new ObjectMapper();
+		 * map.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
+		 * BufferRepo buffer = map.readValue(str, BufferRepo.class);
+		 */
+		/*
+		 * DataCollectionComponentFile comps = new DataCollectionComponentFile(); for
+		 * (IntermediateComponent components : buffer.comps) { Component component =
+		 * ComponentsController.parseComponent(components);
+		 * comps.insertComponent(component); }
+		 * 
+		 * Repository repo = new Repository(buffer.name, comps);
+		 * this.reproService.insertRepository(repo);
+		 * 
+		 * System.out.println("PUT");
+		 */
 
 	}
 
 	@RequestMapping(value = "/api/repo", method = RequestMethod.POST)
-	public void insertComponent(@RequestBody final String str) throws IOException {
-		ObjectMapper map = new ObjectMapper();
-		map.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
-		BufferRepo buffer = map.readValue(str, BufferRepo.class);
-		DataCollectionComponentFile comps = new DataCollectionComponentFile();
-		for (String components : buffer.comps) {
-			Component component = ComponentsController.parseComponent(components);
-			comps.insertComponent(component);
-		}
-
-		Repository repo = new Repository(buffer.name, comps);
-		this.reproService.updateRepository(repo);
-
-		System.out.println("str: " + str);
+	public void insertComponent(@RequestBody BufferRepo buffer) throws IOException {
+		/*
+		 * ObjectMapper map = new ObjectMapper();
+		 * map.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
+		 * BufferRepo buffer = map.readValue(str, BufferRepo.class);
+		 */
+		/*
+		 * DataCollectionComponentFile comps = new DataCollectionComponentFile();
+		 * for(String [] str : buffer.comps) { for(String components : str){ Component
+		 * component = ComponentsController.parseComponent(components);
+		 * comps.insertComponent(component); } }
+		 * 
+		 * Repository repo = new Repository(buffer.name, comps);
+		 * this.reproService.updateRepository(repo);
+		 * 
+		 * System.out.println("str: " + repo.getData().getAllComponents());
+		 */
 		// reproService.updateRepository(repro);
 	}
 
 	@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 	static class BufferRepo {
 		private String name;
-		private String[] comps;
+		private IntermediateComponent[] comps;
 
 		public String getName() {
 			return this.name;
@@ -94,16 +103,17 @@ public class RepositoryController {
 			this.name = name;
 		}
 
-		public String[] getComps() {
+		public IntermediateComponent[] getComps() {
 			return this.comps;
 		}
 
-		public void setComps(final String[] comps) {
+		public void setComps(final IntermediateComponent[] comps) {
 			this.comps = comps;
 		}
 
 		@JsonCreator
-		BufferRepo(@JsonProperty("name") final String name, @JsonProperty("components") final String[] comps) {
+		BufferRepo(@JsonProperty("name") final String name,
+				@JsonProperty("components") final IntermediateComponent[] comps) {
 			this.name = name;
 			this.comps = comps;
 		}
