@@ -1,6 +1,8 @@
 package Controller;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,34 +52,68 @@ public class RepositoryController {
 	@PutMapping(value = "/api/repo")
 	public void updateRepository(@RequestBody BufferRepo buffer) throws IOException {
 		System.out.println("str: " + buffer);
-		
-		  DataCollectionComponentFile comps = new DataCollectionComponentFile(); for
-		  (IntermediateComponent components : buffer.comps) { Component component =
-		  ComponentsController.parseComponent(components);
-		  comps.insertComponent(component); }
-		  
-		  Repository repo = new Repository(buffer.name, comps);
-		  this.reproService.insertRepository(repo);
-		  
-		  System.out.println("PUT");
-		 
 
+		DataCollectionComponentFile comps = new DataCollectionComponentFile();
+		for (IntermediateComponent components : buffer.comps) {
+			Component component = ComponentsController.parseComponent(components);
+			comps.insertComponent(component);
+		}
+
+		Repository repo = new Repository(buffer.name, comps);
+		this.reproService.insertRepository(repo);
+
+		System.out.println("PUT");
+
+	}
+
+	@RequestMapping(value = "/api/repo/save/{repoCollectionName}", method = RequestMethod.POST)
+	public void saveRepo(@PathVariable("repoCollectionName") final String nameOfRepoCollection) {
+		File saveDir = new File("SaveRepo");
+		if (!saveDir.exists()) {
+			saveDir.mkdir();
+		}
+		File saveRepos = new File("SaveRepo/" + nameOfRepoCollection);
+
+		if (!saveRepos.exists()) {
+			// RepoCollection did not exsit --> no file exsits
+
+			saveRepos.mkdirs();
+
+			for (Repository repo : reproService.getAllRepository()) {
+				File saveRepo = new File("SaveRepo/" + nameOfRepoCollection + "/" + repo.getName() + ".json");
+				try {
+					if (saveRepo.createNewFile()) {
+						for (Component comp : repo.getData().getAllComponents()) {
+							ObjectMapper mapper = new ObjectMapper();
+							mapper.writeValue(saveRepo, comp);
+						}
+					} else {
+						throw new IOException("File does allready Exsit");
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+
+		} else {
+			// TODO update Files
+		}
 	}
 
 	@RequestMapping(value = "/api/repo", method = RequestMethod.POST)
 	public void insertComponent(@RequestBody BufferRepo buffer) throws IOException {
-		
-		  DataCollectionComponentFile comps = new DataCollectionComponentFile();
-		  for(IntermediateComponent components : buffer.comps) {
-			  Component component = ComponentsController.parseComponent(components);
-			  comps.insertComponent(component);
-		   } 
-		  
-		  Repository repo = new Repository(buffer.name, comps);
-		  this.reproService.updateRepository(repo);
-		  
-		  System.out.println("str: " + repo.getData().getAllComponents());
-		 
+
+		DataCollectionComponentFile comps = new DataCollectionComponentFile();
+		for (IntermediateComponent components : buffer.comps) {
+			Component component = ComponentsController.parseComponent(components);
+			comps.insertComponent(component);
+		}
+
+		Repository repo = new Repository(buffer.name, comps);
+		this.reproService.updateRepository(repo);
+
+		System.out.println("str: " + repo.getData().getAllComponents());
+
 	}
 
 	@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)

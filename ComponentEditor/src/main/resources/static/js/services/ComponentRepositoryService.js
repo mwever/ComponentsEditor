@@ -1,5 +1,7 @@
 			ComponentApp.service('ComponentRepositoryService', ['$log', '$http', function($log, $http) {
 			
+				this.repoCollectionName = "";
+				
 				this.componentArray = [];
 				this.componentToEdit = null;
 				this.editMode = false;

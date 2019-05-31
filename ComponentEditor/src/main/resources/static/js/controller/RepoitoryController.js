@@ -85,7 +85,7 @@ ComponentApp.controller('RepoitoryController',['$scope','$location','$log','$htt
     		
     		$scope.resetForm();
     		$scope.componentsStorage.editModeRepo =false;
-            $location.path('/');
+    		$location.path('/');
         }
     	
         $scope.resetForm = function(){
@@ -105,11 +105,11 @@ ComponentApp.controller('RepoitoryController',['$scope','$location','$log','$htt
         }
         
         $scope.inEditMode = function(){
-        	return $scope.componentsStorage.toLoadRepo != null
+        	return $scope.componentsStorage.editModeRepo == false
         }
         
         $scope.inNormalMode = function(){
-        	return $scope.componentsStorage.toLoadRepo == null
+        	return $scope.componentsStorage.editModeRepo == true
         }
     	
         $scope.cancel = function(){
