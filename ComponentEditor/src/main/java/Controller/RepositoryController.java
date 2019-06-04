@@ -3,13 +3,18 @@ package Controller;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
+
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,6 +26,8 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
+//import com.google.common.io.Files;
+
 
 import Data.DataCollectionComponentFile;
 import Data.intermediate.IntermediateComponent;
@@ -28,6 +35,7 @@ import Data.intermediate.Repository;
 import Service.RepositoryService;
 import hasco.model.Component;
 import jaicore.basic.FileUtil;
+
 
 @RestController
 @ComponentScan(basePackageClasses = RepositoryService.class)
@@ -68,11 +76,11 @@ public class RepositoryController {
 		this.reproService.insertRepository(repo);
 
 		System.out.println("PUT");
-
 	}
+	
 
-	@RequestMapping(value = "/api/repo/save/{repoCollectionName}", method = RequestMethod.POST)
-	public void saveRepo(@PathVariable("repoCollectionName") final String nameOfRepoCollection) {
+	@RequestMapping(value = "/api/repo/save/{repoCollectionName}", method = RequestMethod.POST, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+	public void saveRepo( HttpServletResponse response, @PathVariable("repoCollectionName") final String nameOfRepoCollection) {
 		File saveDir = new File("SaveRepo");
 		if (!saveDir.exists()) {
 			saveDir.mkdir();
@@ -125,6 +133,24 @@ public class RepositoryController {
 				else {
 					System.out.println("Delete of Folder did not worked");
 				}
+				
+				response.setContentType("application/zip");
+				response.addHeader("Content-Dispoition", "attachment; filename=Download.zip");
+				
+				File zipFile = new File("SaveRepo/Download.zip");
+				byte [] zipFileasByte = java.nio.file.Files.readAllBytes(zipFile.toPath());
+				response.getOutputStream().write(zipFileasByte);
+				
+				/*
+				 * if(zipFile.exists()) {
+				 * 
+				 * System.out.println("zip erkannt"); response.getOutputStream().write();
+				 * 
+				 * Files.copy(zipFile, response.getOutputStream());
+				 * response.getOutputStream().flush();
+				 * 
+				 * }
+				 */
 
 			} catch (FileNotFoundException e) {
 				

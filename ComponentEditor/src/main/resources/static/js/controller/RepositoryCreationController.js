@@ -25,7 +25,11 @@ ComponentApp.controller('RepositoryCreationController', [ '$scope',
 				$http({
 					method : 'POST',
 					url : '/api/repo/save'+ '/'+$scope.repoStorage.repoCollectionName,
-					data : jsonString
+					headers: {
+	                      accept: 'application/zip'
+	                  },
+	                  responseType: 'arraybuffer',
+	                  cache: false,
 				}).then(function(response) {
 					console.log("worked");
 				}, function(response) {
