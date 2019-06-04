@@ -1,10 +1,13 @@
 package Controller;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Collection;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import Data.DataCollectionComponentFile;
@@ -25,11 +27,14 @@ import Data.intermediate.IntermediateComponent;
 import Data.intermediate.Repository;
 import Service.RepositoryService;
 import hasco.model.Component;
+import jaicore.basic.FileUtil;
 
 @RestController
 @ComponentScan(basePackageClasses = RepositoryService.class)
 
 public class RepositoryController {
+
+	private static final Logger logger = LoggerFactory.getLogger(RepositoryController.class);
 
 	@Autowired
 	private RepositoryService reproService;
@@ -79,6 +84,8 @@ public class RepositoryController {
 
 			saveRepos.mkdirs();
 
+			ArrayList<String> zipFiles = new ArrayList<String>();
+
 			for (Repository repo : reproService.getAllRepository()) {
 				File saveRepo = new File("SaveRepo/" + nameOfRepoCollection + "/" + repo.getName() + ".json");
 				try {
@@ -86,13 +93,45 @@ public class RepositoryController {
 						for (Component comp : repo.getData().getAllComponents()) {
 							ObjectMapper mapper = new ObjectMapper();
 							mapper.writeValue(saveRepo, comp);
+
 						}
+						zipFiles.add("SaveRepo/" + nameOfRepoCollection + "/" + repo.getName() + ".json");
+
 					} else {
 						throw new IOException("File does allready Exsit");
 					}
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+			}
+
+			try {
+				FileUtil.zipFiles(zipFiles, "SaveRepo/Download.zip");
+
+				for (Repository repo : reproService.getAllRepository()) {
+					File saveRepo = new File("SaveRepo/" + nameOfRepoCollection + "/" + repo.getName() + ".json");
+					
+					if (saveRepo.delete()) {
+						System.out.println("Delete Worked");
+					} else {
+						System.out.println("Delet did not work");
+					}
+				}
+				
+				File folder = new File("SaveRepo/" + nameOfRepoCollection);
+				if(folder.delete()) {
+					System.out.println("Delete of Folder worked");
+				}
+				else {
+					System.out.println("Delete of Folder did not worked");
+				}
+
+			} catch (FileNotFoundException e) {
+				
+				e.printStackTrace();
+			} catch (IOException e) {
+				
+				e.printStackTrace();
 			}
 
 		} else {
@@ -112,7 +151,8 @@ public class RepositoryController {
 		Repository repo = new Repository(buffer.name, comps);
 		this.reproService.updateRepository(repo);
 
-		System.out.println("str: " + repo.getData().getAllComponents());
+		// logger.debug("components"+repo.getData().getAllComponents().toString());
+		// System.out.println("str: " + repo.getData().getAllComponents());
 
 	}
 
