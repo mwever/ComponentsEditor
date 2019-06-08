@@ -19,8 +19,7 @@ ComponentApp.controller('RepositoryCreationController', [ '$scope',
 			}
 
 			$scope.downloadRepo = function() {
-				var toSave = $scope.repoStorage.getRepository();
-				var jsonString = angular.toJson(toSave, true);
+				
 				console.log("POST");
 				$http({
 					method : 'POST',
@@ -37,5 +36,59 @@ ComponentApp.controller('RepositoryCreationController', [ '$scope',
 					console.log("Error");
 				});
 			}
+			
+			$scope.dirctEditing= function(x,y){
+				
+				var repo
+				var repoToEdit
+				for(repo in $scope.repoStorage.repositoryArray){
+					if($scope.repoStorage.repositoryArray[repo].name == x){
+						repoToEdit = $scope.repoStorage.repositoryArray[repo]
+					}
+				}
+				console.log(repoToEdit)
+				
+				$scope.repoStorage.componentArray =  repoToEdit.components
+				$scope.repoStorage.repositoryToEdit = repoToEdit
+				$scope.repoStorage.editModeRepo = true
+				
+				$scope.repoStorage.name = x
+				$scope.repoStorage.original = repoToEdit
+				
+				
+				var comp
+				var compToEdit
+				for(comp in repoToEdit.components){
+					if(repoToEdit.components[comp].name == y){
+						compToEdit = repoToEdit.components[comp]
+					}
+				}
+				
+				$scope.repoStorage.componentToEdit = compToEdit
+				$scope.repoStorage.editMode = true;
+				 
+				$scope.repoStorage.componentName = y;
+				$scope.repoStorage.reqInterfaces = compToEdit.requiredInterfaces;
+				$scope.repoStorage.providedInterfaces = compToEdit.providedInterfaces;
+				$scope.repoStorage.parameters = compToEdit.parameters;
+				$scope.repoStorage.dependencys= compToEdit.dependencies;
+					
+				$scope.repoStorage.originalComp = compToEdit;
+				
+				$location.path('/Comp');
+				
+			}
+			
+			//elem must have name property
+			/*$scope.findElemByName = function(x,y,z){
+				var index
+				var elemToFind
+				for(index in y){
+					if(x == index.z){
+						elemToFind = index
+					}
+				}
+				return elemToFind
+			}*/
 
 		} ]);

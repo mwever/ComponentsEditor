@@ -317,7 +317,7 @@ ComponentApp.controller('ComponentCreationController',['$scope','$location','$ht
     		
     		crs.updateComponent(crs.originalComp);
     		//$scope.componentsStorage.repositoryArray.push($scope.componentsStorage.originalRepo);
-    		console.log("in Edit Mode and to Load benutzt "+crs.originalComp)
+    		//console.log("in Edit Mode and to Load benutzt "+crs.originalComp)
     	}
     	
     	crs.editMode = false;

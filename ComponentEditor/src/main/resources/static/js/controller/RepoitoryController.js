@@ -97,7 +97,7 @@ ComponentApp.controller('RepoitoryController',['$scope','$location','$log','$htt
         $scope.loadCheck = function(){
         	if($scope.componentsStorage.getToLoadRepo()){
         		$scope.componentsStorage.repositoryToEdit = $scope.componentsStorage.getToLoadRepo();
-        		console.log($scope.componentsStorage.toLoadRepo);
+        		//console.log($scope.componentsStorage.toLoadRepo);
         		$scope.componentsStorage.name = $scope.componentsStorage.repositoryToEdit.name;
         		$scope.componentsStorage.componentArray= $scope.componentsStorage.repositoryToEdit.components;
         		//$scope.componentsStorage.original = angular.copy($scope.componentsStorage.toLoad);
@@ -120,7 +120,7 @@ ComponentApp.controller('RepoitoryController',['$scope','$location','$log','$htt
         		
         		$scope.componentsStorage.updateRepository($scope.componentsStorage.original);
         		//$scope.componentsStorage.repositoryArray.push($scope.componentsStorage.originalRepo);
-        		console.log("in Edit Mode and to Load benutzt "+$scope.componentsStorage.original)
+        		//console.log("in Edit Mode and to Load benutzt "+$scope.componentsStorage.original)
         	}
         	
         	$scope.componentsStorage.componentToEdit = null;

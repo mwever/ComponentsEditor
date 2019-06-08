@@ -92,7 +92,7 @@ public class RepositoryController {
 
 			saveRepos.mkdirs();
 
-			ArrayList<String> zipFiles = new ArrayList<String>();
+			ArrayList<String> zipFiles = new ArrayList<>();
 
 			for (Repository repo : reproService.getAllRepository()) {
 				File saveRepo = new File("SaveRepo/" + nameOfRepoCollection + "/" + repo.getName() + ".json");
@@ -109,7 +109,7 @@ public class RepositoryController {
 						throw new IOException("File does allready Exsit");
 					}
 				} catch (IOException e) {
-					e.printStackTrace();
+					logger.error("The File that you wanted to create allready exsits and can therefor not be created "+ saveRepo.getName());
 				}
 			}
 
@@ -120,18 +120,18 @@ public class RepositoryController {
 					File saveRepo = new File("SaveRepo/" + nameOfRepoCollection + "/" + repo.getName() + ".json");
 					
 					if (saveRepo.delete()) {
-						System.out.println("Delete Worked");
+						logger.info("Delete Worked");
 					} else {
-						System.out.println("Delet did not work");
+						logger.info("Delet did not work");
 					}
 				}
 				
 				File folder = new File("SaveRepo/" + nameOfRepoCollection);
 				if(folder.delete()) {
-					System.out.println("Delete of Folder worked");
+					logger.info("Delete of Folder worked");
 				}
 				else {
-					System.out.println("Delete of Folder did not worked");
+					logger.info("Delete of Folder did not worked");
 				}
 				
 				response.setContentType("application/zip");
@@ -154,14 +154,14 @@ public class RepositoryController {
 
 			} catch (FileNotFoundException e) {
 				
-				e.printStackTrace();
+				logger.error("One of the following files does not exsist "+zipFiles.toString());
 			} catch (IOException e) {
-				
 				e.printStackTrace();
 			}
 
 		} else {
 			// TODO update Files
+			
 		}
 	}
 
