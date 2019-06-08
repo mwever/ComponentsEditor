@@ -24,13 +24,29 @@ ComponentApp.controller('RepositoryCreationController', [ '$scope',
 				$http({
 					method : 'POST',
 					url : '/api/repo/save'+ '/'+$scope.repoStorage.repoCollectionName,
-					headers: {
+					/*headers: {
 	                      accept: 'application/zip'
 	                  },
 	                  responseType: 'arraybuffer',
-	                  cache: false,
+	                  cache: false,*/
 				}).then(function(response) {
 					console.log("worked");
+					
+					    /*var contentType = headers["content-type"] || "application/octet-stream";
+					    var urlCreator = window.URL || window.webkitURL || window.mozURL || window.msURL;
+					    if (urlCreator) {
+					        var blob = new Blob([repsonse], { type: contentType });
+					        var url = urlCreator.createObjectURL(blob);
+					        var a = document.createElement("a");
+					        document.body.appendChild(a);
+					        a.style = "display: none";
+					        a.href = url;
+					        a.download = "download.zip"; //you may assign this value from header as well 
+					        a.click();
+					        window.URL.revokeObjectURL(url);
+					    }*/
+					
+					
 				}, function(response) {
 					console.log(response);
 					console.log("Error");

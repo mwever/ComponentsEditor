@@ -85,6 +85,9 @@ public class RepositoryController {
 		if (!saveDir.exists()) {
 			saveDir.mkdir();
 		}
+		else {
+			logger.info("SaveRpeo was allready created ");
+		}
 		File saveRepos = new File("SaveRepo/" + nameOfRepoCollection);
 
 		if (!saveRepos.exists()) {
@@ -139,7 +142,10 @@ public class RepositoryController {
 				
 				File zipFile = new File("SaveRepo/Download.zip");
 				byte [] zipFileasByte = java.nio.file.Files.readAllBytes(zipFile.toPath());
+				
 				response.getOutputStream().write(zipFileasByte);
+				response.getOutputStream().close();
+			    response.flushBuffer();
 				
 				/*
 				 * if(zipFile.exists()) {
@@ -153,7 +159,6 @@ public class RepositoryController {
 				 */
 
 			} catch (FileNotFoundException e) {
-				
 				logger.error("One of the following files does not exsist "+zipFiles.toString());
 			} catch (IOException e) {
 				e.printStackTrace();
