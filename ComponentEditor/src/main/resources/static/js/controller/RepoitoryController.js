@@ -105,11 +105,11 @@ ComponentApp.controller('RepoitoryController',['$scope','$location','$log','$htt
         }
         
         $scope.inEditMode = function(){
-        	return $scope.componentsStorage.editModeRepo == false
+        	return $scope.componentsStorage.editModeRepo
         }
         
         $scope.inNormalMode = function(){
-        	return $scope.componentsStorage.editModeRepo == true
+        	return !$scope.componentsStorage.editModeRepo
         }
     	
         $scope.cancel = function(){

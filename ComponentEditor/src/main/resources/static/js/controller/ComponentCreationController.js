@@ -295,11 +295,13 @@ ComponentApp.controller('ComponentCreationController',['$scope','$location','$ht
     }
     
     $scope.inEditMode = function(){
-    	return crs.componentToEdit != null
+    	//return crs.componentToEdit != null
+    	return crs.editMode
     }
     
     $scope.inNormalMode = function(){
-    	return crs.componentToEdit == null
+    	//return crs.componentToEdit == null
+    	return !crs.editMode
     }
     /*$scope.goToComponentView=function(){
         $location.path('');
@@ -308,6 +310,19 @@ ComponentApp.controller('ComponentCreationController',['$scope','$location','$ht
     /*$scope.removeComponent = function(x){
     	crs.deleteComponent(x);
     }*/
-    
+    $scope.cancel = function(){
+    	
+    	if(crs.editMode){
+    		crs.editMode= false;
+    		
+    		crs.updateComponent(crs.originalComp);
+    		//$scope.componentsStorage.repositoryArray.push($scope.componentsStorage.originalRepo);
+    		console.log("in Edit Mode and to Load benutzt "+crs.originalComp)
+    	}
+    	
+    	crs.editMode = false;
+    	$scope.resetForm();
+    	$location.path('/repos');
+    }
 }
 ]);

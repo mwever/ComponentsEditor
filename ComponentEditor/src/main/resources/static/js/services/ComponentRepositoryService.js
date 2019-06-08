@@ -46,9 +46,7 @@
 				//-------------------------------------------------------------------------------------------------------
 				
 				this.name = ""
-				//this.components= []
-					
-				
+
 				this.original = null;
 				
 				this.getname = function(){
@@ -70,10 +68,6 @@
 					this.editMode = false;
 					this.componentToEdit= null;
 				};
-				
-				/*this.getComponents = function() {
-					return this.componentArray;
-				};*/
 				
 				this.checkComponent = function(x){
 					console.log(this.componentArray);
