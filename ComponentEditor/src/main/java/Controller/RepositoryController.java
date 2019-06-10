@@ -27,7 +27,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 //import com.google.common.io.Files;
-
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 import Data.DataCollectionComponentFile;
 import Data.intermediate.IntermediateComponent;
@@ -103,6 +103,7 @@ public class RepositoryController {
 					if (saveRepo.createNewFile()) {
 						for (Component comp : repo.getData().getAllComponents()) {
 							ObjectMapper mapper = new ObjectMapper();
+							mapper.enable(SerializationFeature.INDENT_OUTPUT);
 							mapper.writeValue(saveRepo, comp);
 
 						}
@@ -138,7 +139,7 @@ public class RepositoryController {
 				}
 				
 				response.setContentType("application/zip");
-				response.addHeader("Content-Dispoition", "attachment; filename=Download.zip");
+				
 				
 				File zipFile = new File("SaveRepo/Download.zip");
 				byte [] zipFileasByte = java.nio.file.Files.readAllBytes(zipFile.toPath());
@@ -147,16 +148,7 @@ public class RepositoryController {
 				response.getOutputStream().close();
 			    response.flushBuffer();
 				
-				/*
-				 * if(zipFile.exists()) {
-				 * 
-				 * System.out.println("zip erkannt"); response.getOutputStream().write();
-				 * 
-				 * Files.copy(zipFile, response.getOutputStream());
-				 * response.getOutputStream().flush();
-				 * 
-				 * }
-				 */
+				zipFile.delete();
 
 			} catch (FileNotFoundException e) {
 				logger.error("One of the following files does not exsist "+zipFiles.toString());

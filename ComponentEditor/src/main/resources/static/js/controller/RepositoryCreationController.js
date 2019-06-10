@@ -1,6 +1,6 @@
 ComponentApp.controller('RepositoryCreationController', [ '$scope',
-		'$location', '$log','$http', 'ComponentRepositoryService',
-		function($scope, $location, $log, $http, ComponentRepositoryService) {
+		'$location', '$log','$http', 'FileSaver', 'Blob' ,'ComponentRepositoryService',
+		function($scope, $location, $log, $http,FileSaver, Blob,ComponentRepositoryService) {
 			
 			$scope.repoStorage = ComponentRepositoryService;
 			
@@ -24,29 +24,12 @@ ComponentApp.controller('RepositoryCreationController', [ '$scope',
 				$http({
 					method : 'POST',
 					url : '/api/repo/save'+ '/'+$scope.repoStorage.repoCollectionName,
-					/*headers: {
-	                      accept: 'application/zip'
-	                  },
-	                  responseType: 'arraybuffer',
-	                  cache: false,*/
+					responseType: 'arraybuffer'
+	                
 				}).then(function(response) {
 					console.log("worked");
-					
-					    /*var contentType = headers["content-type"] || "application/octet-stream";
-					    var urlCreator = window.URL || window.webkitURL || window.mozURL || window.msURL;
-					    if (urlCreator) {
-					        var blob = new Blob([repsonse], { type: contentType });
-					        var url = urlCreator.createObjectURL(blob);
-					        var a = document.createElement("a");
-					        document.body.appendChild(a);
-					        a.style = "display: none";
-					        a.href = url;
-					        a.download = "download.zip"; //you may assign this value from header as well 
-					        a.click();
-					        window.URL.revokeObjectURL(url);
-					    }*/
-					
-					
+						var data = new Blob([response.data], { type: 'application/zip' });
+						FileSaver.saveAs(data, $scope.repoStorage.repoCollectionName+'.zip');
 				}, function(response) {
 					console.log(response);
 					console.log("Error");
