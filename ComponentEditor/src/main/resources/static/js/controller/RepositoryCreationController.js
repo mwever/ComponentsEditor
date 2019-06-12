@@ -52,7 +52,7 @@ ComponentApp.controller('RepositoryCreationController', [ '$scope',
 				$scope.repoStorage.editModeRepo = true
 				
 				$scope.repoStorage.name = x
-				$scope.repoStorage.original = repoToEdit
+				$scope.repoStorage.original = angular.copy(repoToEdit);
 				
 				
 				var comp
@@ -76,6 +76,27 @@ ComponentApp.controller('RepositoryCreationController', [ '$scope',
 				
 				$location.path('/Comp');
 				
+			}
+			
+			$scope.downloadRepository = function(x){
+				
+				var repoTodownload = $scope.repoStorage.repositoryArray[x]
+				var nameOfRepoToDownload = repoTodownload.name
+				
+				console.log("POST");
+				$http({
+					method : 'POST',
+					url : '/api/repo/save/single'+'/'+nameOfRepoToDownload,
+					responseType: 'arraybuffer'
+	                
+				}).then(function(response) {
+					console.log("worked");
+						var data = new Blob([response.data], { type: 'application/json' });
+						FileSaver.saveAs(data, nameOfRepoToDownload+'.json');
+				}, function(response) {
+					console.log(response);
+					console.log("Error");
+				});
 			}
 			
 			//elem must have name property

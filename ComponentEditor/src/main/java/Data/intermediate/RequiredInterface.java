@@ -6,16 +6,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY )
 public class RequiredInterface {
-	private long id;
+	private String id;
 	private String name;
 	
 	
-	public long getId() {
+	public String getId() {
 		return id;
 	}
 
 
-	public void setId(long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -30,7 +30,7 @@ public class RequiredInterface {
 	}
 
 	@JsonCreator
-	public RequiredInterface(@JsonProperty("id") long id, @JsonProperty("name") String name) {
+	public RequiredInterface(@JsonProperty("id") String id, @JsonProperty("name") String name) {
 		this.id = id;
 		this.name = name;
 	}

@@ -113,11 +113,11 @@ ComponentApp.controller('RepoitoryController',['$scope','$location','$log','$htt
         }
     	
         $scope.cancel = function(){
+        	//console.log($scope.componentsStorage.original)
         	$scope.componentsStorage.componentArray = [];
         	//$scope.components = $scope.componentsStorage.originalRepo.components;
         	if($scope.componentsStorage.editModeRepo){
         		$scope.componentsStorage.editModeRepo = false;
-        		
         		$scope.componentsStorage.updateRepository($scope.componentsStorage.original);
         		//$scope.componentsStorage.repositoryArray.push($scope.componentsStorage.originalRepo);
         		//console.log("in Edit Mode and to Load benutzt "+$scope.componentsStorage.original)
@@ -125,7 +125,7 @@ ComponentApp.controller('RepoitoryController',['$scope','$location','$log','$htt
         	
         	$scope.componentsStorage.componentToEdit = null;
         	$scope.componentsStorage.editMode = false;
-        	$scope.componentsStorage.originalRepo = null;
+        	$scope.componentsStorage.original = null;
         	$scope.resetForm();
         	$location.path('/');
         }

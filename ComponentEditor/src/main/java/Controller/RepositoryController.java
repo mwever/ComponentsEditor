@@ -2,7 +2,9 @@ package Controller;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,6 +28,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 //import com.google.common.io.Files;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
@@ -35,7 +38,6 @@ import Data.intermediate.Repository;
 import Service.RepositoryService;
 import hasco.model.Component;
 import jaicore.basic.FileUtil;
-
 
 @RestController
 @ComponentScan(basePackageClasses = RepositoryService.class)
@@ -77,15 +79,14 @@ public class RepositoryController {
 
 		System.out.println("PUT");
 	}
-	
 
 	@RequestMapping(value = "/api/repo/save/{repoCollectionName}", method = RequestMethod.POST, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-	public void saveRepo( HttpServletResponse response, @PathVariable("repoCollectionName") final String nameOfRepoCollection) {
+	public void saveRepos(HttpServletResponse response,
+			@PathVariable("repoCollectionName") final String nameOfRepoCollection) {
 		File saveDir = new File("SaveRepo");
 		if (!saveDir.exists()) {
 			saveDir.mkdir();
-		}
-		else {
+		} else {
 			logger.info("SaveRpeo was allready created ");
 		}
 		File saveRepos = new File("SaveRepo/" + nameOfRepoCollection);
@@ -101,19 +102,18 @@ public class RepositoryController {
 				File saveRepo = new File("SaveRepo/" + nameOfRepoCollection + "/" + repo.getName() + ".json");
 				try {
 					if (saveRepo.createNewFile()) {
-						for (Component comp : repo.getData().getAllComponents()) {
-							ObjectMapper mapper = new ObjectMapper();
-							mapper.enable(SerializationFeature.INDENT_OUTPUT);
-							mapper.writeValue(saveRepo, comp);
-
-						}
+						
+						ObjectMapper mapper = new ObjectMapper();
+						mapper.enable(SerializationFeature.INDENT_OUTPUT);
+						mapper.writeValue(saveRepo, repo.getData().getAllComponents());
 						zipFiles.add("SaveRepo/" + nameOfRepoCollection + "/" + repo.getName() + ".json");
 
 					} else {
 						throw new IOException("File does allready Exsit");
 					}
 				} catch (IOException e) {
-					logger.error("The File that you wanted to create allready exsits and can therefor not be created "+ saveRepo.getName());
+					logger.error("The File that you wanted to create allready exsits and can therefor not be created "
+							+ saveRepo.getName());
 				}
 			}
 
@@ -122,44 +122,95 @@ public class RepositoryController {
 
 				for (Repository repo : reproService.getAllRepository()) {
 					File saveRepo = new File("SaveRepo/" + nameOfRepoCollection + "/" + repo.getName() + ".json");
-					
+
 					if (saveRepo.delete()) {
 						logger.info("Delete Worked");
 					} else {
 						logger.info("Delet did not work");
 					}
 				}
-				
+
 				File folder = new File("SaveRepo/" + nameOfRepoCollection);
-				if(folder.delete()) {
+				if (folder.delete()) {
 					logger.info("Delete of Folder worked");
-				}
-				else {
+				} else {
 					logger.info("Delete of Folder did not worked");
 				}
-				
+
 				response.setContentType("application/zip");
-				
-				
+
 				File zipFile = new File("SaveRepo/Download.zip");
-				byte [] zipFileasByte = java.nio.file.Files.readAllBytes(zipFile.toPath());
-				
+				byte[] zipFileasByte = java.nio.file.Files.readAllBytes(zipFile.toPath());
+
 				response.getOutputStream().write(zipFileasByte);
 				response.getOutputStream().close();
-			    response.flushBuffer();
-				
+				response.flushBuffer();
+
 				zipFile.delete();
 
 			} catch (FileNotFoundException e) {
-				logger.error("One of the following files does not exsist "+zipFiles.toString());
+				logger.error("One of the following files does not exsist " + zipFiles.toString());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 
 		} else {
 			// TODO update Files
-			
+
 		}
+	}
+
+	@RequestMapping(value = "api/repo/save/single/{nameOfRepoToDownload}", method = RequestMethod.POST)
+	public void saveSingleRepo(HttpServletResponse response,
+			@PathVariable("nameOfRepoToDownload") final String nameOfRepoToDownload) {
+
+		File saveDir = new File("SaveRepo");
+		if (!saveDir.exists()) {
+			saveDir.mkdir();
+		} else {
+			logger.info("SaveRepo was allready created ");
+		}
+
+		File saveDirSingle = new File("SaveRepo/SaveSingleRepo");
+		if (!saveDirSingle.exists()) {
+			saveDirSingle.mkdir();
+		} else {
+			logger.info("SaveSingleRepo was allready created ");
+		}
+
+		File saveRepo = new File("SaveRepo/SaveSingleRepo/" + nameOfRepoToDownload + ".json");
+
+		if (!saveRepo.exists()) {
+			// RepoCollection did not exsit --> no file exsits
+
+			Repository repoToDownload = reproService.getRepositoryByName(nameOfRepoToDownload);
+
+			try {
+				 ObjectMapper mapper = new ObjectMapper();
+				 mapper.enable(SerializationFeature.INDENT_OUTPUT);
+				mapper.writeValue(saveRepo, repoToDownload.getData().getAllComponents());
+				
+			} catch (IOException e) {
+				logger.error("The File that you wanted to create allready exsits and can therefor not be created "
+						+ saveRepo.getName());
+			}
+		}
+
+		response.setContentType("application/json");
+
+		File downloadRepo = new File("SaveRepo/SaveSingleRepo/" + nameOfRepoToDownload + ".json");
+		byte[] downloadRepoByte;
+		try {
+			downloadRepoByte = java.nio.file.Files.readAllBytes(downloadRepo.toPath());
+			response.getOutputStream().write(downloadRepoByte);
+			response.getOutputStream().close();
+			response.flushBuffer();
+
+			downloadRepo.delete();
+		} catch (IOException e) {
+			logger.error("Read Bytes, write Bytes, get Output stream, flush Buffer or delet did not work");
+		}
+
 	}
 
 	@RequestMapping(value = "/api/repo", method = RequestMethod.POST)
@@ -173,9 +224,6 @@ public class RepositoryController {
 
 		Repository repo = new Repository(buffer.name, comps);
 		this.reproService.updateRepository(repo);
-
-		// logger.debug("components"+repo.getData().getAllComponents().toString());
-		// System.out.println("str: " + repo.getData().getAllComponents());
 
 	}
 

@@ -228,7 +228,7 @@ ComponentApp.controller('ComponentCreationController',['$scope','$location','$ht
 			}
 			crs.updateComponent(comp);
 		}
-		
+		//console.log(crs.original)
 		$scope.resetForm();
         $location.path('/repos');
     }

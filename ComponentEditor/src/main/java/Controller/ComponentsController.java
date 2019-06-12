@@ -90,7 +90,7 @@ public class ComponentsController {
 		if (icomp.getRequiredInterfaces() != null) {
 			List<RequiredInterface> reqI = icomp.getRequiredInterfaces();
 			for (RequiredInterface rI : reqI) {
-				comp.addRequiredInterface(Long.toString(rI.getId()), rI.getName());
+				comp.addRequiredInterface(rI.getId(), rI.getName());
 			}
 		}
 
