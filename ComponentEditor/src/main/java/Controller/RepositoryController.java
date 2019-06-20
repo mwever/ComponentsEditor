@@ -212,6 +212,11 @@ public class RepositoryController {
 		}
 
 	}
+	
+	@RequestMapping(value = "/api/repo/upload/zip", method = RequestMethod.POST)
+	public void uploadRepo(HttpServletResponse response) {
+		System.out.println("Hat was gemacht");
+	}
 
 	@RequestMapping(value = "/api/repo", method = RequestMethod.POST)
 	public void insertComponent(@RequestBody BufferRepo buffer) throws IOException {

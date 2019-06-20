@@ -7,7 +7,11 @@
 						<button type="button" ng-click="goToSingleRepositoryView()"
 							class="col btn-lg btn-info m-2">New Repository</button>
 						<button type="button" ng-click="downloadRepo()"
-							class="col btn-lg btn-info m-2">Download Repository Collection</button>
+							class="col btn-lg btn-info m-2">Download all Repository</button>
+					</div>
+					<div class="row">
+						<div class="col"></div>
+						<div class="col btn-lg btn-info m-2 pr-2" id = "uploadText" ngf-select="uploadRepo($files)" multiple accept="application/zip">Upload Repository zip</div>
 					</div>
 					<div class="row border-bottom border-white mb-4">
 						<input type="text" class="col my-3 mx-2" placeholder="Name ..."
@@ -28,7 +32,7 @@
 													class="btn btn-info pull-right m-2">
 													<b>&times</b>
 												</button>
-												
+
 												<button ng-click="downloadRepository($index)"
 													class="btn btn-info pull-left m-2">
 													<i class="fa fa-download"></i>
@@ -49,7 +53,10 @@
 												<div class="row border-bottom border-top py-2">
 													<div class="col">
 														<div ng-repeat="c in x.components">
-															<div class="row px-2 my-1"><button class="col btn-lg btn-info"  ng-click ="dirctEditing(x.name,c.name)">{{c.name}}</button></div>
+															<div class="row px-2 my-1">
+																<button class="col btn-lg btn-info"
+																	ng-click="dirctEditing(x.name,c.name)">{{c.name}}</button>
+															</div>
 														</div>
 													</div>
 												</div>

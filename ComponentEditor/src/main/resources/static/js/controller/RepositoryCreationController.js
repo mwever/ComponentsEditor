@@ -1,6 +1,6 @@
 ComponentApp.controller('RepositoryCreationController', [ '$scope',
-		'$location', '$log','$http', 'FileSaver', 'Blob' ,'ComponentRepositoryService',
-		function($scope, $location, $log, $http,FileSaver, Blob,ComponentRepositoryService) {
+		'$location', '$log','$http', 'FileSaver', 'Blob', 'Upload' ,'ComponentRepositoryService',
+		function($scope, $location, $log, $http,FileSaver, Blob, Upload ,ComponentRepositoryService) {
 			
 			$scope.repoStorage = ComponentRepositoryService;
 			
@@ -99,16 +99,24 @@ ComponentApp.controller('RepositoryCreationController', [ '$scope',
 				});
 			}
 			
-			//elem must have name property
-			/*$scope.findElemByName = function(x,y,z){
-				var index
-				var elemToFind
-				for(index in y){
-					if(x == index.z){
-						elemToFind = index
-					}
+			$scope.uploadRepo = function(files){
+				$scope.files = files;
+				if (files && files.length) {
+					angular.forEach(files, function(file){
+			        file.upload = Upload.upload({
+			        	method : 'POST',
+			        	url : '/api/repo/upload/zip',
+			        	data: {file: file}
+			        });
+					console.log(file.name)
+					file.upload.then(
+							 function (response) {
+				                if (response.status > 0)
+				                    $scope.errorMsg = response.status + ': ' + response.data;
+				            });
+			      });
 				}
-				return elemToFind
-			}*/
-
+			}
+			
 		} ]);
+	

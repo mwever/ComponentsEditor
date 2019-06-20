@@ -51,6 +51,13 @@ body {
     justify-content: center;
 }
 
+#uploadText {
+    display: block;
+    text-align: center;
+    justify-content: center;
+
+}
+
 .border-3 {
     border-width:3px !important;
 }
