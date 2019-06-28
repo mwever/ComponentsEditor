@@ -106,13 +106,16 @@ ComponentApp.controller('RepositoryCreationController', [ '$scope',
 			        file.upload = Upload.upload({
 			        	method : 'POST',
 			        	url : '/api/repo/upload/zip',
-			        	data: {file: file}
+			        	file : file
 			        });
 					console.log(file.name)
 					file.upload.then(
 							 function (response) {
 				                if (response.status > 0)
 				                    $scope.errorMsg = response.status + ': ' + response.data;
+				            },
+				            function(response){
+				            	console.log(response.data)
 				            });
 			      });
 				}

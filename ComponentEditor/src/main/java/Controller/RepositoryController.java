@@ -1,15 +1,15 @@
 package Controller;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
@@ -22,25 +22,34 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-//import com.google.common.io.Files;
 import com.fasterxml.jackson.databind.SerializationFeature;
-
 import Data.DataCollectionComponentFile;
+import Data.intermediate.BooleanParameterDomain;
+import Data.intermediate.CategoricalParameterDomain;
 import Data.intermediate.IntermediateComponent;
+import Data.intermediate.Kitten;
+import Data.intermediate.NumericParameterDomain;
+import Data.intermediate.Parameter;
+import Data.intermediate.ProvidedInterface;
 import Data.intermediate.Repository;
+import Data.intermediate.RequiredInterface;
+import Data.intermediate.SelectionType;
 import Service.RepositoryService;
+import Utils.ComponentsSerializer;
 import hasco.model.Component;
 import jaicore.basic.FileUtil;
 
 @RestController
 @ComponentScan(basePackageClasses = RepositoryService.class)
+@ComponentScan(basePackageClasses = ComponentsSerializer.class)
 
 public class RepositoryController {
 
@@ -48,6 +57,9 @@ public class RepositoryController {
 
 	@Autowired
 	private RepositoryService reproService;
+	
+	@Autowired
+	private ComponentsSerializer serializer;
 
 	@RequestMapping(value = "/api/repo", method = RequestMethod.GET)
 	public Collection<Repository> getAllRepositories() {
@@ -102,7 +114,7 @@ public class RepositoryController {
 				File saveRepo = new File("SaveRepo/" + nameOfRepoCollection + "/" + repo.getName() + ".json");
 				try {
 					if (saveRepo.createNewFile()) {
-						
+
 						ObjectMapper mapper = new ObjectMapper();
 						mapper.enable(SerializationFeature.INDENT_OUTPUT);
 						mapper.writeValue(saveRepo, repo.getData().getAllComponents());
@@ -186,10 +198,10 @@ public class RepositoryController {
 			Repository repoToDownload = reproService.getRepositoryByName(nameOfRepoToDownload);
 
 			try {
-				 ObjectMapper mapper = new ObjectMapper();
-				 mapper.enable(SerializationFeature.INDENT_OUTPUT);
+				ObjectMapper mapper = new ObjectMapper();
+				mapper.enable(SerializationFeature.INDENT_OUTPUT);
 				mapper.writeValue(saveRepo, repoToDownload.getData().getAllComponents());
-				
+
 			} catch (IOException e) {
 				logger.error("The File that you wanted to create allready exsits and can therefor not be created "
 						+ saveRepo.getName());
@@ -212,10 +224,40 @@ public class RepositoryController {
 		}
 
 	}
-	
+
 	@RequestMapping(value = "/api/repo/upload/zip", method = RequestMethod.POST)
-	public void uploadRepo(HttpServletResponse response) {
-		System.out.println("Hat was gemacht");
+	public void uploadRepo(@RequestParam("file") MultipartFile file) throws IOException {
+		byte[] input;
+		File saveDir = new File("LoadRepo");
+		if (!saveDir.exists()) {
+			saveDir.mkdir();
+		} else {
+			if (!file.isEmpty()) {
+				input = file.getBytes();
+				ZipInputStream zipStream = new ZipInputStream(new ByteArrayInputStream(input));
+				ZipEntry entry = null;
+				while ((entry = zipStream.getNextEntry()) != null) {
+
+					String entryName = entry.getName();
+
+					FileOutputStream out = new FileOutputStream("LoadRepo/" + entryName);
+
+					byte[] byteBuff = new byte[4096];
+					int bytesRead = 0;
+					while ((bytesRead = zipStream.read(byteBuff)) != -1) {
+						out.write(byteBuff, 0, bytesRead);
+					}
+
+					out.close();
+					zipStream.closeEntry();
+				}
+				zipStream.close();
+			}
+		}
+		
+			//InputStream inJson = (InputStream) Repository.class.getResourceAsStream("LoadRepo/test.json");
+			//Repository test = new ObjectMapper().readValue(inJson, Repository.class);
+
 	}
 
 	@RequestMapping(value = "/api/repo", method = RequestMethod.POST)
@@ -230,6 +272,43 @@ public class RepositoryController {
 		Repository repo = new Repository(buffer.name, comps);
 		this.reproService.updateRepository(repo);
 
+	}
+	
+	private IntermediateComponent reverseComponentparse(Component comp) {
+		IntermediateComponent output = new IntermediateComponent(comp.getName());
+		
+		ArrayList<ProvidedInterface> pInterface = new ArrayList<>();
+		for(String providedInterface : comp.getProvidedInterfaces()) {
+			ProvidedInterface prov = new ProvidedInterface(providedInterface);
+			pInterface.add(prov);
+		}
+		output.setProvidedInterfaces(pInterface);
+		
+		ArrayList<RequiredInterface> rInterface = new ArrayList<>();
+		for(String id : comp.getRequiredInterfaces().keySet()) {
+			RequiredInterface req = new RequiredInterface(id, comp.getRequiredInterfaces().get(id));
+			rInterface.add(req);
+		}
+		output.setRequiredInterfaces(rInterface);
+		
+		
+		ArrayList<Parameter> params = new ArrayList<>();
+		SelectionType cat = new SelectionType("Cat", new CategoricalParameterDomain(new ArrayList<Kitten>(), "cat", ""));
+		SelectionType num = new SelectionType("Number", new NumericParameterDomain(0,0, false, "number",0));
+		String[] values = {"true","false"}; 
+		SelectionType bool = new SelectionType("Bool", new BooleanParameterDomain(values, "bool", ""));
+		for(hasco.model.Parameter param : comp.getParameters()) {
+			if(param.isCategorical()) {
+				if(param.getDefaultDomain() instanceof hasco.model.BooleanParameterDomain) {
+					
+				}
+			}else if(param.isNumeric()) {
+				
+			}
+			//Parameter p = new Parameter(param.getName(), paramTypeName, defaultDomain, types)
+			
+		}
+		return null;
 	}
 
 	@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)

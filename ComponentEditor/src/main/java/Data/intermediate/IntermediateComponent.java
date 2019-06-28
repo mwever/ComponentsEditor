@@ -1,6 +1,7 @@
 package Data.intermediate;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -11,10 +12,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class IntermediateComponent {
 	
 	private String name;
-	private List<RequiredInterface> requiredInterfaces;
-	private List<ProvidedInterface> providedInterfaces;
-	private List<Parameter> parameters;
-	private List<Dependency> dependencies;
+	private List<RequiredInterface> requiredInterfaces = new ArrayList<>();
+	private List<ProvidedInterface> providedInterfaces = new ArrayList<>();
+	private List<Parameter> parameters = new ArrayList<>();
+	private List<Dependency> dependencies = new ArrayList<>();
 	
 	
 	public String getName() {
@@ -73,5 +74,9 @@ public class IntermediateComponent {
 		this.providedInterfaces = providedInterfaces;
 		this.parameters = parameters;
 		this.dependencies = dependencies;
+	}
+	
+	public IntermediateComponent(String name) {
+		this.name = name;
 	}
 }

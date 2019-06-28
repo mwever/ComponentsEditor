@@ -2,6 +2,7 @@ package Controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -143,16 +144,19 @@ public class ComponentsController {
 		input = input.replaceAll("\\s+", "");
 
 		String[] andSplitted = input.split("and");
+		System.out.println(Arrays.toString(andSplitted));
 
 		ArrayList<Pair<hasco.model.Parameter, ParameterDomain>> output = new ArrayList<>();
 
 		for (String s : andSplitted) {
 
 			String[] inSplitted = s.split("in");
+			System.out.println(Arrays.toString(inSplitted));
 			String preName = inSplitted[0];
+			System.out.println(preName);
 
 			if (inSplitted[1].contains("{")) {
-				String catString = inSplitted[1].substring(inSplitted[1].indexOf('{') + 1, inSplitted[1].indexOf('}') - 1);
+				String catString = inSplitted[1].substring(inSplitted[1].indexOf('{')+1, inSplitted[1].indexOf('}'));
 				String[] catValues = catString.split(",");
 
 				if (catValues.length == 2) {
@@ -160,18 +164,25 @@ public class ComponentsController {
 						hasco.model.BooleanParameterDomain preDomain = new hasco.model.BooleanParameterDomain();
 						hasco.model.Parameter preParam = new hasco.model.Parameter(preName, preDomain, null);
 						output.add(new Pair<hasco.model.Parameter, ParameterDomain>(preParam, preDomain));
-
+						
 					} else {
 						if (catValues[0].equalsIgnoreCase("false") && catValues[1].equalsIgnoreCase("true")) {
 							hasco.model.BooleanParameterDomain preDomain = new hasco.model.BooleanParameterDomain();
 							hasco.model.Parameter preParam = new hasco.model.Parameter(preName, preDomain, null);
 							output.add(new Pair<hasco.model.Parameter, ParameterDomain>(preParam, preDomain));
+						}else {
+							hasco.model.CategoricalParameterDomain preDomain = new hasco.model.CategoricalParameterDomain(catValues);
+							hasco.model.Parameter preParam = new hasco.model.Parameter(preName, preDomain, null);
+							output.add(new Pair<hasco.model.Parameter, ParameterDomain>(preParam, preDomain));
 						}
 					}
+					
+				}else {
 					hasco.model.CategoricalParameterDomain preDomain = new hasco.model.CategoricalParameterDomain(catValues);
 					hasco.model.Parameter preParam = new hasco.model.Parameter(preName, preDomain, null);
 					output.add(new Pair<hasco.model.Parameter, ParameterDomain>(preParam, preDomain));
 				}
+				
 			} else if (inSplitted[1].contains("[")) {
 				String tmp = inSplitted[1].substring(inSplitted[1].indexOf('[') + 1, inSplitted[1].indexOf(']'));
 				String[] intervalValues = tmp.split(",");
@@ -191,6 +202,7 @@ public class ComponentsController {
 				}
 			}
 		}
+		System.out.println(output.toString());
 		return output;
 	}
 }
