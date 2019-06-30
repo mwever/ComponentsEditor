@@ -1,9 +1,11 @@
 package Controller;
 
+import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,6 +33,11 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+
 import Data.DataCollectionComponentFile;
 import Data.intermediate.BooleanParameterDomain;
 import Data.intermediate.CategoricalParameterDomain;
@@ -115,9 +122,13 @@ public class RepositoryController {
 				try {
 					if (saveRepo.createNewFile()) {
 
-						ObjectMapper mapper = new ObjectMapper();
-						mapper.enable(SerializationFeature.INDENT_OUTPUT);
-						mapper.writeValue(saveRepo, repo.getData().getAllComponents());
+						Gson gson = new GsonBuilder().setPrettyPrinting().create();
+						JsonParser jp = new JsonParser();
+						FileWriter writer = new FileWriter("SaveRepo/" + nameOfRepoCollection + "/" + repo.getName() + ".json");
+						JsonElement je = jp.parse(ComponentsSerializer.componentCollectionToJSONRepository(repo.getData().getAllComponents(), repo.getName()));
+						gson.toJson(je,writer);
+						writer.close();
+						
 						zipFiles.add("SaveRepo/" + nameOfRepoCollection + "/" + repo.getName() + ".json");
 
 					} else {
@@ -198,9 +209,12 @@ public class RepositoryController {
 			Repository repoToDownload = reproService.getRepositoryByName(nameOfRepoToDownload);
 
 			try {
-				ObjectMapper mapper = new ObjectMapper();
-				mapper.enable(SerializationFeature.INDENT_OUTPUT);
-				mapper.writeValue(saveRepo, repoToDownload.getData().getAllComponents());
+				Gson gson = new GsonBuilder().setPrettyPrinting().create();
+				JsonParser jp = new JsonParser();
+				FileWriter writer = new FileWriter("SaveRepo/SaveSingleRepo/" + nameOfRepoToDownload + ".json");
+				JsonElement je = jp.parse(ComponentsSerializer.componentCollectionToJSONRepository(repoToDownload.getData().getAllComponents(), repoToDownload.getName()));
+				gson.toJson(je,writer);
+				writer.close();
 
 			} catch (IOException e) {
 				logger.error("The File that you wanted to create allready exsits and can therefor not be created "
