@@ -7,7 +7,7 @@
 					<button ng-click="cancel()" class=" row btn btn-info pull-right">&times</button>
 				</div>
 			</div>
-			<div id="ComponentNameSpace" class="row-fluid">
+			<div id="ComponentNameSpace" class="row-fluid m-2">
 				<div class="input-group">
 					<label class="col-4 center">Component name:</label> <input
 						class="col-8" type="text" ng-model="compStorage.componentName"
@@ -17,12 +17,25 @@
 
 			<!--{{getComponents()}}-->
 
-			<button ng-click="addReqInterface()" type="button"
-				class="btn btn-info btn-lg btn-block my-3">Add required
-				Interface</button>
+			<p>
+				<a class="btn btn-primary" data-toggle="collapse"
+					href="#collapseExample" role="button" aria-expanded="false"
+					aria-controls="collapseExample"> Link with href </a>
+				<button class="btn btn-primary" type="button" data-toggle="collapse"
+					data-target="#collapseExample" aria-expanded="false"
+					aria-controls="collapseExample">Button with data-target</button>
+			</p>
+			<div class="collapse" id="collapseExample">
+				<div class="card card-body">Anim pariatur cliche
+					reprehenderit, enim eiusmod high life accusamus terry richardson ad
+					squid. Nihil anim keffiyeh helvetica, craft beer labore wes
+					anderson cred nesciunt sapiente ea proident.</div>
+			</div>
+
 			<div id="ReqInterfaceSpace" class="row-fluid">
 				<div ng-repeat="x in compStorage.getreqInterfaces()">
 					<div class="row border border-white rounded px-2 py-2">
+
 						<div class="col">
 							<div class="row">
 								<div class="col">
@@ -44,13 +57,15 @@
 							</div>
 						</div>
 						<!-- <div><label>Prio:</label> <input type="text" ng-model="x.prio"></div> -->
+
 					</div>
 				</div>
 			</div>
-
-			<button ng-click="addProvidedInterface()" type="button"
-				class="btn btn-info btn-lg btn-block my-3">Add provided
+			<button ng-click="addReqInterface()" type="button"
+				class="btn btn-info btn-lg btn-block my-3">Add required
 				Interface</button>
+
+
 			<div id="ProvidedInterfaceSpace" class="row-fluid">
 				<div ng-repeat="x in compStorage.getprovidedInterfaces()">
 					<div class="row border border-white rounded px-2 py-2">
@@ -71,9 +86,11 @@
 					</div>
 				</div>
 			</div>
+			<button ng-click="addProvidedInterface()" type="button"
+				class="btn btn-info btn-lg btn-block my-3">Add provided
+				Interface</button>
 
-			<button ng-click="addParameter()" type="button"
-				class="btn btn-info btn-lg btn-block my-3">Add parameter</button>
+
 			<div id="ParameterSpace" class="row-fluid">
 				<div ng-repeat="x in compStorage.getparameters()">
 					<div class="row border border-white rounded px-2 py-2">
@@ -189,8 +206,10 @@
 					</div>
 				</div>
 			</div>
-			<button ng-click="addDependency()" type="button"
-				class="btn btn-info btn-lg btn-block my-3">Add dependency</button>
+			<button ng-click="addParameter()" type="button"
+				class="btn btn-info btn-lg btn-block my-3">Add parameter</button>
+
+
 			<div id="DependencySpace" class="row-fluid">
 				<div ng-repeat="x in compStorage.getdependencys()">
 					<div class="row border border-white rounded p-2">
@@ -219,6 +238,9 @@
 					</div>
 				</div>
 			</div>
+			<button ng-click="addDependency()" type="button"
+				class="btn btn-info btn-lg btn-block my-3">Add dependency</button>
+
 			<div class="row-fluid">
 				<div class="col">
 					<div class="row">
