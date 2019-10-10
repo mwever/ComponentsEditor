@@ -17,140 +17,192 @@
 
 			<!--{{getComponents()}}-->
 
-			<p>
-				<a class="btn btn-primary" data-toggle="collapse"
-					href="#collapseExample" role="button" aria-expanded="false"
-					aria-controls="collapseExample"> Link with href </a>
-				<button class="btn btn-primary" type="button" data-toggle="collapse"
-					data-target="#collapseExample" aria-expanded="false"
-					aria-controls="collapseExample">Button with data-target</button>
-			</p>
-			<div class="collapse" id="collapseExample">
-				<div class="card card-body">Anim pariatur cliche
-					reprehenderit, enim eiusmod high life accusamus terry richardson ad
-					squid. Nihil anim keffiyeh helvetica, craft beer labore wes
-					anderson cred nesciunt sapiente ea proident.</div>
-			</div>
+			<div class="row m-3">
+				<div class="col center">
+					<h5>Required Interfaces</h5>
+				</div>
 
-			<div id="ReqInterfaceSpace" class="row-fluid">
-				<div ng-repeat="x in compStorage.getreqInterfaces()">
-					<div class="row border border-white rounded px-2 py-2">
+				<div class="col text-right">
+					<div class="row">
 
 						<div class="col">
-							<div class="row">
-								<div class="col">
-									<button ng-click="removeReqInterface($index)" type="button"
-										class="btn btn-info pull-right mb-2">&times</button>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col">
-									<div class="row">
-										<label class="col-3 center">ID:</label><input type="text"
-											class="col-9" ng-model="x.id">
-									</div>
-									<div class="row">
-										<label class="col-3 center">Name:</label><input type="text"
-											class="col-9" ng-model="x.name">
-									</div>
-								</div>
-							</div>
+							hide <label class="switch"> <input type="checkbox"
+								ng-model="isReqIFormOpen" ng-init="isReqIFormOpen=true"
+								style="background: none; border: none; color: white; border: none; button: focus{ outline: none;">
+								<span class="slider"></span>
+							</label> show
 						</div>
-						<!-- <div><label>Prio:</label> <input type="text" ng-model="x.prio"></div> -->
 
+					</div>
+				</div>
+			</div>
+			<div ng-show="isReqIFormOpen" id="reqIForm">
+				<div id="ReqInterfaceSpace" class="row-fluid">
+					<div ng-repeat="x in compStorage.getreqInterfaces()">
+						<div class="row border border-white rounded px-2 py-2">
+
+							<div class="col">
+								<div class="row">
+									<div class="col">
+										<button ng-click="removeReqInterface($index)" type="button"
+											class="btn btn-info pull-right mb-2">&times</button>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<div class="row">
+											<label class="col-3 center">ID:</label><input type="text"
+												class="col-9" ng-model="x.id">
+										</div>
+										<div class="row">
+											<label class="col-3 center">Name:</label><input type="text"
+												class="col-9" ng-model="x.name">
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- <div><label>Prio:</label> <input type="text" ng-model="x.prio"></div> -->
+
+						</div>
 					</div>
 				</div>
 			</div>
 			<button ng-click="addReqInterface()" type="button"
-				class="btn btn-info btn-lg btn-block my-3">Add required
+				class="btn btn-info btn-lg btn-block my-3" ng-disabled="!isReqIFormOpen">Add required
 				Interface</button>
 
 
-			<div id="ProvidedInterfaceSpace" class="row-fluid">
-				<div ng-repeat="x in compStorage.getprovidedInterfaces()">
-					<div class="row border border-white rounded px-2 py-2">
+
+			<div class="row m-3">
+				<div class="col center">
+					<h5>Provided Interfaces</h5>
+				</div>
+
+				<div class="col text-right">
+					<div class="row">
+
 						<div class="col">
-							<div class="row">
-								<div class="col">
-									<div class="button-wrapper">
-										<button ng-click="removeProvidedInterface($index)"
-											class="btn btn-info pull-right mb-2">&times</button>
+							hide <label class="switch"> <input type="checkbox"
+								ng-model="isProvIFormOpen" ng-init="isProvIFormOpen=true"
+								style="background: none; border: none; color: white; border: none; button: focus{ outline: none;">
+								<span class="slider"></span>
+							</label> show
+						</div>
+
+					</div>
+				</div>
+			</div>
+			<div ng-show="isProvIFormOpen" id="provIForm">
+
+				<div id="ProvidedInterfaceSpace" class="row-fluid">
+					<div ng-repeat="x in compStorage.getprovidedInterfaces()">
+						<div class="row border border-white rounded px-2 py-2">
+							<div class="col">
+								<div class="row">
+									<div class="col">
+										<div class="button-wrapper">
+											<button ng-click="removeProvidedInterface($index)"
+												class="btn btn-info pull-right mb-2">&times</button>
+										</div>
 									</div>
 								</div>
-							</div>
-							<div class="row">
-								<label class="col-3">Interface:</label> <input type="text"
-									ng-model="x.interfaces" class="col-9">
+								<div class="row">
+									<label class="col-3">Interface:</label> <input type="text"
+										ng-model="x.interfaces" class="col-9">
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
+
 			<button ng-click="addProvidedInterface()" type="button"
-				class="btn btn-info btn-lg btn-block my-3">Add provided
+				class="btn btn-info btn-lg btn-block my-3" ng-disabled="!isProvIFormOpen">Add provided
 				Interface</button>
 
+			<div class="row m-3">
+				<div class="col center">
+					<h5>Parameter</h5>
+				</div>
 
-			<div id="ParameterSpace" class="row-fluid">
-				<div ng-repeat="x in compStorage.getparameters()">
-					<div class="row border border-white rounded px-2 py-2">
+				<div class="col text-right">
+					<div class="row">
+
 						<div class="col">
-							<div class="row">
-								<div class="col">
-									<div class="button-wrapper">
-										<button ng-click="removeParameter($index)"
-											class="btn btn-info pull-right mb-2">&times</button>
+							hide <label class="switch"> <input type="checkbox"
+								ng-model="isParamFormOpen" ng-init="isParamFormOpen=true"
+								style="background: none; border: none; color: white; border: none; button: focus{ outline: none;">
+								<span class="slider"></span>
+							</label> show
+						</div>
+
+					</div>
+				</div>
+			</div>
+			<div ng-show="isParamFormOpen" id="paramForm">
+
+
+				<div id="ParameterSpace" class="row-fluid">
+					<div ng-repeat="x in compStorage.getparameters()">
+						<div class="row border border-white rounded px-2 py-2">
+							<div class="col">
+								<div class="row">
+									<div class="col">
+										<div class="button-wrapper">
+											<button ng-click="removeParameter($index)"
+												class="btn btn-info pull-right mb-2">&times</button>
+										</div>
 									</div>
 								</div>
-							</div>
-							<div class="row">
-								<div class="col">
-									<div class="input-wrapper">
-										<div class="row">
-											<label class="col-3">Name:</label> <input type="text"
-												ng-model="x.name" class="col-9">
-										</div>
-										<div class="row">
-											<label class="col-3">Type:</label><select
-												ng-model="x.defaultDomain"
-												ng-options="type.actualType as type.label for type in x.types"
-												class="col-5"></select>
-											<div class="col-4"></div>
-										</div>
-										<div class="row">
-											<div class="col">
-												<div ng-if="isCat(x.defaultDomain,x)">
-													<div class="row">
-														<div class="col">
-															<div class="row">
-																<label class="col-3">Default value:</label><input
-																	type="text" ng-model="x.defaultDomain.defaultValue"
-																	class="col-9">
-															</div>
-															<div class="row">
-																<div class="col">
-																	<div class="row">
-																		<div class="col">
-																			<button ng-click="addKitten($index)" type="button"
-																				class="btn btn-info btn-lg btn-block my-3">Add
-																				cat</button>
+								<div class="row">
+									<div class="col">
+										<div class="input-wrapper">
+											<div class="row">
+												<label class="col-3">Name:</label> <input type="text"
+													ng-model="x.name" class="col-9">
+											</div>
+											<div class="row">
+												<label class="col-3">Type:</label><select
+													ng-model="x.defaultDomain"
+													ng-options="type.actualType as type.label for type in x.types"
+													class="col-5"></select>
+												<div class="col-4"></div>
+											</div>
+											<div class="row">
+												<div class="col">
+													<div ng-if="isCat(x.defaultDomain,x)">
+														<div class="row">
+															<div class="col">
+																<div class="row">
+																	<label class="col-3">Default value:</label><input
+																		type="text" ng-model="x.defaultDomain.defaultValue"
+																		class="col-9">
+																</div>
+																<div class="row">
+																	<div class="col">
+																		<div class="row">
+																			<div class="col">
+																				<button ng-click="addKitten($index)" type="button"
+																					class="btn btn-info btn-lg btn-block my-3">Add
+																					cat</button>
+																			</div>
 																		</div>
-																	</div>
-																	<div class="row">
-																		<div class="col">
-																			<div ng-repeat="kitten in x.defaultDomain.values">
-																				<div class="row py-2 border round">
-																					<div class="col">
-																						<div class="row">
-																							<div class="col">
-																								<button ng-click="removeKitten(x,$index)"
-																									class="btn btn-info pull-right mb-2">&times</button>
+																		<div class="row">
+																			<div class="col">
+																				<div ng-repeat="kitten in x.defaultDomain.values">
+																					<div class="row py-2 border round">
+																						<div class="col">
+																							<div class="row">
+																								<div class="col">
+																									<button ng-click="removeKitten(x,$index)"
+																										class="btn btn-info pull-right mb-2">&times</button>
+																								</div>
 																							</div>
-																						</div>
-																						<div class="row">
-																							<label class="col-2">Name:</label><input
-																								type="text" ng-model="kitten.name"
-																								class="col-10">
+																							<div class="row">
+																								<label class="col-2">Name:</label><input
+																									type="text" ng-model="kitten.name"
+																									class="col-10">
+																							</div>
 																						</div>
 																					</div>
 																				</div>
@@ -161,39 +213,40 @@
 															</div>
 														</div>
 													</div>
-												</div>
-												<div ng-if="isNumber(x.defaultDomain,x)">
-													<div class="row p-2 m-2 border round">
-														<div class="col">
-															<div class="row">
-																<label class="col-3">Min:</label> <input type="number"
-																	ng-model="x.defaultDomain.min" class="col-5">
-																<div class="col-4"></div>
-															</div>
-															<div class="row">
-																<div class="col">
-																	<div class="row">
-																		<label class="col-3">Max:</label><input type="number"
-																			ng-model="x.defaultDomain.max" class="col-5">
-																		<div class="col-4"></div>
-																	</div>
-																	<div class="row">
-																		<label class="col-3">Default value:</label><input
-																			type="number" ng-model="x.defaultDomain.defaultValue"
-																			class="col-9">
+													<div ng-if="isNumber(x.defaultDomain,x)">
+														<div class="row p-2 m-2 border round">
+															<div class="col">
+																<div class="row">
+																	<label class="col-3">Min:</label> <input type="number"
+																		ng-model="x.defaultDomain.min" class="col-5">
+																	<div class="col-4"></div>
+																</div>
+																<div class="row">
+																	<div class="col">
+																		<div class="row">
+																			<label class="col-3">Max:</label><input type="number"
+																				ng-model="x.defaultDomain.max" class="col-5">
+																			<div class="col-4"></div>
+																		</div>
+																		<div class="row">
+																			<label class="col-3">Default value:</label><input
+																				type="number"
+																				ng-model="x.defaultDomain.defaultValue"
+																				class="col-9">
+																		</div>
 																	</div>
 																</div>
 															</div>
 														</div>
 													</div>
-												</div>
-												<div ng-if="isBool(x.defaultDomain,x)">
-													<div class="row p-2 m-2 border round">
-														<div class="col">
-															<!-- <label> Value</label> <select> </select> -->
-															<label class="col-3">Default value:</label><input
-																type="text" ng-model="x.defaultDomain.defaultValue"
-																class="col-9">
+													<div ng-if="isBool(x.defaultDomain,x)">
+														<div class="row p-2 m-2 border round">
+															<div class="col">
+																<!-- <label> Value</label> <select> </select> -->
+																<label class="col-3">Default value:</label><input
+																	type="text" ng-model="x.defaultDomain.defaultValue"
+																	class="col-9">
+															</div>
 														</div>
 													</div>
 												</div>
@@ -207,29 +260,51 @@
 				</div>
 			</div>
 			<button ng-click="addParameter()" type="button"
-				class="btn btn-info btn-lg btn-block my-3">Add parameter</button>
+				class="btn btn-info btn-lg btn-block my-3" ng-disabled="!isParamFormOpen">Add parameter</button>
 
 
-			<div id="DependencySpace" class="row-fluid">
-				<div ng-repeat="x in compStorage.getdependencys()">
-					<div class="row border border-white rounded p-2">
+			<div class="row m-3">
+				<div class="col center">
+					<h5>Dependency</h5>
+				</div>
+
+				<div class="col text-right">
+					<div class="row">
+
 						<div class="col">
-							<div class="row">
-								<div class="col">
-									<button ng-click="removeDependency($index)"
-										class="btn btn-info pull-right mb-2">&times</button>
+							hide <label class="switch"> <input type="checkbox"
+								ng-model="isDepFormOpen" ng-init="isDepFormOpen=true"
+								style="background: none; border: none; color: white; border: none; button: focus{ outline: none;">
+								<span class="slider"></span>
+							</label> show
+						</div>
+
+					</div>
+				</div>
+			</div>
+			<div ng-show="isDepFormOpen" id="depForm">
+
+				<div id="DependencySpace" class="row-fluid">
+					<div ng-repeat="x in compStorage.getdependencys()">
+						<div class="row border border-white rounded p-2">
+							<div class="col">
+								<div class="row">
+									<div class="col">
+										<button ng-click="removeDependency($index)"
+											class="btn btn-info pull-right mb-2">&times</button>
+									</div>
 								</div>
-							</div>
-							<div class="row">
-								<div class="col">
-									<div class="input-wrapper">
-										<div class="row">
-											<label class="col-2">Pre:</label><input type="text"
-												ng-model="x.pre" class="col-10">
-										</div>
-										<div class="row">
-											<label class="col-2">Post:</label><input type="text"
-												ng-model="x.post" class="col-10">
+								<div class="row">
+									<div class="col">
+										<div class="input-wrapper">
+											<div class="row">
+												<label class="col-2">Pre:</label><input type="text"
+													ng-model="x.pre" class="col-10">
+											</div>
+											<div class="row">
+												<label class="col-2">Post:</label><input type="text"
+													ng-model="x.post" class="col-10">
+											</div>
 										</div>
 									</div>
 								</div>
@@ -239,7 +314,7 @@
 				</div>
 			</div>
 			<button ng-click="addDependency()" type="button"
-				class="btn btn-info btn-lg btn-block my-3">Add dependency</button>
+				class="btn btn-info btn-lg btn-block my-3" ng-disabled="!isDepFormOpen">Add dependency</button>
 
 			<div class="row-fluid">
 				<div class="col">
