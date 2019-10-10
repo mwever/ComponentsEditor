@@ -9,8 +9,12 @@
 			</div>
 			<div id="ComponentNameSpace" class="row-fluid m-2">
 				<div class="input-group">
-					<label class="col-4 center">Component name:</label> <input
-						class="col-8" type="text" ng-model="compStorage.componentName"
+					<div class="input-group-prepend">
+						<span class="input-group-text ml-3" id="basic-addon1" style="background: none; color:white; border: none;"><h5>Component name</h5></span>
+					</div>
+<!-- 					<label class="col"></label>  -->
+					<input
+						class="col" type="text" ng-model="compStorage.componentName"
 						placeholder="Name ...">
 				</div>
 			</div>
@@ -68,8 +72,8 @@
 				</div>
 			</div>
 			<button ng-click="addReqInterface()" type="button"
-				class="btn btn-info btn-lg btn-block my-3" ng-disabled="!isReqIFormOpen">Add required
-				Interface</button>
+				class="btn btn-info btn-lg btn-block my-3"
+				ng-disabled="!isReqIFormOpen">Add required Interface</button>
 
 
 
@@ -117,8 +121,8 @@
 			</div>
 
 			<button ng-click="addProvidedInterface()" type="button"
-				class="btn btn-info btn-lg btn-block my-3" ng-disabled="!isProvIFormOpen">Add provided
-				Interface</button>
+				class="btn btn-info btn-lg btn-block my-3"
+				ng-disabled="!isProvIFormOpen">Add provided Interface</button>
 
 			<div class="row m-3">
 				<div class="col center">
@@ -260,7 +264,8 @@
 				</div>
 			</div>
 			<button ng-click="addParameter()" type="button"
-				class="btn btn-info btn-lg btn-block my-3" ng-disabled="!isParamFormOpen">Add parameter</button>
+				class="btn btn-info btn-lg btn-block my-3"
+				ng-disabled="!isParamFormOpen">Add parameter</button>
 
 
 			<div class="row m-3">
@@ -314,7 +319,8 @@
 				</div>
 			</div>
 			<button ng-click="addDependency()" type="button"
-				class="btn btn-info btn-lg btn-block my-3" ng-disabled="!isDepFormOpen">Add dependency</button>
+				class="btn btn-info btn-lg btn-block my-3"
+				ng-disabled="!isDepFormOpen">Add dependency</button>
 
 			<div class="row-fluid">
 				<div class="col">
