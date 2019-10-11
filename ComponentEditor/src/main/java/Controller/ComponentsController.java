@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
@@ -204,5 +205,52 @@ public class ComponentsController {
 		}
 		System.out.println(output.toString());
 		return output;
+	}
+	
+	public IntermediateComponent reparseComponent(Component comp) {
+		//Name 
+		IntermediateComponent output = new IntermediateComponent(comp.getName());
+		
+		// Provided Interfaces
+		ArrayList<ProvidedInterface> provIList = new ArrayList<>();
+		for(String provI : comp.getProvidedInterfaces()) {
+			ProvidedInterface intProvI = new ProvidedInterface(provI);
+			provIList.add(intProvI);
+		}
+		output.setProvidedInterfaces(provIList);
+		
+		//Required Interfaces
+		ArrayList<RequiredInterface> reqIList = new ArrayList<>();
+		for(Entry<String, String> entry :comp.getRequiredInterfaces().entrySet()) {
+			RequiredInterface intReqI = new RequiredInterface(entry.getKey(), entry.getValue());
+			reqIList.add(intReqI);
+		}
+		output.setRequiredInterfaces(reqIList);
+		
+		//Parameter
+		ArrayList<Parameter> paramList = new ArrayList<>();
+		for(hasco.model.Parameter param:comp.getParameters().getLinearization()) {
+			Parameter intParam = new Parameter(param.getName(), , null, null)
+		}
+		
+		
+		//Dependency
+		ArrayList<Dependency> depList = new ArrayList<>();
+		for(hasco.model.Dependency dep: comp.getDependencies()) {
+			Pair<String,String> prePost = parseDependencyToStringPair(dep);
+			Dependency intDep = new Dependency(prePost.getX(),prePost.getY());
+			depList.add(intDep);
+		}
+		output.setDependencies(depList);
+		
+		
+		
+		return output;
+		
+	}
+	
+	private Pair<String,String> parseDependencyToStringPair(hasco.model.Dependency dep){
+		return null;
+		
 	}
 }
