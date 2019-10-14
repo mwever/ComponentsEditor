@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -49,6 +50,7 @@ import Data.intermediate.SelectionType;
 import Service.RepositoryService;
 import Utils.ComponentsSerializer;
 import hasco.model.Component;
+import hasco.serialization.ComponentLoader;
 import jaicore.basic.FileUtil;
 
 @RestController
@@ -61,7 +63,7 @@ public class RepositoryController {
 
 	@Autowired
 	private RepositoryService reproService;
-	
+
 	@Autowired
 	private ComponentsSerializer serializer;
 
@@ -121,11 +123,13 @@ public class RepositoryController {
 
 						Gson gson = new GsonBuilder().setPrettyPrinting().create();
 						JsonParser jp = new JsonParser();
-						FileWriter writer = new FileWriter("SaveRepo/" + nameOfRepoCollection + "/" + repo.getName() + ".json");
-						JsonElement je = jp.parse(ComponentsSerializer.componentCollectionToJSONRepository(repo.getData().getAllComponents(), repo.getName()));
-						gson.toJson(je,writer);
+						FileWriter writer = new FileWriter(
+								"SaveRepo/" + nameOfRepoCollection + "/" + repo.getName() + ".json");
+						JsonElement je = jp.parse(ComponentsSerializer.componentCollectionToJSONRepository(
+								repo.getData().getAllComponents(), repo.getName()));
+						gson.toJson(je, writer);
 						writer.close();
-						
+
 						zipFiles.add("SaveRepo/" + nameOfRepoCollection + "/" + repo.getName() + ".json");
 
 					} else {
@@ -209,8 +213,9 @@ public class RepositoryController {
 				Gson gson = new GsonBuilder().setPrettyPrinting().create();
 				JsonParser jp = new JsonParser();
 				FileWriter writer = new FileWriter("SaveRepo/SaveSingleRepo/" + nameOfRepoToDownload + ".json");
-				JsonElement je = jp.parse(ComponentsSerializer.componentCollectionToJSONRepository(repoToDownload.getData().getAllComponents(), repoToDownload.getName()));
-				gson.toJson(je,writer);
+				JsonElement je = jp.parse(ComponentsSerializer.componentCollectionToJSONRepository(
+						repoToDownload.getData().getAllComponents(), repoToDownload.getName()));
+				gson.toJson(je, writer);
 				writer.close();
 
 			} catch (IOException e) {
@@ -242,32 +247,35 @@ public class RepositoryController {
 		File saveDir = new File("LoadRepo");
 		if (!saveDir.exists()) {
 			saveDir.mkdir();
-		} else {
-			if (!file.isEmpty()) {
-				input = file.getBytes();
-				ZipInputStream zipStream = new ZipInputStream(new ByteArrayInputStream(input));
-				ZipEntry entry = null;
-				while ((entry = zipStream.getNextEntry()) != null) {
+		}
+		if (!file.isEmpty()) {
+			input = file.getBytes();
+			ZipInputStream zipStream = new ZipInputStream(new ByteArrayInputStream(input));
+			ZipEntry entry = null;
+			while ((entry = zipStream.getNextEntry()) != null) {
 
-					String entryName = entry.getName();
+				String entryName = entry.getName();
+				System.out.println(entryName);
 
-					FileOutputStream out = new FileOutputStream("LoadRepo/" + entryName);
+				FileOutputStream out = new FileOutputStream("LoadRepo/" + entryName);
 
-					byte[] byteBuff = new byte[4096];
-					int bytesRead = 0;
-					while ((bytesRead = zipStream.read(byteBuff)) != -1) {
-						out.write(byteBuff, 0, bytesRead);
-					}
-
-					out.close();
-					zipStream.closeEntry();
+				byte[] byteBuff = new byte[4096];
+				int bytesRead = 0;
+				while ((bytesRead = zipStream.read(byteBuff)) != -1) {
+					out.write(byteBuff, 0, bytesRead);
 				}
-				zipStream.close();
+
+				out.close();
+				zipStream.closeEntry();
 			}
+			zipStream.close();
+
 		}
 		
-			//InputStream inJson = (InputStream) Repository.class.getResourceAsStream("LoadRepo/test.json");
-			//Repository test = new ObjectMapper().readValue(inJson, Repository.class);
+		
+		// InputStream inJson = (InputStream)
+		// Repository.class.getResourceAsStream("LoadRepo/test.json");
+		// Repository test = new ObjectMapper().readValue(inJson, Repository.class);
 
 	}
 
@@ -284,43 +292,38 @@ public class RepositoryController {
 		this.reproService.updateRepository(repo);
 
 	}
-	
-	private IntermediateComponent reverseComponentparse(Component comp) {
-		IntermediateComponent output = new IntermediateComponent(comp.getName());
-		
-		ArrayList<ProvidedInterface> pInterface = new ArrayList<>();
-		for(String providedInterface : comp.getProvidedInterfaces()) {
-			ProvidedInterface prov = new ProvidedInterface(providedInterface);
-			pInterface.add(prov);
-		}
-		output.setProvidedInterfaces(pInterface);
-		
-		ArrayList<RequiredInterface> rInterface = new ArrayList<>();
-		for(String id : comp.getRequiredInterfaces().keySet()) {
-			RequiredInterface req = new RequiredInterface(id, comp.getRequiredInterfaces().get(id));
-			rInterface.add(req);
-		}
-		output.setRequiredInterfaces(rInterface);
-		
-		
-		ArrayList<Parameter> params = new ArrayList<>();
-		SelectionType cat = new SelectionType("Cat", new CategoricalParameterDomain(new ArrayList<Kitten>(), "cat", ""));
-		SelectionType num = new SelectionType("Number", new NumericParameterDomain(0,0, false, "number",0));
-		String[] values = {"true","false"}; 
-		SelectionType bool = new SelectionType("Bool", new BooleanParameterDomain(values, "bool", ""));
-		for(hasco.model.Parameter param : comp.getParameters()) {
-			if(param.isCategorical()) {
-				if(param.getDefaultDomain() instanceof hasco.model.BooleanParameterDomain) {
-					
-				}
-			}else if(param.isNumeric()) {
-				
-			}
-			//Parameter p = new Parameter(param.getName(), paramTypeName, defaultDomain, types)
-			
-		}
-		return null;
-	}
+
+	/*
+	 * private IntermediateComponent reverseComponentparse(Component comp) {
+	 * IntermediateComponent output = new IntermediateComponent(comp.getName());
+	 * 
+	 * ArrayList<ProvidedInterface> pInterface = new ArrayList<>(); for(String
+	 * providedInterface : comp.getProvidedInterfaces()) { ProvidedInterface prov =
+	 * new ProvidedInterface(providedInterface); pInterface.add(prov); }
+	 * output.setProvidedInterfaces(pInterface);
+	 * 
+	 * ArrayList<RequiredInterface> rInterface = new ArrayList<>(); for(String id :
+	 * comp.getRequiredInterfaces().keySet()) { RequiredInterface req = new
+	 * RequiredInterface(id, comp.getRequiredInterfaces().get(id));
+	 * rInterface.add(req); } output.setRequiredInterfaces(rInterface);
+	 * 
+	 * 
+	 * ArrayList<Parameter> params = new ArrayList<>(); SelectionType cat = new
+	 * SelectionType("Cat", new CategoricalParameterDomain(new ArrayList<Kitten>(),
+	 * "cat", "")); SelectionType num = new SelectionType("Number", new
+	 * NumericParameterDomain(0,0, false, "number",0)); String[] values =
+	 * {"true","false"}; SelectionType bool = new SelectionType("Bool", new
+	 * BooleanParameterDomain(values, "bool", "")); for(hasco.model.Parameter param
+	 * : comp.getParameters()) { if(param.isCategorical()) {
+	 * if(param.getDefaultDomain() instanceof hasco.model.BooleanParameterDomain) {
+	 * 
+	 * } }else if(param.isNumeric()) {
+	 * 
+	 * } //Parameter p = new Parameter(param.getName(), paramTypeName,
+	 * defaultDomain, types)
+	 * 
+	 * } return null; }
+	 */
 
 	@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 	static class BufferRepo {
@@ -349,5 +352,28 @@ public class RepositoryController {
 			this.name = name;
 			this.comps = comps;
 		}
+	}
+	
+	private Repository readInRepoFile() throws IOException {
+		 File dir = new File("LoadRepo");
+		  File[] directoryListing = dir.listFiles();
+		  if (directoryListing != null) {
+		    for (File child : directoryListing) {
+		    	ComponentLoader components = new ComponentLoader(child);
+		    	DataCollectionComponentFile comps = new DataCollectionComponentFile();
+				for (Component comp : components.getComponents()) {
+					comps.insertComponent(comp);
+				}
+
+				//Repository repo = new Repository(, comps);
+				//this.reproService.insertRepository(repo);
+
+		    	
+		    }
+		  } else {
+		    throw new IOException("The to uploaded file was not created");
+		  }
+		return null;
+		
 	}
 }
