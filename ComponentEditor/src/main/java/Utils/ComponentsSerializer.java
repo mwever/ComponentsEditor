@@ -86,8 +86,18 @@ public class ComponentsSerializer {
 				if (param.isNumeric()) {
 					NumericNode min = factory.numberNode(((NumericParameterDomain) param.getDefaultDomain()).getMin());
 					para.set("min", min);
-					NumericNode max = factory.numberNode(((NumericParameterDomain) param.getDefaultDomain()).getMin());
+					NumericNode max = factory.numberNode(((NumericParameterDomain) param.getDefaultDomain()).getMax());
 					para.set("max", max);
+					
+					//dummy values
+					NumericNode refineSplits = factory.numberNode(8);
+					para.set("refineSplits", refineSplits);
+					
+					double minIntervalValue = ((NumericParameterDomain) param.getDefaultDomain()).getMax() - ((NumericParameterDomain) param.getDefaultDomain()).getMin() / 1024;
+					NumericNode minInterval = factory.numberNode(minIntervalValue);
+					para.set("minInterval", minInterval);
+					
+					
 				}
 
 				parameter.add(para);

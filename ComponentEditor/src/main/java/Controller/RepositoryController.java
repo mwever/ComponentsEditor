@@ -18,7 +18,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -242,6 +244,7 @@ public class RepositoryController {
 	}
 
 	@RequestMapping(value = "/api/repo/upload/zip", method = RequestMethod.POST)
+	 //ResponseEntity<String>
 	public void uploadRepo(@RequestParam("file") MultipartFile file) throws IOException {
 		byte[] input;
 		File saveDir = new File("LoadRepo");
@@ -270,9 +273,13 @@ public class RepositoryController {
 			}
 			zipStream.close();
 
+			readInRepoFile();
+			
+			deleteContentOfDirectory( new File("LoadRepo"));
+
 		}
-		
-		
+		 //return new ResponseEntity<>("worked", HttpStatus.OK);
+		 
 		// InputStream inJson = (InputStream)
 		// Repository.class.getResourceAsStream("LoadRepo/test.json");
 		// Repository test = new ObjectMapper().readValue(inJson, Repository.class);
@@ -353,27 +360,36 @@ public class RepositoryController {
 			this.comps = comps;
 		}
 	}
-	
+
+	private void deleteContentOfDirectory(File toDelet) {
+
+		File[] files = toDelet.listFiles();
+		if (files != null) { // some JVMs return null for empty dirs
+			for (File f : files) {
+				f.delete();
+			}
+		}
+
+	}
+
 	private Repository readInRepoFile() throws IOException {
-		 File dir = new File("LoadRepo");
-		  File[] directoryListing = dir.listFiles();
-		  if (directoryListing != null) {
-		    for (File child : directoryListing) {
-		    	ComponentLoader components = new ComponentLoader(child);
-		    	DataCollectionComponentFile comps = new DataCollectionComponentFile();
+		File dir = new File("LoadRepo");
+		File[] directoryListing = dir.listFiles();
+		if (directoryListing != null) {
+			for (File child : directoryListing) {
+				ComponentLoader components = new ComponentLoader(child);
+				DataCollectionComponentFile comps = new DataCollectionComponentFile();
 				for (Component comp : components.getComponents()) {
 					comps.insertComponent(comp);
 				}
 
-				//Repository repo = new Repository(, comps);
-				//this.reproService.insertRepository(repo);
-
-		    	
-		    }
-		  } else {
-		    throw new IOException("The to uploaded file was not created");
-		  }
+				Repository repo = new Repository(child.getName(), comps);
+				this.reproService.insertRepository(repo);
+			}
+		} else {
+			throw new IOException("The to uploaded file was not created");
+		}
 		return null;
-		
+
 	}
 }

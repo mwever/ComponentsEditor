@@ -111,11 +111,13 @@ ComponentApp.controller('RepositoryCreationController', [ '$scope',
 					console.log(file.name)
 					file.upload.then(
 							 function (response) {
+								 console.log('worked')
 				                if (response.status > 0)
 				                    $scope.errorMsg = response.status + ': ' + response.data;
 				            },
 				            function(response){
-				            	console.log(response.data)
+				            	console.log(response)
+				            	console.log(response.status)
 				            });
 			      });
 				}
