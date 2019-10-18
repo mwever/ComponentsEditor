@@ -112,6 +112,7 @@ ComponentApp.controller('RepositoryCreationController', [ '$scope',
 					file.upload.then(
 							 function (response) {
 								 console.log('worked')
+								 $scope.getAllRepo();
 				                if (response.status > 0)
 				                    $scope.errorMsg = response.status + ': ' + response.data;
 				            },
@@ -121,6 +122,22 @@ ComponentApp.controller('RepositoryCreationController', [ '$scope',
 				            });
 			      });
 				}
+			}
+			
+			$scope.getAllRepo = function(){
+				$http({
+					method : 'GET',
+					url : '/api/repo',
+					responseType: 'arraybuffer'
+	                
+				}).then(function(response) {
+					console.log("worked");
+						var data = new Blob([response.data], { type: 'application/json' });
+						console.log(data);
+				}, function(response) {
+					console.log(response);
+					console.log("Error");
+				});
 			}
 			
 		} ]);
