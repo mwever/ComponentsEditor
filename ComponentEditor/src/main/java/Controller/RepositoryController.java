@@ -14,6 +14,7 @@ import java.util.zip.ZipInputStream;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,12 +28,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
@@ -69,9 +73,37 @@ public class RepositoryController {
 	@Autowired
 	private ComponentsSerializer serializer;
 
-	@RequestMapping(value = "/api/repo", method = RequestMethod.GET)
-	public Collection<Repository> getAllRepositories() {
-		return this.reproService.getAllRepository();
+	@RequestMapping(value = "/api/repo", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public String getAllRepositories() throws JsonProcessingException {
+		int j = 0;
+		BufferRepo [] outputRepo = new BufferRepo[this.reproService.getAllRepository().size()];
+		for(Repository repo :this.reproService.getAllRepository()) {
+			Collection<Component> icomps = repo.getData().getAllComponents();
+			IntermediateComponent [] icompArray = new IntermediateComponent[icomps.size()];
+			int i = 0;
+			for(Component comp : icomps) {
+				System.out.println(comp.getParameters());
+				IntermediateComponent icomp = ComponentsController.reparseComponent(comp);
+				icompArray[i] = icomp;
+				i++;
+			}
+			
+			BufferRepo ibuffer = new BufferRepo(StringUtils.removeEnd(repo.getName(), ".json"),icompArray);
+			outputRepo[j] = ibuffer;
+			j++;
+		}
+		
+		  ObjectMapper map = new ObjectMapper(); 
+		  String json = map.writeValueAsString(outputRepo);
+		/*
+		 * System.out.println("This is the send json ");
+		 * System.out.println(json.isEmpty());
+		 */
+		  System.out.println(json);
+		  return json;
+		 
+		//return outputRepo;
 	}
 
 	@RequestMapping(value = "/api/repo/{repoName}", method = RequestMethod.GET)
@@ -89,7 +121,7 @@ public class RepositoryController {
 		System.out.println("str: " + buffer);
 
 		DataCollectionComponentFile comps = new DataCollectionComponentFile();
-		for (IntermediateComponent components : buffer.comps) {
+		for (IntermediateComponent components : buffer.components) {
 			Component component = ComponentsController.parseComponent(components);
 			comps.insertComponent(component);
 		}
@@ -290,7 +322,7 @@ public class RepositoryController {
 	public void insertComponent(@RequestBody BufferRepo buffer) throws IOException {
 
 		DataCollectionComponentFile comps = new DataCollectionComponentFile();
-		for (IntermediateComponent components : buffer.comps) {
+		for (IntermediateComponent components : buffer.components) {
 			Component component = ComponentsController.parseComponent(components);
 			comps.insertComponent(component);
 		}
@@ -335,7 +367,7 @@ public class RepositoryController {
 	@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 	static class BufferRepo {
 		private String name;
-		private IntermediateComponent[] comps;
+		private IntermediateComponent[] components;
 
 		public String getName() {
 			return this.name;
@@ -346,20 +378,21 @@ public class RepositoryController {
 		}
 
 		public IntermediateComponent[] getComps() {
-			return this.comps;
+			return this.components;
 		}
 
 		public void setComps(final IntermediateComponent[] comps) {
-			this.comps = comps;
+			this.components = comps;
 		}
 
 		@JsonCreator
 		BufferRepo(@JsonProperty("name") final String name,
 				@JsonProperty("components") final IntermediateComponent[] comps) {
 			this.name = name;
-			this.comps = comps;
+			this.components = comps;
 		}
 	}
+	
 
 	private void deleteContentOfDirectory(File toDelet) {
 

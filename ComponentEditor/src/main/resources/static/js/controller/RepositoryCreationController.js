@@ -132,8 +132,39 @@ ComponentApp.controller('RepositoryCreationController', [ '$scope',
 	                
 				}).then(function(response) {
 					console.log("worked");
-						var data = new Blob([response.data], { type: 'application/json' });
+						//var data = new Blob([response.data], { type: 'application/json' });
+						
+						var data = response.data;
+						var enc = new TextDecoder("utf-8");
+						var json = enc.decode(data);
+						data = JSON.parse(json);
+						
+						//var repositoryCollection = JSON.parse(data);
+						console.log(data.length);
+						var i;
+						//console.log("Hallo1");
+						//console.log(data.length);
+						for(i = 0; i < data.length; i++){
+							Object.assign(new Repository, data[i]);
+						}
 						console.log(data);
+						for (i = 0; i < data.length; i++) {
+							//console.log("Hallo2");
+							  if($scope.repoStorage.checkRepository(data[i])){
+								  $scope.repoStorage.updateRepository(data[i]);
+							  }else{
+								  $scope.repoStorage.addRepository(data[i]);
+								  console.log(data[i])
+								 
+							  }
+							}
+						
+						/*for (i = 0; i < data.length; i++) {
+								console.log("Hallo3");
+							 console.log($scope.repoStorage.getRepository());
+							}*/
+						
+						
 				}, function(response) {
 					console.log(response);
 					console.log("Error");

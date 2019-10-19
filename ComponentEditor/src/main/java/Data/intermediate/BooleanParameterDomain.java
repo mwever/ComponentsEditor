@@ -11,7 +11,7 @@ public class BooleanParameterDomain implements DefaultDomain {
 	
 	private String[] values;
 	private String type;
-	private String defaultValue;
+	//private String defaultValue;
 
 	public String[] getValues() {
 		return values;
@@ -22,13 +22,12 @@ public class BooleanParameterDomain implements DefaultDomain {
 	}
 
 	
-	public String getDefaultValue() {
-		return defaultValue;
-	}
-
-	public void setDefaultValue(String defaultValue) {
-		this.defaultValue = defaultValue;
-	}
+	/*
+	 * public String getDefaultValue() { return defaultValue; }
+	 * 
+	 * public void setDefaultValue(String defaultValue) { this.defaultValue =
+	 * defaultValue; }
+	 */
 	
 	public String getType() {
 		return type;
@@ -38,10 +37,10 @@ public class BooleanParameterDomain implements DefaultDomain {
 		this.type = type;
 	}
 
-
+	//@JsonProperty("defaultValue") String defaultValue
 	@JsonCreator
-	public BooleanParameterDomain(@JsonProperty("values")String [] values, @JsonProperty("type") String type,  @JsonProperty("defaultValue") String defaultValue) {
+	public BooleanParameterDomain(@JsonProperty("values")String [] values, @JsonProperty("type") String type) {
 		this.values = values;
-		this.defaultValue = defaultValue;
+		//this.defaultValue = defaultValue;
 	}
 }

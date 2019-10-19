@@ -8,10 +8,10 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY )
 @JsonTypeName("number")
 public class NumericParameterDomain implements DefaultDomain {
+	private String type;
 	private double min;
 	private double max;
 	private boolean isInteger;
-	private String type;
 	private double defaultValue;
 	
 	public String getType() {

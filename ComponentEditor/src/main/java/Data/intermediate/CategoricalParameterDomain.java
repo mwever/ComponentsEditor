@@ -16,8 +16,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  */
 @JsonTypeName("cat")
 public class CategoricalParameterDomain implements DefaultDomain {
-	private List<Kitten> values;
 	private String type;
+	private List<Kitten> values;
 	private String defaultValue;
 	
 	public String getType() {

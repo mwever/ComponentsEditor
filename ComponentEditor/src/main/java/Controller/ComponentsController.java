@@ -122,8 +122,7 @@ public class ComponentsController {
 					Data.intermediate.BooleanParameterDomain ibp = (Data.intermediate.BooleanParameterDomain) p
 							.getDefaultDomain();
 					hasco.model.BooleanParameterDomain bp = new hasco.model.BooleanParameterDomain();
-					comp.addParameter(new hasco.model.Parameter(p.getName(), bp, ibp.getDefaultValue()));
-				}
+					comp.addParameter(new hasco.model.Parameter(p.getName(), bp,"")); //, ibp.getDefaultValue()				}
 			}
 		}
 
@@ -134,8 +133,9 @@ public class ComponentsController {
 				comp.addDependency(dep);
 			}
 		}
-
+		}
 		return comp;
+		
 	}
 
 	private static hasco.model.Dependency convertToDependency(final String pre, final String post) {
@@ -217,7 +217,7 @@ public class ComponentsController {
 		return output;
 	}
 
-	public IntermediateComponent reparseComponent(Component comp) {
+	public static IntermediateComponent reparseComponent(Component comp) {
 		// Name
 		IntermediateComponent output = new IntermediateComponent(comp.getName());
 
@@ -241,9 +241,11 @@ public class ComponentsController {
 		ArrayList<Parameter> paramList = new ArrayList<>();
 		for (hasco.model.Parameter param : comp.getParameters().getLinearization()) {
 			String type = "";
+			String typeName ="";
 			DefaultDomain defaultdom = null;
 			if (param.getDefaultDomain() instanceof hasco.model.NumericParameterDomain) {
 				type = "number";
+				typeName = "Number";
 				defaultdom = new NumericParameterDomain(
 						((hasco.model.NumericParameterDomain) param.getDefaultDomain()).getMin(),
 						((hasco.model.NumericParameterDomain) param.getDefaultDomain()).getMax(),
@@ -252,12 +254,11 @@ public class ComponentsController {
 			} else {
 				if (param.getDefaultDomain() instanceof hasco.model.BooleanParameterDomain) {
 					type = "bool";
-					defaultdom = new BooleanParameterDomain(new String[] { "true", "false" }, type,
-							(String) param.getDefaultValue());
+					typeName ="Bool";
+					defaultdom = new BooleanParameterDomain(new String[] { "true", "false" }, type);//(String) param.getDefaultValue()
 				} else {
 					type = "cat";
-
-					
+					typeName ="Cat";
 					ArrayList<Kitten> kit = new ArrayList<Kitten>();
 					for (String str : ((hasco.model.CategoricalParameterDomain) param.getDefaultDomain()).getValues()) {
 						kit.add(new Kitten(str));
@@ -265,11 +266,31 @@ public class ComponentsController {
 					defaultdom = new CategoricalParameterDomain(kit, type, ((String) param.getDefaultValue()));
 				}
 			}
-			paramList.add(new Parameter(param.getName(), type, defaultdom,
-					new SelectionType[] { new SelectionType("Cat", new CategoricalParameterDomain(null, "", "")),
+			/*
+			 * SelectionType selction; if(param.getDefaultDomain() instanceof
+			 * hasco.model.NumericParameterDomain) { selction = new SelectionType("Number",
+			 * new NumericParameterDomain( ((hasco.model.NumericParameterDomain)
+			 * param.getDefaultDomain()).getMin(), ((hasco.model.NumericParameterDomain)
+			 * param.getDefaultDomain()).getMax(), ((hasco.model.NumericParameterDomain)
+			 * param.getDefaultDomain()).isInteger(), type, (double)
+			 * param.getDefaultValue())); } else { if(param.getDefaultDomain() instanceof
+			 * hasco.model.BooleanParameterDomain) { selction = new SelectionType("Bool",
+			 * new BooleanParameterDomain(new String[] { "true", "false" }, type)); }else {
+			 * 
+			 * ArrayList<Kitten> kit = new ArrayList<Kitten>(); for (String str :
+			 * ((hasco.model.CategoricalParameterDomain)
+			 * param.getDefaultDomain()).getValues()) { kit.add(new Kitten(str)); } selction
+			 * = new SelectionType("Cat", new CategoricalParameterDomain(kit, type,
+			 * ((String) param.getDefaultValue()))); } }
+			 */
+			
+			
+			paramList.add(new Parameter(param.getName(), typeName, defaultdom,
+					new SelectionType[] { new SelectionType("Cat", new CategoricalParameterDomain(null, "cat", "")),
 							new SelectionType("Number", new NumericParameterDomain(0, 0, false, "number", 0)),
-							new SelectionType("Bool", new BooleanParameterDomain(null, "", "")) }));
+							new SelectionType("Bool", new BooleanParameterDomain(null, "bool")) }));
 		}
+		output.setParameters(paramList);
 
 		// Dependency
 		ArrayList<Dependency> depList = new ArrayList<>();
@@ -284,8 +305,8 @@ public class ComponentsController {
 
 	}
 
-	private Pair<String, String> parseDependencyToStringPair(hasco.model.Dependency dep) {
-		
+	private static Pair<String, String> parseDependencyToStringPair(hasco.model.Dependency dep) {
+
 		// Premise parse
 		String pre = "";
 
@@ -295,11 +316,11 @@ public class ComponentsController {
 			int end = pairs.size();
 			for (Pair<hasco.model.Parameter, ParameterDomain> d : pairs) {
 				if (d.getY() instanceof hasco.model.NumericParameterDomain) {
-					if (counter < end) {
+					if (counter < end - 1) {
 						pre += d.getX().getName() + " in " + "["
 								+ ((hasco.model.NumericParameterDomain) d.getY()).getMin() + ","
 								+ ((hasco.model.NumericParameterDomain) d.getY()).getMax() + "]";
-						pre += "and";
+						pre += " and ";
 					} else {
 						pre += d.getX().getName() + " in " + "["
 								+ ((hasco.model.NumericParameterDomain) d.getY()).getMin() + ","
@@ -308,25 +329,39 @@ public class ComponentsController {
 				} else {
 					if (d.getY() instanceof hasco.model.CategoricalParameterDomain) {
 						if (d.getY() instanceof hasco.model.BooleanParameterDomain) {
-							if (counter < end) {
+							if (counter < end - 1) {
 								pre += d.getX().getName() + " in " + "{true,false}";
-								pre += "and";
+								pre += " and ";
 							} else {
 								pre += d.getX().getName() + " in " + "{true,false}";
 							}
 						} else {
-							if (counter < end) {
+							if (counter < end - 1) {
 								pre += d.getX().getName() + " in " + "{";
 								int counterValue = 0;
 								int endValue = ((hasco.model.CategoricalParameterDomain) d.getY()).getValues().length;
 								for (String str : ((hasco.model.CategoricalParameterDomain) d.getY()).getValues()) {
-									if (counterValue < endValue) {
+									if (counterValue < endValue - 1) {
 										pre += str + ",";
 									} else {
 										pre += str;
+										pre += "}";
+										pre += " and ";
 									}
 								}
-								pre = "}";
+
+							} else {
+								pre += d.getX().getName() + " in " + "{";
+								int counterValue = 0;
+								int endValue = ((hasco.model.CategoricalParameterDomain) d.getY()).getValues().length;
+								for (String str : ((hasco.model.CategoricalParameterDomain) d.getY()).getValues()) {
+									if (counterValue < endValue - 1) {
+										pre += str + ",";
+									} else {
+										pre += str;
+										pre += "}";
+									}
+								}
 							}
 						}
 					}
@@ -335,34 +370,36 @@ public class ComponentsController {
 				counter++;
 			}
 		}
-		
-		//Conclusion parse
-		
+
+		// Conclusion parse
+
 		String post = "";
 		counter = 0;
 		int end = dep.getConclusion().size();
 
 		for (Pair<hasco.model.Parameter, ParameterDomain> pairs : dep.getConclusion()) {
 			if (pairs.getY() instanceof hasco.model.NumericParameterDomain) {
-				if (counter < end) {
-					post += pairs.getX().getName() + " in " + "[" + ((hasco.model.NumericParameterDomain) pairs.getY()).getMin()
-							+ "," + ((hasco.model.NumericParameterDomain) pairs.getY()).getMax() + "]";
-					post += "and";
+				if (counter < end - 1) {
+					post += pairs.getX().getName() + " in " + "["
+							+ ((hasco.model.NumericParameterDomain) pairs.getY()).getMin() + ","
+							+ ((hasco.model.NumericParameterDomain) pairs.getY()).getMax() + "]";
+					post += " and ";
 				} else {
-					post += pairs.getX().getName() + " in " + "[" + ((hasco.model.NumericParameterDomain) pairs.getY()).getMin()
-							+ "," + ((hasco.model.NumericParameterDomain) pairs.getY()).getMax() + "]";
+					post += pairs.getX().getName() + " in " + "["
+							+ ((hasco.model.NumericParameterDomain) pairs.getY()).getMin() + ","
+							+ ((hasco.model.NumericParameterDomain) pairs.getY()).getMax() + "]";
 				}
 			} else {
 				if (pairs.getY() instanceof hasco.model.CategoricalParameterDomain) {
 					if (pairs.getY() instanceof hasco.model.BooleanParameterDomain) {
-						if (counter < end) {
+						if (counter < end - 1) {
 							post += pairs.getX().getName() + " in " + "{true,false}";
-							post += "and";
+							post += " and ";
 						} else {
 							post += pairs.getX().getName() + " in " + "{true,false}";
 						}
 					} else {
-						if (counter < end) {
+						if (counter < end - 1) {
 							post += pairs.getX().getName() + " in " + "{";
 							int counterValue = 0;
 							int endValue = ((hasco.model.CategoricalParameterDomain) pairs.getY()).getValues().length;
@@ -371,9 +408,23 @@ public class ComponentsController {
 									post += str + ",";
 								} else {
 									post += str;
+									post += "}";
 								}
 							}
-							post = "}";
+							post+= " and ";
+
+						} else {
+							post += pairs.getX().getName() + " in " + "{";
+							int counterValue = 0;
+							int endValue = ((hasco.model.CategoricalParameterDomain) pairs.getY()).getValues().length;
+							for (String str : ((hasco.model.CategoricalParameterDomain) pairs.getY()).getValues()) {
+								if (counterValue < endValue) {
+									post += str + ",";
+								} else {
+									post += str;
+									post += "}";
+								}
+							}
 						}
 					}
 				}
@@ -381,8 +432,6 @@ public class ComponentsController {
 				counter++;
 			}
 		}
-
-		
 
 		return new Pair<>(pre, post);
 
