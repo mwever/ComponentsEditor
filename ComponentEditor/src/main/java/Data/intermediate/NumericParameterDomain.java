@@ -8,21 +8,18 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY )
 @JsonTypeName("number")
 public class NumericParameterDomain implements DefaultDomain {
-	private String type;
+	private String type = "number";
 	private double min;
 	private double max;
 	private boolean isInteger;
 	private double defaultValue;
 	
-	public String getType() {
-		return type;
-	}
-
-
-	public void setType(String type) {
-		this.type = type;
-	}
-	
+	/*
+	 * public String getType() { return type; }
+	 * 
+	 * 
+	 * public void setType(String type) { this.type = type; }
+	 */
 	
 	public double getMin() {
 		return min;
@@ -62,14 +59,14 @@ public class NumericParameterDomain implements DefaultDomain {
 		this.defaultValue = defaultValue;
 	}
 
-
+	//  @JsonProperty("type") String type,
 	@JsonCreator
-	public NumericParameterDomain(@JsonProperty("min") double min, @JsonProperty("max") double max, @JsonProperty("isInteger") boolean isInteger,  @JsonProperty("type") String type,  @JsonProperty("defaultValue") double defaultValue ) {
+	public NumericParameterDomain(@JsonProperty("min") double min, @JsonProperty("max") double max, @JsonProperty("isInteger") boolean isInteger,  @JsonProperty("defaultValue") double defaultValue ) {
 		super();
 		this.min = min;
 		this.max = max;
 		this.isInteger = isInteger;
-		this.type = type;
+		//this.type = type;
 		this.defaultValue = defaultValue;
 	}
 	

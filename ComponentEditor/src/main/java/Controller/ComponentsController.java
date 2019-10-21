@@ -240,30 +240,31 @@ public class ComponentsController {
 		// Parameter
 		ArrayList<Parameter> paramList = new ArrayList<>();
 		for (hasco.model.Parameter param : comp.getParameters().getLinearization()) {
-			String type = "";
+			//String type = "";
 			String typeName ="";
 			DefaultDomain defaultdom = null;
 			if (param.getDefaultDomain() instanceof hasco.model.NumericParameterDomain) {
-				type = "number";
+				//type = "number";
 				typeName = "Number";
 				defaultdom = new NumericParameterDomain(
 						((hasco.model.NumericParameterDomain) param.getDefaultDomain()).getMin(),
 						((hasco.model.NumericParameterDomain) param.getDefaultDomain()).getMax(),
-						((hasco.model.NumericParameterDomain) param.getDefaultDomain()).isInteger(), type,
+						((hasco.model.NumericParameterDomain) param.getDefaultDomain()).isInteger(), 
 						(double) param.getDefaultValue());
 			} else {
 				if (param.getDefaultDomain() instanceof hasco.model.BooleanParameterDomain) {
-					type = "bool";
+					//type = "bool";
 					typeName ="Bool";
-					defaultdom = new BooleanParameterDomain(new String[] { "true", "false" }, type);//(String) param.getDefaultValue()
+					defaultdom = new BooleanParameterDomain();//(String) param.getDefaultValue()
+					((BooleanParameterDomain) defaultdom).setDefaultValue((String) param.getDefaultValue());
 				} else {
-					type = "cat";
+					//type = "cat";
 					typeName ="Cat";
 					ArrayList<Kitten> kit = new ArrayList<Kitten>();
 					for (String str : ((hasco.model.CategoricalParameterDomain) param.getDefaultDomain()).getValues()) {
 						kit.add(new Kitten(str));
 					}
-					defaultdom = new CategoricalParameterDomain(kit, type, ((String) param.getDefaultValue()));
+					defaultdom = new CategoricalParameterDomain(kit, ((String) param.getDefaultValue()));
 				}
 			}
 			/*
@@ -285,10 +286,12 @@ public class ComponentsController {
 			 */
 			
 			
-			paramList.add(new Parameter(param.getName(), typeName, defaultdom,
-					new SelectionType[] { new SelectionType("Cat", new CategoricalParameterDomain(null, "cat", "")),
-							new SelectionType("Number", new NumericParameterDomain(0, 0, false, "number", 0)),
-							new SelectionType("Bool", new BooleanParameterDomain(null, "bool")) }));
+			paramList.add(new Parameter(param.getName(), defaultdom));
+			paramList.get(paramList.size()-1).setTypes(new SelectionType[] { new SelectionType("Cat", new CategoricalParameterDomain(new ArrayList<Kitten>(), "")),
+							new SelectionType("Number", new NumericParameterDomain(0, 0, false, 0)),
+							new SelectionType("Bool", new BooleanParameterDomain()) });
+			paramList.get(paramList.size()-1).setParamTypeName(typeName);
+			
 		}
 		output.setParameters(paramList);
 

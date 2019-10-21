@@ -4,7 +4,6 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,13 +14,12 @@ import java.util.zip.ZipInputStream;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,22 +35,15 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
 import Data.DataCollectionComponentFile;
-import Data.intermediate.BooleanParameterDomain;
-import Data.intermediate.CategoricalParameterDomain;
 import Data.intermediate.IntermediateComponent;
-import Data.intermediate.Kitten;
-import Data.intermediate.NumericParameterDomain;
-import Data.intermediate.Parameter;
-import Data.intermediate.ProvidedInterface;
 import Data.intermediate.Repository;
-import Data.intermediate.RequiredInterface;
-import Data.intermediate.SelectionType;
 import Service.RepositoryService;
 import Utils.ComponentsSerializer;
 import hasco.model.Component;
@@ -85,6 +76,7 @@ public class RepositoryController {
 			for(Component comp : icomps) {
 				System.out.println(comp.getParameters());
 				IntermediateComponent icomp = ComponentsController.reparseComponent(comp);
+				//System.out.println(icomp.getParameters());
 				icompArray[i] = icomp;
 				i++;
 			}
@@ -95,12 +87,14 @@ public class RepositoryController {
 		}
 		
 		  ObjectMapper map = new ObjectMapper(); 
-		  String json = map.writeValueAsString(outputRepo);
-		/*
-		 * System.out.println("This is the send json ");
-		 * System.out.println(json.isEmpty());
-		 */
-		  System.out.println(json);
+		  map.enable(SerializationFeature.INDENT_OUTPUT);
+		  
+		  //String json = map.writeValueAsString(outputRepo);
+		  
+		  Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		  String json = gson.toJson(outputRepo);  
+		  
+		  System.out.println("Line 103 "+json);
 		  return json;
 		 
 		//return outputRepo;

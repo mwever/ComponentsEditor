@@ -50,12 +50,14 @@ public class Parameter {
 	public void setDefaultDomain(DefaultDomain defaultDomain) {
 		this.defaultDomain = defaultDomain;
 	}
-
+	
+	//@JsonProperty("paramTypeName") String paramTypeName,
+	//, @JsonProperty("types") SelectionType[] types
 	@JsonCreator
-	public Parameter(@JsonProperty("name") String name, @JsonProperty("paramTypeName") String paramTypeName, @JsonProperty("defaultDomain") DefaultDomain defaultDomain, @JsonProperty("types") SelectionType[] types) {
+	public Parameter(@JsonProperty("name") String name,  @JsonProperty("defaultDomain") DefaultDomain defaultDomain) {
 		this.name = name;
-		this.paramTypeName = paramTypeName;
+		//this.paramTypeName = paramTypeName;
 		this.defaultDomain = defaultDomain;
-		this.setTypes(types);
+		//this.setTypes(types);
 	}
 }
