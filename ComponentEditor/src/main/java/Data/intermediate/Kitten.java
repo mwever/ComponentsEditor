@@ -25,4 +25,8 @@ public class Kitten {
 	}
 	
 	
+	public Kitten() {
+		super();
+	}
+	
 }

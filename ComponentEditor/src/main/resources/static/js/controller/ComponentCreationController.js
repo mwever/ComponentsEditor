@@ -112,6 +112,8 @@ ComponentApp.controller('ComponentCreationController',['$scope','$location','$ht
     	return str; 
     }*/
 	$scope.compStorage = crs;
+	$scope.selection = "";
+	$scope.selectionTypes = ["Cat","Number","Bool"]
     
     $scope.addReqInterface = function(){
         $scope.errortext="";

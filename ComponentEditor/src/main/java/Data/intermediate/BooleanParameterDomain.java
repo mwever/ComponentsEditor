@@ -1,11 +1,8 @@
 package Data.intermediate;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY )
@@ -13,12 +10,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class BooleanParameterDomain implements DefaultDomain {
 	
 	private String type = "bool";
-	private ArrayList<Kitten> values = new ArrayList<Kitten>() { 
-        { 
-            add(new Kitten("true")); 
-            add(new Kitten("false")); 
-        } 
-    }; 
+	@JsonIgnore
+	private Kitten [] values = { new Kitten("true"), new Kitten("false")};
 	private String defaultValue ="";
 	
 	//private String defaultValue;
@@ -36,7 +29,9 @@ public class BooleanParameterDomain implements DefaultDomain {
 	 * public void setDefaultValue(String defaultValue) { this.defaultValue =
 	 * defaultValue; }
 	 */
-
+	
+	
+	
 	public String getDefaultValue() {
 		return defaultValue;
 	}
@@ -53,10 +48,15 @@ public class BooleanParameterDomain implements DefaultDomain {
 
 	//@JsonProperty("defaultValue") String defaultValue
 	//@JsonProperty("values")String [] values, @JsonProperty("type") String type
+	
+	
+	
 	@JsonCreator
 	public BooleanParameterDomain() {
-		//this.values = values;
+		super();
 		//this.defaultValue = defaultValue;
 	}
+	
+	
 
 }
