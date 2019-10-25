@@ -8,10 +8,11 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 	    use = JsonTypeInfo.Id.NAME,
 	    include = JsonTypeInfo.As.PROPERTY,
 	    property = "type")
-	@JsonSubTypes({
+@JsonSubTypes({
 	    @Type(value = BooleanParameterDomain.class, name = "bool"),
 	    @Type(value = NumericParameterDomain.class, name = "number"),
 	    @Type(value = CategoricalParameterDomain.class, name = "cat")})
-public interface DefaultDomain {
 
+public interface DefaultDomain {
+	
 }

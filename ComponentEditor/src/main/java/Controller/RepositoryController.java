@@ -86,14 +86,17 @@ public class RepositoryController {
 			j++;
 		}
 		
-		  //ObjectMapper map = new ObjectMapper(); 
-		  //map.enable(SerializationFeature.INDENT_OUTPUT);
-		  
-		  //String json = map.writeValueAsString(outputRepo);
-			GsonBuilder gson = new GsonBuilder(); 
-			gson.serializeNulls();
-			Gson g = gson.setPrettyPrinting().create();
-			String json = g.toJson(outputRepo);  
+		/*
+		 * ObjectMapper map = new ObjectMapper();
+		 * map.enable(SerializationFeature.INDENT_OUTPUT);
+		 * 
+		 * String json = map.writeValueAsString(outputRepo);
+		 */
+		 // map.
+		
+		  GsonBuilder gson = new GsonBuilder(); gson.serializeNulls();
+		  Gson g = gson.setPrettyPrinting().create(); String json = g.toJson(outputRepo);
+		 
 		  
 		  System.out.println("Line 103 "+json);
 		  return json;

@@ -7,9 +7,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY )
 public class Parameter {
 	private String name;
-	private String paramTypeName;
+	//private String paramTypeName;
 	private DefaultDomain defaultDomain;
-	private SelectionType[] types;
+	//private SelectionType[] types;
 	
 	
 	public String getName() {
@@ -22,29 +22,24 @@ public class Parameter {
 	}
 
 
-	public String getParamTypeName() {
-		return paramTypeName;
-	}
-
-
-	public void setParamTypeName(String paramTypeName) {
-		this.paramTypeName = paramTypeName;
-	}
-
+	/*
+	 * public String getParamTypeName() { return paramTypeName; }
+	 * 
+	 * 
+	 * public void setParamTypeName(String paramTypeName) { this.paramTypeName =
+	 * paramTypeName; }
+	 */
 
 	public DefaultDomain getDefaultDomain() {
 		return defaultDomain;
 	}
 	
-
-	public SelectionType[] getTypes() {
-		return types;
-	}
-
-
-	public void setTypes(SelectionType[] types) {
-		this.types = types;
-	}
+	/*
+	 * public SelectionType[] getTypes() { return types; }
+	 * 
+	 * 
+	 * public void setTypes(SelectionType[] types) { this.types = types; }
+	 */
 
 
 	public void setDefaultDomain(DefaultDomain defaultDomain) {

@@ -10,12 +10,13 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY )
+/*
+ * @JsonSubTypes({
+ * 
+ * @JsonSubTypes.Type(value = BooleanParameterDomain.class, name = "boolean") })
+ */
+  @JsonTypeName("cat")
 
-  @JsonSubTypes({
-  
-  @JsonSubTypes.Type(value = BooleanParameterDomain.class, name = "boolean") })
- 
-@JsonTypeName("cat")
 public class CategoricalParameterDomain implements DefaultDomain {
 	private String type = "cat";
 	private List<Kitten> values;

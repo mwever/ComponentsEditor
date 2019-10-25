@@ -10,11 +10,12 @@
 			<div id="ComponentNameSpace" class="row-fluid m-2">
 				<div class="input-group">
 					<div class="input-group-prepend">
-						<span class="input-group-text ml-3" id="basic-addon1" style="background: none; color:white; border: none;"><h5>Component name</h5></span>
+						<span class="input-group-text ml-3" id="basic-addon1"
+							style="background: none; color: white; border: none;"><h5>Component
+								name</h5></span>
 					</div>
-<!-- 					<label class="col"></label>  -->
-					<input
-						class="col" type="text" ng-model="compStorage.componentName"
+					<!-- 					<label class="col"></label>  -->
+					<input class="col" type="text" ng-model="compStorage.componentName"
 						placeholder="Name ...">
 				</div>
 			</div>
@@ -166,16 +167,28 @@
 													ng-model="x.name" class="col-9">
 											</div>
 											<div class="row">
-												<label class="col-3">Type:</label><select
-													ng-model="x.defaultDomain"
-													ng-options="type.actualType as type.label for type in x.types"
-													class="col-5"></select>
+												<label class="col-3">Type:</label>
+												<select
+													ng-model="selection"
+													ng-options="y for y in selectionTypes" 
+													ng-change="onChange(x,this)"
+													class="col-5">
+													</select>
+												<!-- <form>
+													<select ng-model="selection" ng-change="onChange(x)">
+														<option value="">
+														<option value="Cat">Cat
+														<option value="Number">Number
+														<option value="Bool">Bool
+													</select>
+												</form> -->
 												<div class="col-4"></div>
 											</div>
+
 											<div class="row">
 												<div class="col">
-													<div ng-if="isCat(x.defaultDomain,x)">
-														<div class="row">
+													<div *ngIf="isCat(x);then content"> </div>    
+														<ng-template #content class="row">
 															<div class="col">
 																<div class="row">
 																	<label class="col-3">Default value:</label><input
@@ -214,10 +227,11 @@
 																		</div>
 																	</div>
 																</div>
-															</div>
+															</ng-template>
 														</div>
 													</div>
-													<div ng-if="isNumber(x.defaultDomain,x)">
+<!-- 													<ng-template #alternativ>other content here...</ng-template> -->
+													<div ng-if="isNumber(x)">
 														<div class="row p-2 m-2 border round">
 															<div class="col">
 																<div class="row">
@@ -243,7 +257,7 @@
 															</div>
 														</div>
 													</div>
-													<div ng-if="isBool(x.defaultDomain,x)">
+													<div ng-if="isBool(x)">
 														<div class="row p-2 m-2 border round">
 															<div class="col">
 																<!-- <label> Value</label> <select> </select> -->

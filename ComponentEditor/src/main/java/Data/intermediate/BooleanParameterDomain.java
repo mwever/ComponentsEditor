@@ -10,8 +10,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class BooleanParameterDomain implements DefaultDomain {
 	
 	private String type = "bool";
-	@JsonIgnore
-	private Kitten [] values = { new Kitten("true"), new Kitten("false")};
+	private String [] values = { "true","false"};
 	private String defaultValue ="";
 	
 	//private String defaultValue;

@@ -25,9 +25,9 @@ class ProvidedInterface{
 class Parameter{
     constructor(name , paramtype /*, prio  */){
         this.name = name;
-        this.paramTypeName = "";
+        //this.paramTypeName = "";
         this.defaultDomain = paramtype;
-        this.types = [new SelectionType('Cat',new CategoricalParameterDomain(new Array(),"")),new SelectionType('Number',new NumericParameterDomain(null,null,false,null)),new SelectionType('Bool',new BooleanParameterDomain())];
+        //this.types = [new SelectionType('Cat',new CategoricalParameterDomain(new Array(),"")),new SelectionType('Number',new NumericParameterDomain(null,null,false,null)),new SelectionType('Bool',new BooleanParameterDomain())];
         //this.prio = prio;
     }
 };
@@ -51,8 +51,8 @@ class CategoricalParameterDomain{
 
 class NumericParameterDomain{
     constructor(min,max,isInteger,defaultValue){
-       /* this.name = 'number';*/
-        this.type = "number";
+    	this.type = 'number';
+        //this.type = "number";
     	this.min = min;
         this.max = max;
         this.isInteger = isInteger;
@@ -62,19 +62,19 @@ class NumericParameterDomain{
 
 class BooleanParameterDomain extends CategoricalParameterDomain{
     constructor(/*defaultVal*/){
-        /*this.name = 'bool';
-        this.defaultVal = defaultVal;*/
+        this.type = 'bool';
+        /*this.defaultVal = defaultVal;*/
     	super(new Array("true","false"),"");
-    	this.type = "bool";
+    	//this.type = "bool";
     }
 }
 
-class SelectionType{
+/*class SelectionType{
 	constructor(TypeName, Type){
 		this.label = TypeName;
 		this.actualType = Type;
 	}
-}
+}*/
 
 class Kitten{
   constructor(name){
@@ -112,9 +112,28 @@ ComponentApp.controller('ComponentCreationController',['$scope','$location','$ht
     	return str; 
     }*/
 	$scope.compStorage = crs;
+	
 	$scope.selection = "";
 	$scope.selectionTypes = ["Cat","Number","Bool"]
     
+	$scope.onChange = function(x,y){
+		
+		$scope.selection = y.selection;
+		
+		if($scope.selection == "Cat"){
+			if(!(x.defaultDomain instanceof  CategoricalParameterDomain && !(x.defaultDomain instanceof  BooleanParameterDomain))){
+			x.defaultDomain = new CategoricalParameterDomain(new Array(),"");}
+		}
+		if($scope.selection ==  "Number"){
+			if(!(x.defaultDomain instanceof  NumericParameterDomain)){
+			x.defaultDomain = new NumericParameterDomain(null,null,false,null);}
+		}
+		if($scope.selection ==  "Bool"){
+			if(!(x.defaultDomain instanceof  BooleanParameterDomain)){
+			x.defaultDomain = new BooleanParameterDomain();}
+		}
+	}
+	
     $scope.addReqInterface = function(){
         $scope.errortext="";
         if(!(crs.reqInterfaces.indexOf($scope.addReqInterface)== -1)){
@@ -262,25 +281,25 @@ ComponentApp.controller('ComponentCreationController',['$scope','$location','$ht
     	crs.parameters[crs.parameters.indexOf(x)].defaultDomain.values.splice(y,1);
     }
 
-    $scope.isNumber = function(x,y){
-    	if(x instanceof NumericParameterDomain){
+    $scope.isNumber = function(x){
+    	/*if(x instanceof NumericParameterDomain){
     		y.paramTypeName = "Number"
-    	}
-    	return x instanceof NumericParameterDomain;
+    	}*/
+    	return x.defaultDomain instanceof NumericParameterDomain;
     }
     
-    $scope.isCat = function(x,y){
-    	if(x instanceof CategoricalParameterDomain && !(x instanceof BooleanParameterDomain))
+    $scope.isCat = function(x){
+    	/*if(x instanceof CategoricalParameterDomain && !(x instanceof BooleanParameterDomain))
     	{	y.paramTypeName = "Cat";
-    		}
-    	return (x instanceof CategoricalParameterDomain && !(x instanceof BooleanParameterDomain))
+    		}*/
+    	return (x.defaultDomain instanceof CategoricalParameterDomain && !(x.defaultDomain instanceof BooleanParameterDomain))
     }
     
-    $scope.isBool = function(x,y){
-    	if(x instanceof BooleanParameterDomain){
+    $scope.isBool = function(x){
+    	/*if(x instanceof BooleanParameterDomain){
     		y.paramTypeName ="Bool"
-    	}
-    	return (x instanceof BooleanParameterDomain)
+    	}*/
+    	return (x.defaultDomain instanceof BooleanParameterDomain)
     }
     
     $scope.loadCheck = function(){
