@@ -62,9 +62,10 @@ class NumericParameterDomain{
 
 class BooleanParameterDomain extends CategoricalParameterDomain{
     constructor(/*defaultVal*/){
-        this.type = 'bool';
+        
         /*this.defaultVal = defaultVal;*/
     	super(new Array("true","false"),"");
+    	this.type = 'bool';
     	//this.type = "bool";
     }
 }
@@ -113,24 +114,49 @@ ComponentApp.controller('ComponentCreationController',['$scope','$location','$ht
     }*/
 	$scope.compStorage = crs;
 	
+	/*$scope.isCat = false;
+	$scope.isNumber = false;
+	$scope.isBool= false;*/
+	
 	$scope.selection = "";
 	$scope.selectionTypes = ["Cat","Number","Bool"]
     
 	$scope.onChange = function(x,y){
 		
 		$scope.selection = y.selection;
-		
+		//console.log("onChange");
 		if($scope.selection == "Cat"){
+			/*$scope.isCat = true;
+			$scope.isNumber = false;
+			$scope.isBool= false;*/
+			
+			//console.log("onChangeCat");
 			if(!(x.defaultDomain instanceof  CategoricalParameterDomain && !(x.defaultDomain instanceof  BooleanParameterDomain))){
-			x.defaultDomain = new CategoricalParameterDomain(new Array(),"");}
+				x.defaultDomain = new CategoricalParameterDomain(new Array(),"");
+				//console.log("onChangeCatNew");
+			}
 		}
 		if($scope.selection ==  "Number"){
+			/*$scope.isNumbe = true;
+			$scope.isCat = false;
+			$scope.isBool= false;*/
+			
+			//console.log("onChangeNumber");
 			if(!(x.defaultDomain instanceof  NumericParameterDomain)){
-			x.defaultDomain = new NumericParameterDomain(null,null,false,null);}
+				x.defaultDomain = new NumericParameterDomain(null,null,false,null);
+				//console.log("onChangeNumberNew");
+			}
 		}
 		if($scope.selection ==  "Bool"){
+			/*$scope.isBool= true;
+			$scope.isCat = true;
+			$scope.isNumber = false;
+			*/
+			//console.log("onChangeBool");
 			if(!(x.defaultDomain instanceof  BooleanParameterDomain)){
-			x.defaultDomain = new BooleanParameterDomain();}
+				x.defaultDomain = new BooleanParameterDomain();
+				//console.log("onChangeBoolNew");
+			}
 		}
 	}
 	
@@ -285,6 +311,7 @@ ComponentApp.controller('ComponentCreationController',['$scope','$location','$ht
     	/*if(x instanceof NumericParameterDomain){
     		y.paramTypeName = "Number"
     	}*/
+    	//console.log(x.defaultDomain)
     	return x.defaultDomain instanceof NumericParameterDomain;
     }
     
@@ -292,6 +319,7 @@ ComponentApp.controller('ComponentCreationController',['$scope','$location','$ht
     	/*if(x instanceof CategoricalParameterDomain && !(x instanceof BooleanParameterDomain))
     	{	y.paramTypeName = "Cat";
     		}*/
+    	//console.log(x.defaultDomain)
     	return (x.defaultDomain instanceof CategoricalParameterDomain && !(x.defaultDomain instanceof BooleanParameterDomain))
     }
     
@@ -299,6 +327,8 @@ ComponentApp.controller('ComponentCreationController',['$scope','$location','$ht
     	/*if(x instanceof BooleanParameterDomain){
     		y.paramTypeName ="Bool"
     	}*/
+    	//console.log(x.defaultDomain)
+    	//console.log(x.defaultDomain instanceof BooleanParameterDomain);
     	return (x.defaultDomain instanceof BooleanParameterDomain)
     }
     
@@ -312,7 +342,6 @@ ComponentApp.controller('ComponentCreationController',['$scope','$location','$ht
     		crs.parameters = crs.componentToEdit.parameters;
     		crs.dependencys = crs.componentToEdit.dependencies;
     	}
-    	
     }
     
     $scope.inEditMode = function(){

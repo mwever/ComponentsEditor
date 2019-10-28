@@ -167,13 +167,10 @@
 													ng-model="x.name" class="col-9">
 											</div>
 											<div class="row">
-												<label class="col-3">Type:</label>
-												<select
-													ng-model="selection"
-													ng-options="y for y in selectionTypes" 
-													ng-change="onChange(x,this)"
-													class="col-5">
-													</select>
+												<label class="col-3">Type:</label> <select
+													ng-model="selection" ng-options="y for y in selectionTypes"
+													ng-change="onChange(x,this)" class="col-5">
+												</select>
 												<!-- <form>
 													<select ng-model="selection" ng-change="onChange(x)">
 														<option value="">
@@ -187,8 +184,8 @@
 
 											<div class="row">
 												<div class="col">
-													<div *ngIf="isCat(x);then content"> </div>    
-														<ng-template #content class="row">
+													<div ng-if="isCat(x)">
+														<div class="row">
 															<div class="col">
 																<div class="row">
 																	<label class="col-3">Default value:</label><input
@@ -226,11 +223,14 @@
 																			</div>
 																		</div>
 																	</div>
+
 																</div>
-															</ng-template>
+															</div>
 														</div>
 													</div>
-<!-- 													<ng-template #alternativ>other content here...</ng-template> -->
+
+													<!-- 													<ng-template #alternativ>other content here...</ng-template> -->
+													
 													<div ng-if="isNumber(x)">
 														<div class="row p-2 m-2 border round">
 															<div class="col">
@@ -257,6 +257,7 @@
 															</div>
 														</div>
 													</div>
+
 													<div ng-if="isBool(x)">
 														<div class="row p-2 m-2 border round">
 															<div class="col">
@@ -276,53 +277,55 @@
 						</div>
 					</div>
 				</div>
-			</div>
-			<button ng-click="addParameter()" type="button"
-				class="btn btn-info btn-lg btn-block my-3"
-				ng-disabled="!isParamFormOpen">Add parameter</button>
 
 
-			<div class="row m-3">
-				<div class="col center">
-					<h5>Dependency</h5>
-				</div>
+				<button ng-click="addParameter()" type="button"
+					class="btn btn-info btn-lg btn-block my-3"
+					ng-disabled="!isParamFormOpen">Add parameter</button>
 
-				<div class="col text-right">
-					<div class="row">
 
-						<div class="col">
-							hide <label class="switch"> <input type="checkbox"
-								ng-model="isDepFormOpen" ng-init="isDepFormOpen=true"
-								style="background: none; border: none; color: white; border: none; button: focus{ outline: none;">
-								<span class="slider"></span>
-							</label> show
+				<div class="row m-3">
+					<div class="col center">
+						<h5>Dependency</h5>
+					</div>
+
+					<div class="col text-right">
+						<div class="row">
+
+							<div class="col">
+								hide <label class="switch"> <input type="checkbox"
+									ng-model="isDepFormOpen" ng-init="isDepFormOpen=true"
+									style="background: none; border: none; color: white; border: none; button: focus{ outline: none;">
+									<span class="slider"></span>
+								</label> show
+							</div>
+
 						</div>
-
 					</div>
 				</div>
-			</div>
-			<div ng-show="isDepFormOpen" id="depForm">
+				<div ng-show="isDepFormOpen" id="depForm">
 
-				<div id="DependencySpace" class="row-fluid">
-					<div ng-repeat="x in compStorage.getdependencys()">
-						<div class="row border border-white rounded p-2">
-							<div class="col">
-								<div class="row">
-									<div class="col">
-										<button ng-click="removeDependency($index)"
-											class="btn btn-info pull-right mb-2">&times</button>
+					<div id="DependencySpace" class="row-fluid">
+						<div ng-repeat="x in compStorage.getdependencys()">
+							<div class="row border border-white rounded p-2">
+								<div class="col">
+									<div class="row">
+										<div class="col">
+											<button ng-click="removeDependency($index)"
+												class="btn btn-info pull-right mb-2">&times</button>
+										</div>
 									</div>
-								</div>
-								<div class="row">
-									<div class="col">
-										<div class="input-wrapper">
-											<div class="row">
-												<label class="col-2">Pre:</label><input type="text"
-													ng-model="x.pre" class="col-10">
-											</div>
-											<div class="row">
-												<label class="col-2">Post:</label><input type="text"
-													ng-model="x.post" class="col-10">
+									<div class="row">
+										<div class="col">
+											<div class="input-wrapper">
+												<div class="row">
+													<label class="col-2">Pre:</label><input type="text"
+														ng-model="x.pre" class="col-10">
+												</div>
+												<div class="row">
+													<label class="col-2">Post:</label><input type="text"
+														ng-model="x.post" class="col-10">
+												</div>
 											</div>
 										</div>
 									</div>
@@ -331,32 +334,27 @@
 						</div>
 					</div>
 				</div>
-			</div>
-			<button ng-click="addDependency()" type="button"
-				class="btn btn-info btn-lg btn-block my-3"
-				ng-disabled="!isDepFormOpen">Add dependency</button>
+				<button ng-click="addDependency()" type="button"
+					class="btn btn-info btn-lg btn-block my-3"
+					ng-disabled="!isDepFormOpen">Add dependency</button>
 
-			<div class="row-fluid">
-				<div class="col">
+				<div class="row-fluid">
+					<div class="col">
+						<div class="row">
+							<div class="col" id="centerButton">
+								<div ng-if="inEditMode()">
+									<button ng-click="addComponent()" type="button"
+										class="btn btn-lg btn-info my-3">Save Changes</button>
+								</div>
+							</div>
+						</div>
+					</div>
 					<div class="row">
 						<div class="col" id="centerButton">
-							<div ng-if="inEditMode()">
+							<div ng-if="inNormalMode()">
 								<button ng-click="addComponent()" type="button"
-									class="btn btn-lg btn-info my-3">Save Changes</button>
+									class="btn btn-lg btn-info my-3">Save Component</button>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="row">
-					<div class="col" id="centerButton">
-						<div ng-if="inNormalMode()">
-							<button ng-click="addComponent()" type="button"
-								class="btn btn-lg btn-info my-3">Save Component</button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-</div>
