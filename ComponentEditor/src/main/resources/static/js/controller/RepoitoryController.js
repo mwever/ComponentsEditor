@@ -1,9 +1,25 @@
 class Repository{
         	constructor(name,components){
+        		console.log("create repository");
         		this.name = name;
         		this.components = components;
-        	}
-        }
+        		console.log(name);
+        		console.log("add components" ,components);
+        		for(c in components) {
+        			console.log("add component ", c);
+        			this.components.push(new Component(c));
+        		}
+        		
+	        	this.assignToObjects = function() {
+	    			console.log("Assign component class to component objects of repository");
+	        		for(var i = 0; i<this.components.length; i++) {
+	        			this.components[i] = Object.assign(new Component, this.components[i]);
+	        			this.components[i].assignToObject();
+	        		}
+	        	};
+        	};
+        	
+}
 
 
 ComponentApp.controller('RepoitoryController',['$scope','$location','$log','$http','ComponentRepositoryService',function($scope,$location,$log,$http,ComponentRepositoryService){

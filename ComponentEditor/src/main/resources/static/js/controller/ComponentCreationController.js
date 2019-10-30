@@ -1,11 +1,20 @@
 class Component{
     constructor(name, reqInterface, providedInterface, param, dependency){
+    console.log("create component " + name);
         this.name = name;
         this.requiredInterfaces = reqInterface;
         this.providedInterfaces = providedInterface;
         this.parameters = param;
         this.dependencies = dependency;
+	    this.assignToObject = function() {
+	    	console.log("Assign parameter class to parameter objects of component");
+	        for(var i = 0; i<this.parameters.length; i++) {
+	        	this.parameters[i] = Object.assign(new Parameter, this.parameters[i]);
+	        	this.parameters[i].assignToObject();
+	        }
+	    };
     }
+    
 }; 
 
 class ReqInterface{
@@ -26,9 +35,18 @@ class Parameter{
     constructor(name , paramtype /*, prio  */){
         this.name = name;
         //this.paramTypeName = "";
-        this.defaultDomain = paramtype;
+        console.log("create parameter " + name + " with paramtype ", paramtype);
+        if(paramtype.type=="cat") {
+        	console.log("Create parameter domain for categorical parameters");
+        	this.defaultDomain = new CategoricalParameterDomain(paramtype.values, paramtype.defaultValue);
+        }
+        
         //this.types = [new SelectionType('Cat',new CategoricalParameterDomain(new Array(),"")),new SelectionType('Number',new NumericParameterDomain(null,null,false,null)),new SelectionType('Bool',new BooleanParameterDomain())];
         //this.prio = prio;
+	    this.assignToObject = function() {
+	    	console.log("Assign parameter domain");
+	    	
+	    };
     }
 };
 
@@ -319,7 +337,11 @@ ComponentApp.controller('ComponentCreationController',['$scope','$location','$ht
     	/*if(x instanceof CategoricalParameterDomain && !(x instanceof BooleanParameterDomain))
     	{	y.paramTypeName = "Cat";
     		}*/
-    	//console.log(x.defaultDomain)
+    	console.log(x)
+    	
+    	console.log(x.defaultDomain instanceof CategoricalParameterDomain)
+    	console.log(x.defaultDomain instanceof BooleanParameterDomain)
+    	console.log(typeof x.defaultDomain)
     	return (x.defaultDomain instanceof CategoricalParameterDomain && !(x.defaultDomain instanceof BooleanParameterDomain))
     }
     

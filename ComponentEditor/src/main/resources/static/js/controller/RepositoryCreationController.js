@@ -141,13 +141,22 @@ ComponentApp.controller('RepositoryCreationController', [ '$scope',
 						
 						//var repositoryCollection = JSON.parse(data);
 						console.log(data.length);
+						
+						console.log(data);
 						var i;
 						//console.log("Hallo1");
 						//console.log(data.length);
+						test = [];
+						
 						for(i = 0; i < data.length; i++){
-							Object.assign(new Repository, data[i]);
+							var t = Object.assign(new Repository, data[i]);
+							console.log("######");
+							console.log(t);
+							t.assignToObjects();
+							test.push(t);
 						}
-						console.log(data);
+						console.log(test[0].components[0] instanceof Component);
+						
 						for (i = 0; i < data.length; i++) {
 							//console.log("Hallo2");
 							  if($scope.repoStorage.checkRepository(data[i])){
