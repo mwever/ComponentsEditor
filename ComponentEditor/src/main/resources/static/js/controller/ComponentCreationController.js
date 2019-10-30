@@ -12,6 +12,17 @@ class Component{
 	        	this.parameters[i] = Object.assign(new Parameter, this.parameters[i]);
 	        	this.parameters[i].assignToObject();
 	        }
+	        for(var i = 0; i<this.requiredInterfaces.length; i++){
+	        	this.requiredInterfaces[i] = Object.assign(new ReqInterface, this.requiredInterfaces[i]);
+	        }
+	        
+	        for(var i = 0; i<this.providedInterfaces.length; i++){
+	        	this.providedInterfaces[i] = Object.assign(new ProvidedInterface, this.providedInterfaces[i]);
+	        }
+	        
+	        for(var i = 0; i<this.dependencies.length; i++){
+	        	this.dependencies[i] = Object.assign(new Dependency, this.dependencies[i]);
+	        }
 	    };
     }
     
@@ -34,17 +45,29 @@ class ProvidedInterface{
 class Parameter{
     constructor(name , paramtype /*, prio  */){
         this.name = name;
+        this.defaultDomain = paramtype;
         //this.paramTypeName = "";
-        console.log("create parameter " + name + " with paramtype ", paramtype);
+      /*  console.log("create parameter " + name + " with paramtype ", paramtype);
         if(paramtype.type=="cat") {
         	console.log("Create parameter domain for categorical parameters");
         	this.defaultDomain = new CategoricalParameterDomain(paramtype.values, paramtype.defaultValue);
         }
-        
+        */
         //this.types = [new SelectionType('Cat',new CategoricalParameterDomain(new Array(),"")),new SelectionType('Number',new NumericParameterDomain(null,null,false,null)),new SelectionType('Bool',new BooleanParameterDomain())];
         //this.prio = prio;
 	    this.assignToObject = function() {
+	    	if(this.defaultDomain.type == "cat"){
+		    	this.defaultDomain = Object.assign(new CategoricalParameterDomain, this.defaultDomain);
+	        	this.defaultDomain.assignToObject();
+	    	}
+	    	if(this.defaultDomain.type =="number"){
+	    		this.defaultDomain = Object.assign(new NumericParameterDomain, this.defaultDomain);
+	    	}
+	    	if(this.defaultDomain.type == "bool"){
+	    		this.defaultDomain = Object.assign(new BooleanParameterDomain, this.defaultDomain);
+	    	}
 	    	console.log("Assign parameter domain");
+	    	
 	    	
 	    };
     }
@@ -64,6 +87,12 @@ class CategoricalParameterDomain{
         this.name = 'cat';*/
         this.values = values;
         this.defaultValue = defaultValue;
+        
+        this.assignToObject = function(){
+        	for(var i = 0; i < this.values.length; i++){
+        		this.values[i] = Object.assign(new Kitten, this.values[i]);
+        	}
+        };
     }
 }
 
@@ -337,11 +366,17 @@ ComponentApp.controller('ComponentCreationController',['$scope','$location','$ht
     	/*if(x instanceof CategoricalParameterDomain && !(x instanceof BooleanParameterDomain))
     	{	y.paramTypeName = "Cat";
     		}*/
-    	console.log(x)
+    	/*console.log(x)
     	
     	console.log(x.defaultDomain instanceof CategoricalParameterDomain)
     	console.log(x.defaultDomain instanceof BooleanParameterDomain)
-    	console.log(typeof x.defaultDomain)
+    	console.log(typeof x.defaultDomain)*/
+    	
+    	
+    	/*if(x.defaultDomain instanceof CategoricalParameterDomain && !(x.defaultDomain instanceof BooleanParameterDomain)){
+    		console.log(x.defaultDomain.values[0] instanceof Kitten)
+    	}*/
+    	
     	return (x.defaultDomain instanceof CategoricalParameterDomain && !(x.defaultDomain instanceof BooleanParameterDomain))
     }
     

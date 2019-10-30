@@ -5,10 +5,10 @@ class Repository{
         		this.components = components;
         		console.log(name);
         		console.log("add components" ,components);
-        		for(c in components) {
+        		/*for(c in components) {
         			console.log("add component ", c);
         			this.components.push(new Component(c));
-        		}
+        		}*/
         		
 	        	this.assignToObjects = function() {
 	    			console.log("Assign component class to component objects of repository");

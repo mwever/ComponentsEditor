@@ -184,12 +184,12 @@
 
 											<div class="row">
 												<div class="col">
-													<div ng-show="isCat(x)">
+													<div ng-if="isCat(x)">
 														<div class="row">
 															<div class="col">
 																<div class="row">
 																	<label class="col-3">Default value:</label><input
-																		type="text" ng-model="x.defaultDomain.defaultValue"
+																		type="text"  ng-model="x.defaultDomain.defaultValue"
 																		class="col-9">
 																</div>
 																<div class="row">
@@ -231,7 +231,7 @@
 
 													<!-- 													<ng-template #alternativ>other content here...</ng-template> -->
 													
-													<div ng-show="isNumber(x)">
+													<div ng-if="isNumber(x)">
 														<div class="row p-2 m-2 border round">
 															<div class="col">
 																<div class="row">
@@ -258,7 +258,7 @@
 														</div>
 													</div>
 
-													<div ng-show="isBool(x)">
+													<div ng-if="isBool(x)">
 														<div class="row p-2 m-2 border round">
 															<div class="col">
 																<!-- <label> Value</label> <select> </select> -->

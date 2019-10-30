@@ -153,13 +153,13 @@ public class ComponentsSerializer {
 						} else {
 							for (int i = 0; i < ((CategoricalParameterDomain) pair.getY()).getValues().length; i++) {
 								if (((CategoricalParameterDomain) pair.getY()).getValues().length == 1) {
-									postValues = "{" + ((CategoricalParameterDomain) pair.getY()).getValues()[0] + "}";
+									postValues += "{" + ((CategoricalParameterDomain) pair.getY()).getValues()[0] + "}";
 								} else if (i == 0) {
-									postValues = "{" + ((CategoricalParameterDomain) pair.getY()).getValues()[i] + ",";
+									postValues += "{" + ((CategoricalParameterDomain) pair.getY()).getValues()[i] + ",";
 								} else if (i == ((CategoricalParameterDomain) pair.getY()).getValues().length - 1) {
-									postValues = ((CategoricalParameterDomain) pair.getY()).getValues()[i] + "}";
+									postValues += ((CategoricalParameterDomain) pair.getY()).getValues()[i] + "}";
 								} else {
-									postValues = ((CategoricalParameterDomain) pair.getY()).getValues()[i] + ",";
+									postValues += ((CategoricalParameterDomain) pair.getY()).getValues()[i] + ",";
 								}
 							}
 						}

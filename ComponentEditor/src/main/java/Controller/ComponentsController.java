@@ -357,6 +357,7 @@ public class ComponentsController {
 										pre += "}";
 										pre += " and ";
 									}
+									counterValue++;
 								}
 
 							} else {
@@ -370,6 +371,7 @@ public class ComponentsController {
 										pre += str;
 										pre += "}";
 									}
+									counterValue++;
 								}
 							}
 						}
@@ -408,17 +410,20 @@ public class ComponentsController {
 							post += pairs.getX().getName() + " in " + "{true,false}";
 						}
 					} else {
+						
 						if (counter < end - 1) {
 							post += pairs.getX().getName() + " in " + "{";
 							int counterValue = 0;
 							int endValue = ((hasco.model.CategoricalParameterDomain) pairs.getY()).getValues().length;
 							for (String str : ((hasco.model.CategoricalParameterDomain) pairs.getY()).getValues()) {
-								if (counterValue < endValue) {
+								if (counterValue < endValue -1) {
 									post += str + ",";
+									
 								} else {
 									post += str;
 									post += "}";
 								}
+								counterValue++;
 							}
 							post+= " and ";
 
@@ -427,12 +432,13 @@ public class ComponentsController {
 							int counterValue = 0;
 							int endValue = ((hasco.model.CategoricalParameterDomain) pairs.getY()).getValues().length;
 							for (String str : ((hasco.model.CategoricalParameterDomain) pairs.getY()).getValues()) {
-								if (counterValue < endValue) {
+								if (counterValue < endValue-1) {
 									post += str + ",";
 								} else {
 									post += str;
 									post += "}";
 								}
+								counterValue++;
 							}
 						}
 					}

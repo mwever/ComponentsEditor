@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.zip.ZipEntry;
@@ -75,6 +76,7 @@ public class RepositoryController {
 			int i = 0;
 			for(Component comp : icomps) {
 				System.out.println(comp.getParameters());
+				System.out.println(comp.getDependencies());
 				IntermediateComponent icomp = ComponentsController.reparseComponent(comp);
 				//System.out.println(icomp.getParameters());
 				icompArray[i] = icomp;
@@ -159,6 +161,7 @@ public class RepositoryController {
 								"SaveRepo/" + nameOfRepoCollection + "/" + repo.getName() + ".json");
 						JsonElement je = jp.parse(ComponentsSerializer.componentCollectionToJSONRepository(
 								repo.getData().getAllComponents(), repo.getName()));
+						
 						gson.toJson(je, writer);
 						writer.close();
 
@@ -408,6 +411,10 @@ public class RepositoryController {
 		File[] directoryListing = dir.listFiles();
 		if (directoryListing != null) {
 			for (File child : directoryListing) {
+				/*
+				 * byte[] encoded = Files.readAllBytes(child.toPath()); String test = new
+				 * String(encoded); System.out.println("test "); System.out.println(test);
+				 */
 				ComponentLoader components = new ComponentLoader(child);
 				DataCollectionComponentFile comps = new DataCollectionComponentFile();
 				for (Component comp : components.getComponents()) {

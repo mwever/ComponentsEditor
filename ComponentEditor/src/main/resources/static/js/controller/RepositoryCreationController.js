@@ -146,16 +146,16 @@ ComponentApp.controller('RepositoryCreationController', [ '$scope',
 						var i;
 						//console.log("Hallo1");
 						//console.log(data.length);
-						test = [];
+						repos = [];
 						
 						for(i = 0; i < data.length; i++){
 							var t = Object.assign(new Repository, data[i]);
-							console.log("######");
-							console.log(t);
+							/*console.log("######");
+							console.log(t);*/
 							t.assignToObjects();
-							test.push(t);
+							repos.push(t);
 						}
-						console.log(test[0].components[0] instanceof Component);
+						//console.log(repos[0].components[0] instanceof Component);
 						
 						for (i = 0; i < data.length; i++) {
 							//console.log("Hallo2");
@@ -163,7 +163,7 @@ ComponentApp.controller('RepositoryCreationController', [ '$scope',
 								  $scope.repoStorage.updateRepository(data[i]);
 							  }else{
 								  $scope.repoStorage.addRepository(data[i]);
-								  console.log(data[i])
+								  //console.log(data[i])
 								 
 							  }
 							}
