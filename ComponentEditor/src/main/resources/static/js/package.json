@@ -1,0 +1,24 @@
+{
+  "name": "dependencys_components_editor",
+  "version": "1.0.0",
+  "description": "Contains all dependency for the Component-Editor project.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "angular-file-saver": "^1.1.3",
+    "blob-tmp": "^1.0.0",
+    "file-saver": "^2.0.2",
+    "ng-file-upload": "^12.2.13"
+  },
+  "devDependencies": {
+    "jasmine": "^3.5.0",
+    "jasmine-core": "^3.5.0",
+    "karma": "^4.4.1",
+    "karma-chrome-launcher": "^3.1.0",
+    "karma-jasmine": "^2.0.1"
+  }
+}
